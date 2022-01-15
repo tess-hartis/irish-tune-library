@@ -1,6 +1,10 @@
 namespace TL.Common;
 
-public class EnumerableNotEmpty
+public static class EnumerableNotEmpty
 {
-    
+    public static bool IsAny<T>(this IEnumerable<T>? data)
+    {
+        return data != null && data.Any();
+    }
+
 }
