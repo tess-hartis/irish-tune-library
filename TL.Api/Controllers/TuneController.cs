@@ -13,7 +13,6 @@ public class TuneController : Controller
 {
     private readonly ITuneRepository _tuneRepository;
 
-
     public TuneController(ITuneRepository tuneRepository)
     {
         _tuneRepository = tuneRepository;
@@ -80,6 +79,20 @@ public class TuneController : Controller
     {
         var tune = PostTuneDto.ToTune(dto);
         await _tuneRepository.Add(tune);
+        return Ok();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDto dto)
+    {
+        var tune = await _tuneRepository.FindAsync(id);
+        var updated = PutTuneDto.UpdatedTune(tune, dto);
+        var result = _tuneRepository.Update(tune.Id);
+        if (!result.IsCompleted)
+        {
+            return new BadRequestResult();
+        }
+
         return Ok();
     }
     
