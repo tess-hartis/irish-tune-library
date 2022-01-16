@@ -47,14 +47,20 @@ public class TuneRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new TuneRepository(context);
-        var tune = new Tune("Helvic Head", TuneTypeEnum.Jig,
+        var tune1 = new Tune("Helvic Head", TuneTypeEnum.Jig,
+            TuneKeyEnum.GMaj, "Traditional");
+        var tune2 = new Tune("Bucks of Oranmore", TuneTypeEnum.Reel,
+            TuneKeyEnum.GMaj, "Traditional");
+        var tune3 = new Tune("Gravel Walks", TuneTypeEnum.Reel,
             TuneKeyEnum.GMaj, "Traditional");
 
         //Act
-        await repo.Add(tune);
+        await repo.Add(tune1);
+        await repo.Add(tune2);
+        await repo.Add(tune3);
         
         const int expected = 0;
-        var actual = tune.Id;
+        var actual = tune1.Id;
 
         //Assert
         Assert.AreNotEqual(expected, actual);
