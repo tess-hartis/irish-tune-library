@@ -100,7 +100,7 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     {
         return await GetByWhere(t => t.Title == title).ToListAsync();
     }
-    
+
     // public async Task<List<Tune>> AnthonyExampleRegex(string query)
     // {
     //     var regex = new Regex("???? + query + ???");
