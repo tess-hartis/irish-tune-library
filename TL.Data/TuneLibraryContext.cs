@@ -23,7 +23,7 @@ public class TuneLibraryContext : DbContext
         //the following code:
         if (!options.IsConfigured)
         {
-            options.UseNpgsql("Host=localhost;Username=postgres;Password=postgres;Database=TraditionalTuneLibrary");
+            options.UseNpgsql("Host=localhost;Username=postgres;Password=postgres;Database=TuneLibrary");
         }
     }
 
