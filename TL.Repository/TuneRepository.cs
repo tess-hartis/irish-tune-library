@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TL.Common;
 using TL.Data;
 using TL.Domain;
 
@@ -17,7 +18,7 @@ public interface ITuneRepository : IGenericRepository<Tune>
     Task<IEnumerable<Tune>> SortByTypeAndKeyAsync(TuneTypeEnum type, TuneKeyEnum key);
     Task<IEnumerable<Tune>> SortByExactComposerAsync(string composer);
     Task<IEnumerable<Tune>> GetByTitle(string title);
-
+    Task <int> SaveChanges();
 
 }
 
@@ -60,7 +61,14 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     public async Task Update(int id)
     {
         var tune = await FindAsync(id);
-        await UpdateAsync(tune);
+        if (tune.Title.IsValidNameOrTitle() && tune.Composer.IsValidNameOrTitle())
+        {
+            await UpdateAsync(tune);
+        }
+        else
+        {
+            throw new Exception();
+        }
     }
 
     public async Task AddAlternateTitlesAsync(int id, List<string> tunes)
@@ -99,6 +107,11 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     public async Task<IEnumerable<Tune>> GetByTitle(string title)
     {
         return await GetByWhere(t => t.Title == title).ToListAsync();
+    }
+
+    public async Task<int> SaveChanges()
+    {
+        return await Context.SaveChangesAsync();
     }
 
     // public async Task<List<Tune>> AnthonyExampleRegex(string query)
