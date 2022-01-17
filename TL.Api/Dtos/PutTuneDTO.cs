@@ -3,7 +3,7 @@ using TL.Repository;
 
 namespace TL.Api.Dtos;
 
-public class PutTuneDto
+public class PutTuneDTO
 {
     public string Title { get; set; }
     public TuneTypeEnum Type { get; set; }
@@ -11,7 +11,7 @@ public class PutTuneDto
     public string Composer { get; set; }
     public List<string> AlternateTitles { get; set; }
     
-    public static Tune UpdatedTune(Tune tune, PutTuneDto dto)
+    public static Tune UpdatedTune(Tune tune, PutTuneDTO dto)
     {
         tune.Title = dto.Title;
         tune.TuneType = dto.Type;
