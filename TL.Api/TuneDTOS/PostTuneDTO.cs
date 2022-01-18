@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.JsonPatch;
 using TL.Domain;
-using TL.Repository;
 
-namespace TL.Api.Dtos;
+namespace TL.Api.TuneDTOS;
 
 public class PostTuneDTO
 {
