@@ -5,7 +5,7 @@ namespace TL.Api.TrackDTOS;
 public class GetTracksDTO
 {
     private   List<GetTrackDTO> _tracks { get; }
-    public IEnumerable<GetTrackDTO> Tracks = new List<GetTrackDTO>();
+    public IEnumerable<GetTrackDTO> AllTracks => _tracks;
 
     public static GetTracksDTO GetTracks(IEnumerable<Track> tracks)
     {
