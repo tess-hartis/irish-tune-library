@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.Dtos;
+namespace TL.Api.TuneDTOS;
 
 public class GetTuneDTO
 {
@@ -9,7 +9,6 @@ public class GetTuneDTO
     public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
     public List<string> AlternateTitles { get; set; }
-    public List<Track> FeaturedOn { get; set; }
 
     public static GetTuneDTO FromTune(Tune tune)
     {
@@ -20,7 +19,6 @@ public class GetTuneDTO
             Key = tune.TuneKey,
             Composer = tune.Composer,
             AlternateTitles = tune.AlternateTitles,
-            FeaturedOn = tune.FeaturedOn
         };
     }
 }
