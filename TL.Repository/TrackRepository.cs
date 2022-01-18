@@ -59,7 +59,7 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         return await GetByWhere(t => t.Title == title).ToListAsync();
     }
 
-    public async Task<IReadOnlyList<Track>> FindByTuneFeatured(Tune tune)
+    public async Task<IEnumerable<Track>> FindByTuneFeatured(Tune tune)
     {
         return await Context.Tracks
             .Where(t => t.TuneList.Contains(tune))
