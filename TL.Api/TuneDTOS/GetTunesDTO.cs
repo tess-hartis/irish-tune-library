@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.Dtos;
+namespace TL.Api.TuneDTOS;
 
 public class GetTunesDTO
 {
