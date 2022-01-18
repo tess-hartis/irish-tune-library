@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TL.Api.Dtos;
+using TL.Api.TuneDTOS;
 using TL.Domain;
 using TL.Repository;
 
@@ -24,7 +24,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("Type/{type}")]
+    [HttpGet("{type}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByType(TuneTypeEnum type)
     {
         var tunes = await _tuneRepository.SortByTuneTypeAsync(type);
@@ -32,7 +32,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("Key/{key}")]
+    [HttpGet("{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByKey(TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.SortByTuneKeyAsync(key);
@@ -40,7 +40,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("TypeKey/{type}/{key}")]
+    [HttpGet("{type}/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.SortByTypeAndKeyAsync(type, key);
@@ -48,7 +48,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("Composer/{composer}")]
+    [HttpGet("{composer}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByComposer(string composer)
     {
         var tunes = await _tuneRepository.SortByExactComposerAsync(composer);
@@ -56,7 +56,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("Title/{title}")]
+    [HttpGet("{title}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTitle(string title)
     {
         var tunes = await _tuneRepository.GetByTitle(title);
@@ -86,12 +86,25 @@ public class TuneController : Controller
         var tune = await _tuneRepository.FindAsync(id);
         var updated = PutTuneDTO.UpdatedTune(tune, dto);
         var result = _tuneRepository.Update(tune.Id);
-        if (!result.IsCompleted)
+        if (result.IsFaulted)
         {
             return new BadRequestResult();
         }
 
         return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteTune(int id)
+    {
+        var tune = _tuneRepository.FindAsync(id);
+        if (tune.IsFaulted)
+        {
+            return new NotFoundResult();
+        }
+        await _tuneRepository.Delete(tune.Id);
+        return new NoContentResult();
+        
     }
     
 }
