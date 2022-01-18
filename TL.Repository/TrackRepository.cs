@@ -10,8 +10,8 @@ public interface ITrackRepository : IGenericRepository<Track>
     Task Delete(int id);
     Task<Track> FindAsync(int id);
     Task Update(int id);
-    Task<Track?> FindByExactTitleAsync(string title);
-    Task<IReadOnlyList<Track>> FindByTuneFeatured(Tune tune);
+    Task<IEnumerable<Track>> FindByExactTitleAsync(string title);
+    Task<IEnumerable<Track>> FindByTuneFeatured(Tune tune);
     Task<IEnumerable<Track>> GetAllTracks();
 
 }
@@ -54,10 +54,9 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         await UpdateAsync(track);
     }
 
-    public async Task<Track?> FindByExactTitleAsync(string title)
+    public async Task<IEnumerable<Track>> FindByExactTitleAsync(string title)
     {
-        return await Context.Tracks
-            .FirstOrDefaultAsync(t => t.Title == title);
+        return await GetByWhere(t => t.Title == title).ToListAsync();
     }
 
     public async Task<IReadOnlyList<Track>> FindByTuneFeatured(Tune tune)
