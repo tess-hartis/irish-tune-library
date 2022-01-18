@@ -5,7 +5,7 @@ using TL.Repository;
 
 namespace TL.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/Tracks")]
 
 public class TrackController : Controller
 {
