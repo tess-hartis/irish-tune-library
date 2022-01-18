@@ -85,12 +85,7 @@ public class TuneController : Controller
     {
         var tune = await _tuneRepository.FindAsync(id);
         var updated = PutTuneDTO.UpdatedTune(tune, dto);
-        var result = _tuneRepository.Update(tune.Id);
-        if (result.IsFaulted)
-        {
-            return new BadRequestResult();
-        }
-
+        await _tuneRepository.Update(tune.Id);
         return Ok();
     }
 
@@ -98,13 +93,9 @@ public class TuneController : Controller
     public async Task<ActionResult> DeleteTune(int id)
     {
         var tune = _tuneRepository.FindAsync(id);
-        if (tune.IsFaulted)
-        {
-            return new NotFoundResult();
-        }
         await _tuneRepository.Delete(tune.Id);
-        return new NoContentResult();
-        
+        return Ok();
+
     }
     
 }
