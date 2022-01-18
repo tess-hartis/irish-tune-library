@@ -17,14 +17,7 @@ public class TrackController : Controller
         _trackRepository = trackRepository;
         _unitOfWork = unitOfWork;
     }
-
-    // [HttpGet("{trackId}/album")]
-    // public async Task<ActionResult<Album>> GetTrackAlbum(int trackId)
-    // {
-    //     var track = await _trackRepository.FindAsync(trackId);
-    //     var album = await _unitOfWork.GetTrackAlbum(trackId);
-    //     return album;
-    // }
+    
 
     [HttpGet("{id}")]
     public async Task<ActionResult<GetTrackDTO>> FindTrack(int id)
