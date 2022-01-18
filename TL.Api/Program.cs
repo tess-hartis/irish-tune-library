@@ -16,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITuneRepository, TuneRepository>();
 builder.Services.AddDbContext<TuneLibraryContext>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
