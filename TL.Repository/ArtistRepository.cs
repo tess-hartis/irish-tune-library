@@ -12,6 +12,7 @@ public interface IArtistRepository : IGenericRepository<Artist>
     Task Update(int id);
     Task<IEnumerable<Artist>> GetAllArtists();
     Task<IEnumerable<Artist>> GetByName(string name);
+    Task<IEnumerable<Artist>> FindAlbumArtists(Album album);
 
 }
 
