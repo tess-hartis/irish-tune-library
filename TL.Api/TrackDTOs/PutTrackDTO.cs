@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.TrackDTOS;
+namespace TL.Api.TrackDTOs;
 
 public class PutTrackDTO
 {

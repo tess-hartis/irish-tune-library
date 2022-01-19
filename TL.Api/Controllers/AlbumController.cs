@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TL.Api.AlbumDTOS;
-using TL.Api.TrackDTOS;
+using TL.Api.AlbumDTOs;
+using TL.Api.TrackDTOs;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -52,8 +52,8 @@ public class AlbumController : Controller
   [HttpPost]
   public async Task<ActionResult> AddAlbum([FromBody] PostAlbumDTO dto)
   {
-    var tune = PostAlbumDTO.ToAlbum(dto);
-    await _albumRepository.Add(tune);
+    var album = PostAlbumDTO.ToAlbum(dto);
+    await _albumRepository.Add(album);
     return Ok();
   }
   

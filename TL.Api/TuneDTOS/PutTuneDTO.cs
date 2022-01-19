@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.TuneDTOS;
+namespace TL.Api.TuneDTOs;
 
 public class PutTuneDTO
 {

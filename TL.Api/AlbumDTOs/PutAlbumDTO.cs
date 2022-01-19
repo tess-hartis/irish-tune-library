@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.AlbumDTOS;
+namespace TL.Api.AlbumDTOs;
 
 public class PutAlbumDTO
 {

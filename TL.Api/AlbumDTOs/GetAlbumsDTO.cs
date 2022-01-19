@@ -1,7 +1,7 @@
-using TL.Api.TrackDTOS;
+using TL.Api.TrackDTOs;
 using TL.Domain;
 
-namespace TL.Api.AlbumDTOS;
+namespace TL.Api.AlbumDTOs;
 
 public class GetAlbumsDTO
 {

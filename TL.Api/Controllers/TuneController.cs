@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TL.Api.TuneDTOS;
+using TL.Api.TuneDTOs;
 using TL.Domain;
 using TL.Repository;
 
