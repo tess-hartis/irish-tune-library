@@ -15,6 +15,7 @@ public interface IUnitOfWork
     Task AddArtistToAlbum(int artistId, int albumId);
     Task<Album> GetAlbumByTrack(int trackId);
     Task<IEnumerable<Track>> GetByTuneFeatured(int tuneId);
+    Task<IEnumerable<Artist>> GetAlbumArtists(int albumId);
 
 }
 
@@ -109,6 +110,13 @@ public class UnitOfWork : IUnitOfWork
         var tracks = await _trackRepository.FindByTuneFeatured(tune);
         return tracks;
     }
-    
-    
+
+    public async Task<IEnumerable<Artist>> GetAlbumArtists(int albumId)
+    {
+        var album = await _albumRepository.FindAsync(albumId);
+        var artists = await _artistRepository.FindAlbumArtists(album);
+        return artists;
+    }
+
+
 }
