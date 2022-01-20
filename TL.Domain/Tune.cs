@@ -73,4 +73,45 @@ public class Tune
 
         _alternateTitles.Remove(title);
     }
+
+    public void UpdateTitle(string title)
+    {
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Tune title cannot be empty");
+        
+        if (title.Length > 75)
+            throw new FormatException("Tune title must be 75 characters or fewer");
+        
+        Title = title;
+    }
+
+    public void UpdateType(TuneTypeEnum type)
+    {
+        if (!Enum.IsDefined(typeof(TuneTypeEnum), type))
+            throw new ArgumentException(string.Format("Invalid tune type"));
+
+        TuneType = type;
+    }
+
+    public void UpdateKey(TuneKeyEnum key)
+    {
+        if (!Enum.IsDefined(typeof(TuneKeyEnum), key))
+            throw new ArgumentException(string.Format("Invalid tune key"));
+
+        TuneKey = key;
+    }
+
+    public void UpdateComposer(string composer)
+    {
+        if (string.IsNullOrWhiteSpace(composer))
+            throw new FormatException("Tune composer cannot be empty");
+        
+        if (composer.Length > 50)
+            throw new FormatException("Tune composer must be 50 characters or fewer");
+
+        Composer = composer;
+    }
+    
+    
 }

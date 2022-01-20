@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using TL.Common;
 
 namespace TL.Domain;
@@ -26,6 +27,8 @@ public class Album
         if (string.IsNullOrWhiteSpace(title))
             throw new FormatException("Album title cannot be empty");
 
+        if (!year.IsValidYear())
+            throw new FormatException("Invalid year");
         
         return album;
     }
@@ -74,5 +77,25 @@ public class Album
         _tracks.Remove(track);
     }
     
+    public void UpdateTitle(string title)
+    {
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Album title cannot be empty");
+        
+        if (title.Length > 75)
+            throw new FormatException("Album title must be 75 characters or fewer");
+        
+        Title = title;
+    }
+
+    public void UpdateYear(int year)
+    {
+        if (!year.IsValidYear())
+            throw new FormatException("Invalid year");
+
+        Year = year;
+        
+    }
     
 }

@@ -23,13 +23,8 @@ public class Track
         if (string.IsNullOrWhiteSpace(title))
             throw new FormatException("Track title cannot be empty");
 
-        switch (trackNumber)
-        {
-            case < 1:
-                throw new FormatException("Track number cannot be 0");
-            case > 100:
-                throw new FormatException("Track number cannot be greater than 100");
-        }
+        if (!trackNumber.IsValidTrackNumber())
+            throw new FormatException("Invalid track number");
 
         return track;
     }
@@ -60,6 +55,26 @@ public class Track
             throw new InvalidOperationException("The tune was not found");
 
         _tuneList.Remove(tune);
+    }
+    
+    public void UpdateTitle(string title)
+    {
+        
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Track title cannot be empty");
+        
+        if (title.Length > 75)
+            throw new FormatException("Track title must be 75 characters or fewer");
+        
+        Title = title;
+    }
+
+    public void UpdateTrackNumber(int trackNumber)
+    {
+        if (!trackNumber.IsValidTrackNumber())
+            throw new FormatException("Invalid track number");
+
+        TrackNumber = trackNumber;
     }
     
 }

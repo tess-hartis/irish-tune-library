@@ -29,5 +29,13 @@ public class Artist
         CreateArtist(name);
     }
 
+    public void UpdateName(string name)
+    {
+        if (!name.IsValidNameOrTitle())
+            throw new FormatException("Invalid name");
+
+        Name = name;
+    }
+
     
 }
