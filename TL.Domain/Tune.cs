@@ -1,57 +1,76 @@
-using TL.Common;
-
 namespace TL.Domain;
 
 public class Tune
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public List<string> AlternateTitles { get; set; }
+    private Tune(){ }
     
-    public TuneTypeEnum TuneType;
-    
-    public TuneKeyEnum TuneKey;
-    public string Composer { get; set; }
-    public DateOnly DateAdded { get; set; }
-    public List<Track> FeaturedOn { get; set; }
-    
-    public Tune(string title, TuneTypeEnum tuneType, TuneKeyEnum tuneKey, 
-        string composer)
-    {
-        if (title.IsValidNameOrTitle() & composer.IsValidNameOrTitle())
-        {
-            Id = new int();
-            Title = title;
-            TuneType = tuneType;
-            TuneKey = tuneKey;
-            Composer = composer;
-            DateAdded = DateOnly.FromDateTime(DateTime.Now);
-            AlternateTitles = new List<string>();
-            FeaturedOn = new List<Track>();
-        }
-        else
-        {
-            throw new FormatException();
-        }
-    }
+    public int Id { get; private set; }
+    public string Title { get;  private set; }
+    private HashSet<string> _alternateTitles;
+    public IReadOnlyList<string> AlternateTitles => _alternateTitles.ToList();
+    public TuneTypeEnum TuneType { get; private set; }
+    public TuneKeyEnum TuneKey { get; private set; }
+    public string Composer { get; private set; }
+    public DateOnly DateAdded { get; private set; }
 
-    public Tune()
+    public static Tune CreateTune(string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
+        var tune = new Tune
+        {
+            Title = title,
+            TuneType = type,
+            TuneKey = key,
+            Composer = composer,
+            DateAdded = DateOnly.FromDateTime(DateTime.Today)
+        };
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Tune title cannot be empty");
         
+        if (title.Length > 75)
+            throw new FormatException("Tune title must be 75 characters or fewer");
+        
+        if (string.IsNullOrWhiteSpace(composer))
+            throw new FormatException("Tune composer cannot be empty");
+        
+        if (composer.Length > 50)
+            throw new FormatException("Tune composer must be 50 characters or fewer");
+
+        if (!Enum.IsDefined(typeof(TuneTypeEnum), type))
+            throw new ArgumentException(string.Format("Invalid tune type"));
+        
+        if (!Enum.IsDefined(typeof(TuneKeyEnum), key))
+            throw new ArgumentException(string.Format("Invalid tune key"));
+        
+        return tune;
     }
 
-    public void AddAlternateTitles(List<string> tunes)
+    internal Tune(string title, TuneTypeEnum type, TuneKeyEnum key, string composer)
     {
-        foreach (var title in tunes)
-        {
-            if (title.IsValidNameOrTitle())
-            {
-                AlternateTitles.Add(title);
-            }
-            else
-            {
-                throw new FormatException();
-            }
-        }
+        CreateTune(title, composer, type, key);
+    }
+
+    public void AddAlternateTitle(string title)
+    {
+        if (_alternateTitles == null)
+            throw new InvalidOperationException(
+                "Alternate title list not loaded");
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Alternate title cannot be empty");
+
+        _alternateTitles.Add(title);
+    }
+
+    public void RemoveAlternateTitle(string title)
+    {
+        if (_alternateTitles == null)
+            throw new InvalidOperationException(
+                "Alternate title list not loaded");
+
+        if (!_alternateTitles.Contains(title))
+            throw new InvalidOperationException("The alternate title was not found");
+
+        _alternateTitles.Remove(title);
     }
 }
