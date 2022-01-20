@@ -47,7 +47,6 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     public override async Task<Tune> FindAsync(int id)
     {
         var tune = await Context.Tunes
-            .Include(t => t.FeaturedOn)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (tune == null)
