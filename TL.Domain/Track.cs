@@ -4,33 +4,62 @@ namespace TL.Domain;
 
 public class Track
 {
-    public int Id { get; set; }
-    public int TrackNumber { get; set; }
-    public string Title { get; set; }
-    public List<Tune> TuneList { get; set; }
+    private Track(){}
+    public int Id { get; private set; }
+    public string Title { get; private set; }
+    public int TrackNumber { get; private set; }
+    
+    private HashSet<Tune> _tuneList;
+    public IReadOnlyCollection<Tune> TuneList => _tuneList.ToList();
 
-    public Track(string title, int trackNumber)
+    public static Track CreateTrack(string title, int trackNumber)
     {
-        if (title.IsValidNameOrTitle() & trackNumber.IsValidInt())
+        var track = new Track()
         {
-            Id = new int();
-            Title = title;
-            TuneList = new List<Tune>();
-            TrackNumber = trackNumber;
-        }
-        else
+            Title = title,
+            TrackNumber = trackNumber
+        };
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Track title cannot be empty");
+
+        switch (trackNumber)
         {
-            throw new FormatException();
+            case < 1:
+                throw new FormatException("Track number cannot be 0");
+            case > 100:
+                throw new FormatException("Track number cannot be greater than 100");
         }
+
+        return track;
     }
 
-    public Track()
+    internal Track(string title, int trackNumber)
     {
-        
+        CreateTrack(title, trackNumber);
     }
 
-    public void AddTune(Tune tune)
+    public void AddTune(string title, TuneTypeEnum type, 
+        TuneKeyEnum key, string composer)
     {
-        TuneList.Add(tune);
+        if (_tuneList == null)
+            throw new InvalidOperationException("Tune collection was not loaded");
+
+        _tuneList.Add(new Tune(title, type, key, composer));
     }
+
+    public void RemoveTune(int tuneId)
+    {
+        if (_tuneList == null)
+            throw new InvalidOperationException("Tune list was not loaded");
+
+        var tune = _tuneList.SingleOrDefault(
+            x => x.Id == tuneId);
+
+        if (tune == null)
+            throw new InvalidOperationException("The tune was not found");
+
+        _tuneList.Remove(tune);
+    }
+    
 }
