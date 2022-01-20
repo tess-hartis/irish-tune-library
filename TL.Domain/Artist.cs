@@ -4,22 +4,30 @@ namespace TL.Domain;
 
 public class Artist
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public List<Album> Albums { get; set; }
+    private Artist(){ }
+    public int Id { get; private set; }
+    public string Name { get; private set; }
 
-    public Artist(string name)
+    public static Artist CreateArtist(string name)
     {
-        if (name.IsValidNameOrTitle())
+        var artist = new Artist
         {
-            Name = name;
-            Id = new int();
-            Albums = new List<Album>();
-        }
-        else
-        {
-            throw new FormatException();
-        }
+            Name = name
+        };
+
+        if (string.IsNullOrWhiteSpace(name))
+            throw new FormatException("Artist name cannot be empty");
         
+        if (name.Length > 50)
+            throw new FormatException("Artist name must be 50 characters or fewer");
+
+        return artist;
     }
+    
+    internal Artist(string name)
+    {
+        CreateArtist(name);
+    }
+
+    
 }
