@@ -9,7 +9,7 @@ public static class StringValidator
             return false;
         }
 
-        if (name.Length >= 20 && name.Length < 2)
+        if (name.Length >= 75 && name.Length < 75)
         {
             return false;
         }
@@ -17,10 +17,9 @@ public static class StringValidator
         if (name.StartsWith(" "))
         {
             return false;
-        }
-        else
-        {
-            return true;
-        }
+        } 
+        
+        return true;
+        
     }
 }
