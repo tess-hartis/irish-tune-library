@@ -4,39 +4,75 @@ namespace TL.Domain;
 
 public class Album
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
+    public int Id { get; private set; }
+    public string Title { get; private set; }
+    public int Year { get; private set; }
     
-    public int Year { get; set; }
-    public List<Artist> Artists { get; set; }
-    public List<Track> TrackListing { get; set; }
-    
-    
+    private HashSet<Artist> _artists;
+    public IReadOnlyCollection<Artist> Artists => _artists.ToList();
 
-
-    public Album(string title, int year)
+    private HashSet<Track> _tracks;
+    public IReadOnlyCollection<Track> TrackListing => _tracks.ToList();
+    
+    
+    public static Album CreateAlbum(string title, int year)
     {
-        if (title.IsValidNameOrTitle() && year.IsValidYear())
+        var album = new Album()
         {
-            Id = new int();
-            Title = title;
-            Artists = new List<Artist>();
-            TrackListing = new List<Track>();
-            Year = year;
-        }
-        else
-        {
-            throw new FormatException();
-        }
+            Title = title,
+            Year = year
+        };
+
+        if (string.IsNullOrWhiteSpace(title))
+            throw new FormatException("Album title cannot be empty");
+
+        
+        return album;
     }
 
-    public void AddArtist(Artist artist)
+    public void AddArtist(string name)
     {
-        Artists.Add(artist);
+        if (_artists == null)
+            throw new InvalidOperationException("Artists collection not loaded");
+
+        _artists.Add(new Artist(name));
     }
 
-    public void AddTrack(Track track)
+    public void RemoveArtist(int artistId)
     {
-        TrackListing.Add(track);
+        if (_artists == null)
+            throw new InvalidOperationException("Artists collection not loaded");
+
+        var artist = _artists.SingleOrDefault(
+            x => x.Id == artistId);
+
+        if (artist == null)
+            throw new InvalidOperationException("The artist was not found");
+        
+        _artists.Remove(artist);
     }
+
+    public void AddTrack(string title, int trackNumber)
+    {
+        if (_tracks == null)
+            throw new InvalidOperationException("Tracks collection not loaded");
+
+        _tracks.Add(new Track(title, trackNumber));
+    }
+
+    public void RemoveTrack(int trackId)
+    {
+        if (_tracks == null)
+            throw new InvalidOperationException("Tracks collection not loaded");
+
+        var track = _tracks.SingleOrDefault(
+            x => x.Id == trackId);
+
+        if (track == null)
+            throw new InvalidOperationException("The track was not found");
+
+        _tracks.Remove(track);
+    }
+    
+    
 }
