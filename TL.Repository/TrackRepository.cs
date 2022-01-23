@@ -6,13 +6,19 @@ namespace TL.Repository;
 
 public interface ITrackRepository : IGenericRepository<Track>
 {
-    Task Add(Track track);
-    Task Delete(int id);
-    Task<Track> FindAsync(int id);
-    Task Update(int id);
-    Task<IEnumerable<Track>> FindByExactTitleAsync(string title);
+    Task AddTrack(Track track);
+    Task DeleteTrack(int id);
+    new Task<Track> FindAsync(int id);
+    Task<IEnumerable<Track>> FindByExactTitle(string title);
     Task<IEnumerable<Track>> FindByTuneFeatured(Tune tune);
     Task<IEnumerable<Track>> GetAllTracks();
+    Task UpdateTrackTitle(int id, string title);
+    Task UpdateTrackNumber(int id, int trackNumber);
+    Task UpdateTunesAddNew(int trackId, string title,
+        TuneTypeEnum type, TuneKeyEnum key, string composer);
+    Task UpdateTunesRemove(int trackId, int tuneId);
+
+
 
 }
 
@@ -23,12 +29,12 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
 
     }
 
-    public async Task Add(Track track)
+    public async Task AddTrack(Track track)
     {
         await AddAsync(track);
     }
 
-    public async Task Delete(int id)
+    public async Task DeleteTrack(int id)
     {
         var track = await FindAsync(id);
         await DeleteAsync(track);
@@ -41,20 +47,12 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (track == null)
-        {
-            throw new Exception();
-        }
+            throw new InvalidOperationException("Track not found");
 
         return track;
     }
 
-    public async Task Update(int id)
-    {
-        var track = await FindAsync(id);
-        await UpdateAsync(track);
-    }
-
-    public async Task<IEnumerable<Track>> FindByExactTitleAsync(string title)
+    public async Task<IEnumerable<Track>> FindByExactTitle(string title)
     {
         return await GetByWhere(t => t.Title == title).ToListAsync();
     }
@@ -68,7 +66,39 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
 
     public async Task<IEnumerable<Track>> GetAllTracks()
     {
-        return await GetAll().ToListAsync();
+        return await GetEntities().ToListAsync();
     }
+
+    public async Task UpdateTrackTitle(int id, string title)
+    {
+        var track = await FindAsync(id);
+        track.UpdateTitle(title);
+        await SaveAsync();
+    }
+
+    public async Task UpdateTrackNumber(int id, int trackNumber)
+    {
+        var track = await FindAsync(id);
+        track.UpdateTrackNumber(trackNumber);
+        await SaveAsync();
+    }
+
+    public async Task UpdateTunesAddNew(int trackId, string title,
+        TuneTypeEnum type, TuneKeyEnum key, string composer)
+    {
+        var track = await FindAsync(trackId);
+        track.AddNewTune(title, type, key, composer);
+        await SaveAsync();
+    }
+    
+
+    public async Task UpdateTunesRemove(int trackId, int tuneId)
+    {
+        var track = await FindAsync(trackId);
+        track.RemoveTune(tuneId);
+        await SaveAsync();
+    }
+    
+    
 
 }
