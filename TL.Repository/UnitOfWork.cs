@@ -72,20 +72,7 @@ public class UnitOfWork : IUnitOfWork
         await SaveChangesAsync();
         
     }
-
-    public async Task<Album> GetAlbumByTrack(int trackId)
-    {
-        var track = await _trackRepository.FindAsync(trackId);
-        var album = await _albumRepository.FindByTrackFeatured(track);
-        if (album == null)
-        {
-            throw new Exception();
-        }
-
-        return album;
-    }
-
-    public async Task<IEnumerable<Track>> GetByTuneFeatured(int tuneId)
+    public async Task<IEnumerable<Track>> FindTracksByTune(int tuneId)
     {
         var tune = await _tuneRepository.FindAsync(tuneId);
         var tracks = await _trackRepository.FindByTuneFeatured(tune);
