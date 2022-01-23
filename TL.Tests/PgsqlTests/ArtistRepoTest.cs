@@ -11,23 +11,6 @@ namespace TL.Tests.PgsqlTests;
 public class ArtistRepoTest
 {
     [Test]
-    public void Can_Add_Artist_Using_Context_Directly()
-    {
-        using var context = new TuneLibraryContext(); // need to extract these three lines
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-        var artist = new Artist("Liz Carroll");
-
-        context.Artists.Add(artist);
-        context.SaveChanges();
-
-        const int expected = 0;
-        var actual = artist.Id;
-        
-        Assert.AreNotEqual(expected, actual);
-    }
-    
-    [Test]
     public async Task Can_Add_Artist_Using_Repository()
     {
         //Arrange
@@ -35,10 +18,10 @@ public class ArtistRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new ArtistRepository(context);
-        var artist = new Artist("Liz Carroll");
+        var artist = Artist.CreateArtist("Liz Carroll");
         
         //Act
-        await repo.Add(artist);
+        await repo.AddArtist(artist);
 
         const int expected = 1;
         var actual = artist.Id;
@@ -55,11 +38,11 @@ public class ArtistRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new ArtistRepository(context);
-        var artist = new Artist("Name");
-        await repo.Add(artist);
+        var artist = Artist.CreateArtist("Liz Carroll");
+        await repo.AddArtist(artist);
         
         //Act
-        await repo.Delete(artist.Id);
+        await repo.DeleteArtist(artist.Id);
         var list = await repo.GetAllArtists();
         const int expected = 0;
         var actual = list.Count();
@@ -69,21 +52,20 @@ public class ArtistRepoTest
     }
 
     [Test]
-    public async Task Can_Update_Artist_Using_Repository()
+    public async Task Can_Update_Name_Using_Repository()
     {
         //Arrange
         await using var context = new TuneLibraryContext();
         var repo = new ArtistRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var artist = new Artist("Liz Carroll");
-        await repo.Add(artist);
+        var artist = Artist.CreateArtist("Liz Carroll");
+        await repo.AddArtist(artist);
 
         //Act
-        artist.Name = "Liz Carroll";
-        await repo.Update(artist.Id);
+        await repo.UpdateName(artist.Id, "John Doyle");
 
-        const string expected = "Liz Carroll";
+        const string expected = "John Doyle";
         var actual = artist.Name;
 
         //Assert
@@ -98,13 +80,12 @@ public class ArtistRepoTest
         var repo = new ArtistRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var artist = new Artist("Name");
-        await repo.Add(artist);
+        var artist = Artist.CreateArtist("Liz Carroll");
+        await repo.AddArtist(artist);
 
         //Act
-        const string expected = "Name";
-        var actual = await repo.Find(artist.Id);
-
+        const string expected = "Liz Carroll";
+        var actual = await repo.FindAsync(artist.Id);
         //Assert
         Assert.AreEqual(expected, actual.Name);
     }
@@ -135,12 +116,12 @@ public class ArtistRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new ArtistRepository(context);
-        var artist = new Artist("Name");
-        await repo.Add(artist);
+        var artist = Artist.CreateArtist("Liz Carroll");
+        await repo.AddArtist(artist);
         
         //Act
         const int expected = 1;
-        var actual = await repo.GetByName("Name");
+        var actual = await repo.GetByExactName("Liz Carroll");
 
         //Assert
         Assert.AreEqual(expected, actual.Count());
