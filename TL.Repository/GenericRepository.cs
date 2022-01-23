@@ -7,7 +7,7 @@ namespace TL.Repository;
 
 public interface IGenericRepository<T> where T : class
 {
-    IQueryable<T> GetAll();
+    IQueryable<T> GetEntities();
     IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate);
     Task AddAsync(T entity);
     Task UpdateAsync(T entity);
@@ -26,7 +26,7 @@ public abstract class GenericRepository<T>
         Context = context;
     }
 
-    public IQueryable<T> GetAll()
+    public IQueryable<T> GetEntities()
     {
         return Context.Set<T>().AsNoTracking();
     }
