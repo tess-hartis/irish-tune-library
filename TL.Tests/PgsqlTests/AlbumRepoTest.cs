@@ -12,23 +12,6 @@ namespace TL.Tests.PgsqlTests;
 public class AlbumRepoTest
 {
     [Test]
-    public void Can_Add_Album_Using_Context_Directly()
-    {
-        using var context = new TuneLibraryContext(); // need to extract these three lines
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-        var album = new Album("Title", 2000);
-
-        context.Albums.Add(album);
-        context.SaveChanges();
-
-        const int expected = 0;
-        var actual = album.Id;
-        
-        Assert.AreNotEqual(expected, actual);
-    }
-    
-    [Test]
     public async Task Can_Add_Album_Using_Repository()
     {
         //Arrange
@@ -36,10 +19,10 @@ public class AlbumRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new AlbumRepository(context);
-        var album = new Album("Title", 2000);
+        var album = Album.CreateAlbum("Making Time", 2000);
         
         //Act
-        await repo.Add(album);
+        await repo.AddAlbum(album);
 
         const int expected = 1;
         var actual = album.Id;
@@ -56,12 +39,12 @@ public class AlbumRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new AlbumRepository(context);
-        var album = new Album("Title", 2000);
-        await repo.Add(album);
+        var album = Album.CreateAlbum("Making Time", 2000);
+        await repo.AddAlbum(album);
         
         //Act
-        await repo.Delete(album.Id);
-        var list =  await repo.GetAll().ToListAsync();
+        await repo.DeleteAlbum(album.Id);
+        var list =  await repo.GetEntities().ToListAsync();
         const int expected = 0;
         var actual = list.Count;
 
@@ -70,22 +53,42 @@ public class AlbumRepoTest
     }
 
     [Test]
-    public async Task Can_Update_Album_Using_Repository()
+    public async Task Can_Update_Title_Using_Repository()
     {
         //Arrange
         await using var context = new TuneLibraryContext();
         var repo = new AlbumRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var album = new Album("Title", 2000);
-        await repo.Add(album);
+        var album = Album.CreateAlbum("Making Time", 2000);
+        await repo.AddAlbum(album);
 
         //Act
-        album.Title = "Title";
-        await repo.Update(album.Id);
+        await repo.UpdateTitle(album.Id, "New Title");
 
-        const string expected = "Title";
+        const string expected = "New Title";
         var actual = album.Title;
+
+        //Assert
+        Assert.AreEqual(expected, actual);
+    }
+    
+    [Test]
+    public async Task Can_Update_Year_Using_Repository()
+    {
+        //Arrange
+        await using var context = new TuneLibraryContext();
+        var repo = new AlbumRepository(context);
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+        var album = Album.CreateAlbum("Making Time", 2000);
+        await repo.AddAlbum(album);
+
+        //Act
+        await repo.UpdateYear(album.Id, 2001);
+
+        const int expected = 2001;
+        var actual = album.Year;
 
         //Assert
         Assert.AreEqual(expected, actual);
@@ -99,11 +102,11 @@ public class AlbumRepoTest
         var repo = new AlbumRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var album = new Album("Title", 2000);
-        await repo.Add(album);
+        var album = Album.CreateAlbum("Making Time", 2000);
+        await repo.AddAlbum(album);
 
         //Act
-        const string expected = "Title";
+        const string expected = "Making Time";
         var actual = await repo.FindAsync(album.Id);
 
         //Assert
@@ -129,19 +132,19 @@ public class AlbumRepoTest
     }
     
     [Test]
-    public async Task Can_Find_By_Exact_Name_Using_Repository()
+    public async Task Can_Find_By_Exact_Title_Using_Repository()
     {
         //Arrange
         await using var context = new TuneLibraryContext();
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new AlbumRepository(context);
-        var album = new Album("Title", 2000);
-        await repo.Add(album);
+        var album = Album.CreateAlbum("Making Time", 2000);
+        await repo.AddAlbum(album);
         
         //Act
         const int expected = 1;
-        var actual = await repo.GetByTitle("Title");
+        var actual = await repo.FindByExactTitle("Making Time");
 
         //Assert
         Assert.AreEqual(expected, actual.Count());
