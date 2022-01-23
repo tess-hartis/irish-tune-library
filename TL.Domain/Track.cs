@@ -34,7 +34,7 @@ public class Track
         CreateTrack(title, trackNumber);
     }
 
-    public void AddTune(string title, TuneTypeEnum type, 
+    public void AddNewTune(string title, TuneTypeEnum type, 
         TuneKeyEnum key, string composer)
     {
         if (_tuneList == null)
@@ -42,6 +42,16 @@ public class Track
 
         _tuneList.Add(new Tune(title, type, key, composer));
     }
+
+    public void AddExistingTune(Tune tune)
+    {
+        if (_tuneList == null)
+            throw new InvalidOperationException("Tune collection was not loaded");
+        
+
+        _tuneList.Add(tune);
+    }
+    
 
     public void RemoveTune(int tuneId)
     {
@@ -57,7 +67,7 @@ public class Track
         _tuneList.Remove(tune);
     }
     
-    public void UpdateTitle(string title)
+    public void UpdateTitle(string title) 
     {
         
         if (string.IsNullOrWhiteSpace(title))
