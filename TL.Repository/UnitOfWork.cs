@@ -64,28 +64,11 @@ public class UnitOfWork : IUnitOfWork
     {
        await _context.SaveChangesAsync();
     }
-    public async Task AddTuneToTrack(int tuneId, int trackId)
+    public async Task AddExistingTuneToTrack(int tuneId, int trackId)
     {
         var tune = await _tuneRepository.FindAsync(tuneId);
         var track = await _trackRepository.FindAsync(trackId);
-        track.AddTune(tune);
-        await SaveChangesAsync();
-       
-        
-    }
-    public async Task AddTrackToAlbum(int trackId, int albumId)
-    {
-        var track = await _trackRepository.FindAsync(trackId);
-        var album = await _albumRepository.FindAsync(albumId);
-        album.AddTrack(track);
-        await SaveChangesAsync();
-            
-    }
-    public async Task AddArtistToAlbum(int artistId, int albumId)
-    {
-        var artist = await _artistRepository.FindAsync(artistId);
-        var album = await _albumRepository.FindAsync(albumId);
-        album.AddArtist(artist);
+        track.AddExistingTune(tune);
         await SaveChangesAsync();
         
     }
