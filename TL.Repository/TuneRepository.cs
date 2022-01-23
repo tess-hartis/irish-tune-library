@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using TL.Common;
 using TL.Data;
 using TL.Domain;
 
@@ -7,18 +6,22 @@ namespace TL.Repository;
 
 public interface ITuneRepository : IGenericRepository<Tune>
 {
-    Task AddAlternateTitlesAsync(int id, List<string> tunes);
     Task<IEnumerable<Tune>> GetAllTunes();
-    Task Add(Tune tune);
-    Task Delete(int id);
-    Task<Tune> FindAsync(int id);
-    Task Update(int id);
-    Task<IEnumerable<Tune>> SortByTuneTypeAsync(TuneTypeEnum type);
-    Task<IEnumerable<Tune>> SortByTuneKeyAsync(TuneKeyEnum key);
-    Task<IEnumerable<Tune>> SortByTypeAndKeyAsync(TuneTypeEnum type, TuneKeyEnum key);
-    Task<IEnumerable<Tune>> SortByExactComposerAsync(string composer);
-    Task<IEnumerable<Tune>> GetByTitle(string title);
-    Task <int> SaveChanges();
+    Task AddTune(Tune tune);
+    Task DeleteTune(int id);
+    new Task<Tune> FindAsync(int id);
+    Task<IEnumerable<Tune>> FindByType(TuneTypeEnum type);
+    Task<IEnumerable<Tune>> FindByKey(TuneKeyEnum key);
+    Task<IEnumerable<Tune>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key);
+    Task<IEnumerable<Tune>> FindByExactComposer(string composer);
+    Task<IEnumerable<Tune>> FindByExactTitle(string title);
+    Task UpdateTuneTitle(int id, string title);
+    Task UpdateTuneComposer(int id, string composer);
+    Task UpdateTuneType(int id, TuneTypeEnum type);
+    Task UpdateTuneKey(int id, TuneKeyEnum key);
+    Task AddAlternateTitle(int id, string title);
+    Task RemoveAlternateTitle(int id, string title);
+    Task<int> SaveChanges();
 
 }
 
@@ -31,79 +34,100 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     
     public async Task<IEnumerable<Tune>> GetAllTunes()
     {
-        return await GetAll().ToListAsync();
+        return await GetEntities().ToListAsync();
     }
 
-    public async Task Add(Tune tune)
+    public async Task AddTune(Tune tune)
     {
         await AddAsync(tune);
     }
 
-    public async Task Delete(int id)
+    public async Task DeleteTune(int id)
     {
         var tune = await FindAsync(id);
         await DeleteAsync(tune);
     }
+    
     public override async Task<Tune> FindAsync(int id)
     {
         var tune = await Context.Tunes
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (tune == null)
-        {
-            throw new Exception();
-        }
+            throw new InvalidOperationException("Tune not found");
 
         return tune;
     }
     
-    public async Task Update(int id)
+    public async Task UpdateTuneTitle(int id, string title)
     {
         var tune = await FindAsync(id);
-        if (tune.Title.IsValidNameOrTitle() && tune.Composer.IsValidNameOrTitle())
-        {
-            await UpdateAsync(tune);
-        }
-        else
-        {
-            throw new Exception();
-        }
+        tune.UpdateTitle(title);
+        await SaveAsync();
+        
+    }
+    
+    public async Task UpdateTuneComposer(int id, string composer)
+    {
+        var tune = await FindAsync(id);
+        tune.UpdateComposer(composer);
+        await SaveAsync();
+        
+    }
+    
+    public async Task UpdateTuneType(int id, TuneTypeEnum type)
+    {
+        var tune = await FindAsync(id);
+        tune.UpdateType(type);
+        await SaveAsync();
+        
+    }
+    
+    public async Task UpdateTuneKey(int id, TuneKeyEnum key)
+    {
+        var tune = await FindAsync(id);
+        tune.UpdateKey(key);
+        await SaveAsync();
+        
     }
 
-    public async Task AddAlternateTitlesAsync(int id, List<string> tunes)
+    public async Task AddAlternateTitle(int id, string title)
     {
-        var tune = await Context.Tunes.FindAsync(id);
+        var tune = await FindAsync(id);
+        tune.AddAlternateTitle(title);
+        await Context.SaveChangesAsync();
 
-        if (tune == null)
-        {
-            throw new NullReferenceException();
-        }
-        tune.AddAlternateTitles(tunes);
+    }
+    
+    public async Task RemoveAlternateTitle(int id, string title)
+    {
+        var tune = await FindAsync(id);
+        tune.RemoveAlternateTitle(title);
         await Context.SaveChangesAsync();
 
     }
 
-    public async Task<IEnumerable<Tune>> SortByTuneTypeAsync(TuneTypeEnum type)
+    public async Task<IEnumerable<Tune>> FindByType(TuneTypeEnum type)
     {
         return await GetByWhere(tune => tune.TuneType == type).ToListAsync();
     }
 
-    public async Task<IEnumerable<Tune>> SortByTuneKeyAsync(TuneKeyEnum key)
+    public async Task<IEnumerable<Tune>> FindByKey(TuneKeyEnum key)
     {
         return await GetByWhere(t => t.TuneKey == key).ToListAsync();
     }
 
-    public async Task<IEnumerable<Tune>> SortByTypeAndKeyAsync(TuneTypeEnum type, TuneKeyEnum key)
+    public async Task<IEnumerable<Tune>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         return await GetByWhere(t => t.TuneType == type & t.TuneKey == key).ToListAsync();
     }
 
-    public async Task<IEnumerable<Tune>> SortByExactComposerAsync(string composer)
+    public async Task<IEnumerable<Tune>> FindByExactComposer(string composer)
     { 
         return await GetByWhere(t => t.Composer == composer).ToListAsync();
     }
 
-    public async Task<IEnumerable<Tune>> GetByTitle(string title)
+    public async Task<IEnumerable<Tune>> FindByExactTitle(string title)
     {
         return await GetByWhere(t => t.Title == title).ToListAsync();
     }
