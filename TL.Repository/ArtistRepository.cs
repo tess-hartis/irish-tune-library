@@ -6,13 +6,12 @@ namespace TL.Repository;
 
 public interface IArtistRepository : IGenericRepository<Artist>
 {
-    Task Add(Artist artist);
-    Task Delete(int id);
-    Task<Artist> Find(int id);
-    Task Update(int id);
+    Task AddArtist(Artist artist);
+    Task DeleteArtist(int id);
+    new Task<Artist> FindAsync (int id);
     Task<IEnumerable<Artist>> GetAllArtists();
-    Task<IEnumerable<Artist>> GetByName(string name);
-    Task<IEnumerable<Artist>> FindAlbumArtists(Album album);
+    Task<IEnumerable<Artist>> GetByExactName(string name);
+    Task UpdateName(int id, string name);
 
 }
 
@@ -23,48 +22,46 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
        
     }
 
-    public async Task Add(Artist artist)
+    public async Task AddArtist(Artist artist)
     {
         await AddAsync(artist);
        
     }
 
-    public async Task Delete(int id)
+    public async Task DeleteArtist(int id)
     {
         var artist = await FindAsync(id);
         await DeleteAsync(artist);
         
     }
 
-    public async Task<Artist> Find(int id)
+    public override async Task<Artist> FindAsync (int id)
     {
-        var result = await FindAsync(id);
+        var result = await Context.Artists
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
         if (result == null)
-        {
-            throw new NullReferenceException();
-        }
+            throw new InvalidOperationException("Artist not found");
 
         return result;
     }
-
-    public async Task Update(int id)
-    {
-        var artist = await FindAsync(id);
-        await UpdateAsync(artist);
-    }
-
+    
     public async Task<IEnumerable<Artist>> GetAllArtists()
     {
-        return await GetAll().ToListAsync();
+        return await GetEntities().ToListAsync();
     }
 
-    public async Task<IEnumerable<Artist>> GetByName(string name)
+    public async Task<IEnumerable<Artist>> GetByExactName(string name)
     {
         return await GetByWhere(artist => artist.Name == name).ToListAsync();
     }
 
-    public async Task<IEnumerable<Artist>> FindAlbumArtists(Album album)
+    public async Task UpdateName(int id, string name)
     {
-        return await GetByWhere(a => a.Albums.Contains(album)).ToListAsync();
+        var artist = await FindAsync(id);
+        artist.UpdateName(name);
+        await SaveAsync();
     }
+
+    
 }
