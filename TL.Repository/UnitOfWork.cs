@@ -10,12 +10,10 @@ public interface IUnitOfWork
     IAlbumRepository AlbumRepository { get; }
     IArtistRepository ArtistRepository { get; }
     Task SaveChangesAsync();
-    Task AddTuneToTrack(int tuneId, int trackId);
-    Task AddTrackToAlbum(int trackId, int albumId);
-    Task AddArtistToAlbum(int artistId, int albumId);
-    Task<Album> GetAlbumByTrack(int trackId);
-    Task<IEnumerable<Track>> GetByTuneFeatured(int tuneId);
-    Task<IEnumerable<Artist>> GetAlbumArtists(int albumId);
+    Task AddExistingTuneToTrack(int tuneId, int trackId);
+    Task<IEnumerable<Track>> FindTracksByTune(int tuneId);
+    Task<IEnumerable<Album>> FindAlbumsByArtist(int artistId);
+
 
 }
 
