@@ -78,12 +78,11 @@ public class UnitOfWork : IUnitOfWork
         var tracks = await _trackRepository.FindByTuneFeatured(tune);
         return tracks;
     }
-
-    public async Task<IEnumerable<Artist>> GetAlbumArtists(int albumId)
+    public async Task<IEnumerable<Album>> FindAlbumsByArtist(int artistId)
     {
-        var album = await _albumRepository.FindAsync(albumId);
-        var artists = await _artistRepository.FindAlbumArtists(album);
-        return artists;
+        var artist = await _artistRepository.FindAsync(artistId);
+        var albums = await _albumRepository.FindByArtist(artist);
+        return albums;
     }
 
 
