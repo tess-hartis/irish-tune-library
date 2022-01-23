@@ -12,23 +12,6 @@ namespace TL.Tests.PgsqlTests;
 public class TrackRepoTest
 {
     [Test]
-    public void Can_Add_Track_Using_Context_Directly()
-    {
-        using var context = new TuneLibraryContext(); // need to extract these three lines
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-        var track = new Track("Title", 1);
-
-        context.Tracks.Add(track);
-        context.SaveChanges();
-
-        const int expected = 0;
-        var actual = track.Id;
-        
-        Assert.AreNotEqual(expected, actual);
-    }
-
-    [Test]
     public async Task Can_Add_Track_Using_Repository()
     {
         //Arrange
@@ -36,10 +19,10 @@ public class TrackRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new TrackRepository(context);
-        var track = new Track("Title", 1);
+        var track = Track.CreateTrack("Kerry Nights", 2);
         
         //Act
-        await repo.Add(track);
+        await repo.AddTrack(track);
 
         const int expected = 1;
         var actual = track.Id;
@@ -56,12 +39,13 @@ public class TrackRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new TrackRepository(context);
-        var track = new Track("Title", 1);
-        await repo.AddAsync(track);
+        var track = Track.CreateTrack("Kerry Nights", 2);
+        await repo.AddTrack(track);
         
         //Act
-        await repo.Delete(track.Id);
-        var list = await repo.GetAll().ToListAsync();
+        await repo.DeleteTrack(track.Id);
+        var list = await repo.GetEntities().ToListAsync();
+        
         const int expected = 0;
         var actual = list.Count;
 
@@ -70,22 +54,42 @@ public class TrackRepoTest
     }
     
     [Test]
-    public async Task Can_Update_Track_Using_Repository()
+    public async Task Can_Update_Title_Using_Repository()
     {
         //Arrange
         await using var context = new TuneLibraryContext();
         var repo = new TrackRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var track = new Track("Title", 1);
-        await repo.AddAsync(track);
+        var track = Track.CreateTrack("Kerry Nights", 2);
+        await repo.AddTrack(track);
 
         //Act
-        track.Title = "New Title";
-        await repo.Update(track.Id);
+        await repo.UpdateTrackTitle(track.Id, "New Title");
 
         const string expected = "New Title";
         var actual = track.Title;
+
+        //Assert
+        Assert.AreEqual(expected, actual);
+    }
+    
+    [Test]
+    public async Task Can_Update_TrackNumber_Using_Repository()
+    {
+        //Arrange
+        await using var context = new TuneLibraryContext();
+        var repo = new TrackRepository(context);
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+        var track = Track.CreateTrack("Kerry Nights", 2);
+        await repo.AddTrack(track);
+
+        //Act
+        await repo.UpdateTrackNumber(track.Id, 3);
+
+        const int expected = 3;
+        var actual = track.TrackNumber;
 
         //Assert
         Assert.AreEqual(expected, actual);
@@ -99,11 +103,11 @@ public class TrackRepoTest
         var repo = new TrackRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var track = new Track("Title", 1);
+        var track = Track.CreateTrack("Kerry Nights", 2);
         await repo.AddAsync(track);
 
         //Act
-        const string expected = "Title";
+        const string expected = "Kerry Nights";
         var actual = await repo.FindAsync(track.Id);
 
         //Assert
@@ -136,37 +140,15 @@ public class TrackRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var repo = new TrackRepository(context);
-        var track = new Track("Title", 1);
+        var track = Track.CreateTrack("Kerry Nights", 2);
         await repo.AddAsync(track);
-        
-        //Act
-        const string expected = "Title";
-        var actual = await repo.FindByExactTitleAsync("Title");
-
-        //Assert
-        Assert.AreEqual(expected, actual.Title);
-    }
-
-    [Test]
-    public async Task Can_Find_By_Tune_Featured()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var repo = new TrackRepository(context);
-        var track = new Track("Title", 1);
-        await repo.AddAsync(track);
-        var tune = new Tune("Misty", TuneTypeEnum.Air, TuneKeyEnum.Ador, "Traditional");
-        track.AddTune(tune);
-        await repo.SaveAsync();
         
         //Act
         const int expected = 1;
-        var actual = track.TuneList.Count;
-        
-        //Assert
-        Assert.AreEqual(expected, actual);
+        var actual = await repo.FindByExactTitle("Kerry Nights");
 
+        //Assert
+        Assert.AreEqual(expected, actual.Count());
     }
+    
 }
