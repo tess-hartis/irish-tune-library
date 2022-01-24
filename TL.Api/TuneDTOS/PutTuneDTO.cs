@@ -8,15 +8,15 @@ public class PutTuneDTO
     public TuneTypeEnum Type { get; set; }
     public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
-    public List<string> AlternateTitles { get; set; }
     
+
     public static Tune UpdatedTune(Tune tune, PutTuneDTO dto)
     {
-        tune.Title = dto.Title;
-        tune.TuneType = dto.Type;
-        tune.TuneKey = dto.Key;
-        tune.Composer = dto.Composer;
-        tune.AlternateTitles = dto.AlternateTitles;
+        tune.UpdateTitle(dto.Title);
+        tune.UpdateComposer(dto.Composer);
+        tune.UpdateType(dto.Type);
+        tune.UpdateKey(dto.Key);
+        
         return tune;
     }
 }
