@@ -9,6 +9,7 @@ public class PostAlbumDTO
 
     public static Album ToAlbum(PostAlbumDTO dto)
     {
-        return new Album(dto.Title, dto.Year);
+        var album = Album.CreateAlbum(dto.Title, dto.Year);
+        return album;
     }
 }

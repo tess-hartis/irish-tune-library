@@ -9,6 +9,7 @@ public class PostTrackDTO
 
     public static Track ToTrack(PostTrackDTO dto)
     {
-        return new Track(dto.Title, dto.TrackNumber);
+        var track = Track.CreateTrack(dto.Title, dto.TrackNumber);
+        return track;
     }
 }

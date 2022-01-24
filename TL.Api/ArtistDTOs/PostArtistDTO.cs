@@ -8,6 +8,7 @@ public class PostArtistDTO
 
     public static Artist ToArtist(PostArtistDTO dto)
     {
-        return new Artist(dto.Name);
+        var artist = Artist.CreateArtist(dto.Name);
+        return artist;
     }
 }
