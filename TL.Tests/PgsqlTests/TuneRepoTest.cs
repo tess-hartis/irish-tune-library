@@ -142,8 +142,8 @@ public class TuneRepoTest
         //Act
         await repo.AddAlternateTitle(tune.Id, "Extra Title");
 
-        const string expected = "Extra Title";
-        var actual = tune.AlternateTitles[0];
+        const bool expected = true;
+        var actual = tune.AlternateTitles.Contains("Extra Title");
         
         //Assert
         Assert.AreEqual(expected, actual);
