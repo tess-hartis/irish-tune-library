@@ -60,6 +60,7 @@ public class Tune
             throw new FormatException("Alternate title cannot be empty");
 
         _alternateTitles.Add(title);
+        
     }
 
     public void RemoveAlternateTitle(string title)
@@ -67,9 +68,6 @@ public class Tune
         if (_alternateTitles == null)
             throw new InvalidOperationException(
                 "Alternate title list not loaded");
-
-        if (!_alternateTitles.Contains(title))
-            throw new InvalidOperationException("The alternate title was not found");
 
         _alternateTitles.Remove(title);
     }
