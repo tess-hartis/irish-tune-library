@@ -9,8 +9,8 @@ public class PutAlbumDTO
 
     public static Album UpdatedAlbum(Album album, PutAlbumDTO dto)
     {
-        album.Title = dto.Title;
-        album.Title = dto.Title;
+        album.UpdateTitle(dto.Title);
+        album.UpdateYear(dto.Year);
         return album;
     }
 }
