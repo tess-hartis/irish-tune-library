@@ -6,5 +6,6 @@
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.TrackRepoTest&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumRepoTest.Can_Add_Album_Using_Repository&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumRepoTest&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.DomainTests.TuneDomainTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
