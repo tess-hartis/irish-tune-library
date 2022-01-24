@@ -9,8 +9,8 @@ public class PutTrackDTO
 
     public static Track UpdatedTrack(Track track, PutTrackDTO dto)
     {
-        track.Title = dto.Title;
-        track.TrackNumber = dto.TrackNumber;
+        track.UpdateTitle(dto.Title);
+        track.UpdateTrackNumber(dto.TrackNumber);
         return track;
     }
 }
