@@ -10,9 +10,9 @@ public class TuneLibraryContext : DbContext
     public DbSet<Artist> Artists { get; set; }
     public DbSet<Track> Tracks { get; set; }
 
-    public TuneLibraryContext(){} //have to specify a default constructor
+    public TuneLibraryContext(){ } //have to specify a default constructor
 
-    public TuneLibraryContext(DbContextOptions opt) : base(opt){} //in the tests, we can explicitly 
+    public TuneLibraryContext(DbContextOptions opt) : base(opt){ } //in the tests, we can explicitly 
     //create the context and tell it to use InMemory
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
