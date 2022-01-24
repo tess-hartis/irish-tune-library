@@ -4,6 +4,7 @@ using TL.Repository;
 
 namespace TL.Api.Controllers;
 
+[Route("api/[controller]")]
 public class ArtistController : Controller
 {
    private readonly IArtistRepository _artistRepository;
@@ -23,13 +24,13 @@ public class ArtistController : Controller
       return Ok(returned);
    }
    
-   [HttpGet("{name}")]
-   public async Task<ActionResult<IEnumerable<GetArtistsDTO>>> FindByName(string name)
-   {
-      var artists = await _artistRepository.GetByName(name);
-      var returned = GetArtistsDTO.GetAll(artists);
-      return Ok(returned);
-   }
+   // [HttpGet("{name}")]
+   // public async Task<ActionResult<IEnumerable<GetArtistsDTO>>> FindByName(string name)
+   // {
+   //    var artists = await _artistRepository.GetByExactName(name);
+   //    var returned = GetArtistsDTO.GetAll(artists);
+   //    return Ok(returned);
+   // }
    
    [HttpGet("{id}")]
    public async Task<ActionResult<GetArtistDTO>> FindArtist(int id)
@@ -39,19 +40,11 @@ public class ArtistController : Controller
       return Ok(returned);
    }
 
-   [HttpGet("{albumId}")]
-   public async Task<ActionResult<GetArtistsDTO>> GetAlbumArtists(int albumId)
-   {
-      var artist = await _unitOfWork.GetAlbumArtists(albumId);
-      var returned = GetArtistsDTO.GetAll(artist);
-      return Ok(returned);
-   }
-
    [HttpPost]
    public async Task<ActionResult> AddArtist([FromBody] PostArtistDTO dto)
    {
       var artist = PostArtistDTO.ToArtist(dto);
-      await _artistRepository.Add(artist);
+      await _artistRepository.AddArtist(artist);
       return Ok();
    }
 
@@ -60,7 +53,7 @@ public class ArtistController : Controller
    {
       var artist = await _artistRepository.FindAsync(id);
       var updated = PutArtistDTO.UpdatedArtist(artist, dto);
-      await _artistRepository.Update(artist.Id);
+      await _artistRepository.UpdateAsync(updated);
       return Ok();
    }
    
@@ -68,7 +61,7 @@ public class ArtistController : Controller
    public async Task<ActionResult> DeleteArtist(int id)
    {
       var artist = _artistRepository.FindAsync(id);
-      await _artistRepository.Delete(artist.Id);
+      await _artistRepository.DeleteArtist(artist.Id);
       return Ok();
 
    }

@@ -5,7 +5,7 @@ using TL.Repository;
 
 namespace TL.Api.Controllers;
 
-[Route("api/Tracks")]
+[Route("api/[controller]")]
 
 public class TrackController : Controller
 {
@@ -31,7 +31,7 @@ public class TrackController : Controller
     public async Task<ActionResult> AddTrack([FromBody] PostTrackDTO dto)
     {
         var track = PostTrackDTO.ToTrack(dto);
-        await _trackRepository.Add(track);
+        await _trackRepository.AddTrack(track);
         return Ok();
     }
 
@@ -40,7 +40,7 @@ public class TrackController : Controller
     {
         var track = await _trackRepository.FindAsync(id);
         var updated = PutTrackDTO.UpdatedTrack(track, dto);
-        var result = _trackRepository.Update(track.Id);
+        var result = _trackRepository.UpdateAsync(updated);
         if (!result.IsCompleted)
         {
             return new BadRequestResult();
@@ -55,7 +55,7 @@ public class TrackController : Controller
         var track = _trackRepository.FindAsync(id);
         if (track.IsCompleted)
         {
-            await _trackRepository.Delete(track.Id);
+            await _trackRepository.DeleteTrack(track.Id);
             return new NoContentResult();
         }
 
@@ -65,7 +65,7 @@ public class TrackController : Controller
     [HttpGet("{title}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTitle(string title)
     {
-        var tracks = await _trackRepository.FindByExactTitleAsync(title);
+        var tracks = await _trackRepository.FindByExactTitle(title);
         var returned = GetTracksDTO.GetTracks(tracks);
         return Ok(returned);
     }
@@ -73,7 +73,7 @@ public class TrackController : Controller
     [HttpGet("{tuneId}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTune(int tuneId)
     {
-        var tracks = await _unitOfWork.GetByTuneFeatured(tuneId);
+        var tracks = await _unitOfWork.FindTracksByTune(tuneId);
         var returned = GetTracksDTO.GetTracks(tracks);
         return Ok(returned);
     }

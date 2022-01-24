@@ -5,7 +5,7 @@ using TL.Repository;
 
 namespace TL.Api.Controllers;
 
-[Route("api/Tunes")]
+[Route("api/[controller]")]
 
 public class TuneController : Controller
 {
@@ -27,7 +27,7 @@ public class TuneController : Controller
     [HttpGet("{type}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByType(TuneTypeEnum type)
     {
-        var tunes = await _tuneRepository.SortByTuneTypeAsync(type);
+        var tunes = await _tuneRepository.FindByType(type);
         var returned = GetTunesDTO.GetAll(tunes);
         return Ok(returned);
     }
@@ -35,7 +35,7 @@ public class TuneController : Controller
     [HttpGet("{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByKey(TuneKeyEnum key)
     {
-        var tunes = await _tuneRepository.SortByTuneKeyAsync(key);
+        var tunes = await _tuneRepository.FindByKey(key);
         var returned = GetTunesDTO.GetAll(tunes);
         return Ok(returned);
     }
@@ -43,7 +43,7 @@ public class TuneController : Controller
     [HttpGet("{type}/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
-        var tunes = await _tuneRepository.SortByTypeAndKeyAsync(type, key);
+        var tunes = await _tuneRepository.FindByTypeAndKey(type, key);
         var returned = GetTunesDTO.GetAll(tunes);
         return Ok(returned);
     }
@@ -51,7 +51,7 @@ public class TuneController : Controller
     [HttpGet("{composer}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByComposer(string composer)
     {
-        var tunes = await _tuneRepository.SortByExactComposerAsync(composer);
+        var tunes = await _tuneRepository.FindByExactComposer(composer);
         var returned = GetTunesDTO.GetAll(tunes);
         return Ok(returned);
     }
@@ -59,13 +59,13 @@ public class TuneController : Controller
     [HttpGet("{title}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTitle(string title)
     {
-        var tunes = await _tuneRepository.GetByTitle(title);
+        var tunes = await _tuneRepository.FindByExactTitle(title);
         var returned = GetTunesDTO.GetAll(tunes);
         return Ok(returned);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindAll()
+    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindAllTunes()
     {
         var tunes = await _tuneRepository.GetAllTunes();
         var returned = GetTunesDTO.GetAll(tunes);
@@ -75,27 +75,32 @@ public class TuneController : Controller
     [HttpPost]
     public async Task<ActionResult> AddTune([FromBody] PostTuneDTO dto)
     {
-        var tune = PostTuneDTO.ToTune(dto);
-        await _tuneRepository.Add(tune);
+        var tune = PostTuneDTO.Create(dto);
+        await _tuneRepository.AddTune(tune);
         return Ok();
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
     {
-        var tune = await _tuneRepository.FindAsync(id);
-        var updated = PutTuneDTO.UpdatedTune(tune, dto);
-        await _tuneRepository.Update(tune.Id);
+        await _tuneRepository.UpdateTune(id, dto.Title, dto.Composer, dto.Type, dto.Key);
         return Ok();
     }
-
+    
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTune(int id)
     {
         var tune = _tuneRepository.FindAsync(id);
-        await _tuneRepository.Delete(tune.Id);
+        await _tuneRepository.DeleteTune(tune.Id);
         return Ok();
 
+    }
+
+    [HttpPost("{id}/altTitle")]
+    public async Task<ActionResult> AddAltTitle(int id, [FromBody] PostAltTitleDTO dto)
+    {
+        await _tuneRepository.AddAlternateTitle(id, dto.AlternateTitle);
+        return Ok();
     }
     
 }
