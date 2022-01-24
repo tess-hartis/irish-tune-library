@@ -1,3 +1,4 @@
+using System.Xml;
 using TL.Domain;
 
 namespace TL.Api.TuneDTOs;
@@ -9,9 +10,10 @@ public class PostTuneDTO
     public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
 
-    public static Tune ToTune(PostTuneDTO dto)
+    public static Tune Create(PostTuneDTO dto)
     {
-        return new Tune(dto.Title, dto.Type, dto.Key, dto.Composer);
+        var tune = Tune.CreateTune(dto.Title, dto.Composer, dto.Type, dto.Key);
+        return tune;
     }
     
 }
