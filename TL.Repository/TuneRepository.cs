@@ -69,16 +69,14 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     {
         var tune = await FindAsync(id);
         tune.AddAlternateTitle(title);
-        await Context.SaveChangesAsync();
-
+        await SaveChanges();
     }
-    
+
     public async Task RemoveAlternateTitle(int id, string title)
     {
         var tune = await FindAsync(id);
         tune.RemoveAlternateTitle(title);
-        await Context.SaveChangesAsync();
-
+        await SaveChanges();
     }
 
     public async Task<IEnumerable<Tune>> FindByType(TuneTypeEnum type)
@@ -106,7 +104,7 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
         return await GetByWhere(t => t.Title == title).ToListAsync();
     }
 
-    public async Task<int> SaveChanges()
+    private async Task<int> SaveChanges()
     {
         return await Context.SaveChangesAsync();
     }
