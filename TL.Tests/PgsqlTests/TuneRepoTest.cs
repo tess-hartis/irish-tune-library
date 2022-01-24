@@ -64,27 +64,27 @@ public class TuneRepoTest
         
     }
 
-    [Test]
-    public async Task Can_Update_Title_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var repo = new TuneRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var tune = Tune.CreateTune("Kesh", "Traditional", 
-            TuneTypeEnum.Jig, TuneKeyEnum.GMaj);
-        await repo.AddTune(tune);
-
-        //Act
-        await repo.UpdateTuneTitle(tune.Id, "New Title");
-
-        const string expected = "New Title";
-        var actual = tune.Title;
-
-        //Assert
-        Assert.AreEqual(expected, actual);
-    }
+    // [Test]
+    // public async Task Can_Update_Title_Using_Repository()
+    // {
+    //     //Arrange
+    //     await using var context = new TuneLibraryContext();
+    //     var repo = new TuneRepository(context);
+    //     await context.Database.EnsureDeletedAsync();
+    //     await context.Database.EnsureCreatedAsync();
+    //     var tune = Tune.CreateTune("Kesh", "Traditional", 
+    //         TuneTypeEnum.Jig, TuneKeyEnum.GMaj);
+    //     await repo.AddTune(tune);
+    //
+    //     //Act
+    //     await repo.UpdateTuneTitle(tune.Id, "New Title");
+    //
+    //     const string expected = "New Title";
+    //     var actual = tune.Title;
+    //
+    //     //Assert
+    //     Assert.AreEqual(expected, actual);
+    // }
 
     [Test]
     public async Task Can_Find_Tune_By_Id_Using_Repository()
