@@ -15,13 +15,9 @@ public interface ITuneRepository : IGenericRepository<Tune>
     Task<IEnumerable<Tune>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key);
     Task<IEnumerable<Tune>> FindByExactComposer(string composer);
     Task<IEnumerable<Tune>> FindByExactTitle(string title);
-    Task UpdateTuneTitle(int id, string title);
-    Task UpdateTuneComposer(int id, string composer);
-    Task UpdateTuneType(int id, TuneTypeEnum type);
-    Task UpdateTuneKey(int id, TuneKeyEnum key);
+    Task UpdateTune(int id, string title, string composer, TuneTypeEnum type, TuneKeyEnum key);
     Task AddAlternateTitle(int id, string title);
     Task RemoveAlternateTitle(int id, string title);
-    Task<int> SaveChanges();
 
 }
 
@@ -58,37 +54,15 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
 
         return tune;
     }
-    
-    public async Task UpdateTuneTitle(int id, string title)
+
+    public async Task UpdateTune(int id, string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         var tune = await FindAsync(id);
         tune.UpdateTitle(title);
-        await SaveAsync();
-        
-    }
-    
-    public async Task UpdateTuneComposer(int id, string composer)
-    {
-        var tune = await FindAsync(id);
         tune.UpdateComposer(composer);
-        await SaveAsync();
-        
-    }
-    
-    public async Task UpdateTuneType(int id, TuneTypeEnum type)
-    {
-        var tune = await FindAsync(id);
         tune.UpdateType(type);
-        await SaveAsync();
-        
-    }
-    
-    public async Task UpdateTuneKey(int id, TuneKeyEnum key)
-    {
-        var tune = await FindAsync(id);
         tune.UpdateKey(key);
         await SaveAsync();
-        
     }
 
     public async Task AddAlternateTitle(int id, string title)
