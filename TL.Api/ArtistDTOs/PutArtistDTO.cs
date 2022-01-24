@@ -8,7 +8,7 @@ public class PutArtistDTO
 
     public static Artist UpdatedArtist(Artist artist, PutArtistDTO dto)
     {
-        artist.Name = dto.Name;
+        artist.UpdateName(dto.Name);
         return artist;
     }
 }
