@@ -59,6 +59,9 @@ public class Tune
         if (string.IsNullOrWhiteSpace(title))
             throw new FormatException("Alternate title cannot be empty");
 
+        if (title.Length > 75)
+            throw new FormatException("Alternate title must be 75 characters or fewer");
+
         _alternateTitles.Add(title);
         
     }
