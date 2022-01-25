@@ -44,6 +44,9 @@ public class TuneLibraryContext : DbContext
             .HasConversion(
                 d => d.ToString("MM/dd/yyyy"),
                 d => DateOnly.Parse(d));
-        
+        modelBuilder.Entity<Tune>()
+            .Property(t => t.AlternateTitles)
+            .HasColumnName("Alternate Titles");
+
     }
 }
