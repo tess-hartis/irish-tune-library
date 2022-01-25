@@ -24,7 +24,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("{type}")]
+    [HttpGet("type/{type}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByType(TuneTypeEnum type)
     {
         var tunes = await _tuneRepository.FindByType(type);
@@ -32,7 +32,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("{key}")]
+    [HttpGet("key/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByKey(TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.FindByKey(key);
@@ -40,7 +40,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("{type}/{key}")]
+    [HttpGet("typekey/{type}/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.FindByTypeAndKey(type, key);
@@ -48,7 +48,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("{composer}")]
+    [HttpGet("composer/{composer}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByComposer(string composer)
     {
         var tunes = await _tuneRepository.FindByExactComposer(composer);
@@ -56,7 +56,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("{title}")]
+    [HttpGet("title/{title}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTitle(string title)
     {
         var tunes = await _tuneRepository.FindByExactTitle(title);
