@@ -66,10 +66,9 @@ public class Tune
 
     public void RemoveAlternateTitle(string title)
     {
-        if (_alternateTitles == null)
-            throw new InvalidOperationException(
-                "Alternate title list not loaded");
-
+        if (!_alternateTitles.Contains(title))
+            throw new InvalidOperationException("The alternate title was not found");
+        
         _alternateTitles.Remove(title);
     }
 
