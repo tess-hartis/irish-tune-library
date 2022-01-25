@@ -97,10 +97,19 @@ public class TuneController : Controller
 
     }
 
-    [HttpPost("{id}/altTitle")]
-    public async Task<ActionResult> AddAltTitle(int id, [FromBody] PostAltTitleDTO dto)
+    [HttpPost("{id}/titles")]
+    public async Task<ActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
-        await _tuneRepository.AddAlternateTitle(id, dto.AlternateTitle);
+        var altTitle = dto.AlternateTitle;
+        await _tuneRepository.AddAlternateTitle(id, altTitle);
+        return Ok();
+    }
+    
+    [HttpDelete("{id}/titles")]
+    public async Task<ActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
+    {
+        var title = dto.AlternateTitle;
+        await _tuneRepository.RemoveAlternateTitle(id, title);
         return Ok();
     }
     
