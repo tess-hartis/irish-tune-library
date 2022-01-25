@@ -9,7 +9,7 @@ public class Track
     public string Title { get; private set; }
     public int TrackNumber { get; private set; }
     
-    private HashSet<Tune> _tuneList;
+    private List<Tune> _tuneList;
     public IReadOnlyCollection<Tune> TuneList => _tuneList.ToList();
 
     public static Track CreateTrack(string title, int trackNumber)
