@@ -53,10 +53,7 @@ public class Tune
 
     public void AddAlternateTitle(string title)
     {
-        if (_alternateTitles == null)
-            throw new InvalidOperationException(
-                "Alternate title list not loaded");
-
+        
         if (string.IsNullOrWhiteSpace(title))
             throw new FormatException("Alternate title cannot be empty");
 
