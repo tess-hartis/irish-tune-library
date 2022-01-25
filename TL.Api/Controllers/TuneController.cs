@@ -68,8 +68,9 @@ public class TuneController : Controller
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindAllTunes()
     {
         var tunes = await _tuneRepository.GetAllTunes();
-        var returned = GetTunesDTO.GetAll(tunes);
-        return Ok(returned);
+        var shortsyntax = tunes.Select(GetTuneDTO.FromTune);
+        // var returned = GetTunesDTO.GetAll(tunes);
+        return Ok(shortsyntax);
     }
 
     [HttpPost]
