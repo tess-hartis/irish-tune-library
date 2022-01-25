@@ -8,7 +8,7 @@ public class GetTuneDTO
     public TuneTypeEnum Type { get; set; }
     public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
-    public IReadOnlyList<string> AlternateTitles { get; set; }
+    public List<string> AlternateTitles { get; set; }
 
     public static GetTuneDTO FromTune(Tune tune)
     {
