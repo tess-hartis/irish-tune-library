@@ -46,7 +46,7 @@ public class Tune
         return tune;
     }
 
-    internal Tune(string title, TuneTypeEnum type, TuneKeyEnum key, string composer)
+    public Tune(string title, TuneTypeEnum type, TuneKeyEnum key, string composer)
     {
         CreateTune(title, composer, type, key);
     }
