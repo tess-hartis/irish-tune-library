@@ -6,8 +6,9 @@ public class Tune
     
     public int Id { get; private set; }
     public string Title { get;  private set; }
-    private HashSet<string> _alternateTitles;
-    public IReadOnlyList<string> AlternateTitles => _alternateTitles.ToList();
+
+    private List<string> _alternateTitles = new List<string>();
+    public List<string> AlternateTitles => _alternateTitles;
     public TuneTypeEnum TuneType { get; private set; }
     public TuneKeyEnum TuneKey { get; private set; }
     public string Composer { get; private set; }
