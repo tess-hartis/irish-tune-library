@@ -5,18 +5,16 @@ namespace TL.Api.AlbumDTOs;
 
 public class GetAlbumsDTO
 {
-    private List<GetAlbumDTO> _albums { get; } = new List<GetAlbumDTO>();
-    public IEnumerable<GetAlbumDTO> AllAlbums => _albums;
-
-    public static GetAlbumsDTO GetAll(IEnumerable<Album> albums)
+    public List<GetAlbumDTO> Albums = new List<GetAlbumDTO>();
+    public static List<GetAlbumDTO> GetAll(IEnumerable<Album> albums)
     {
         var dto = new GetAlbumsDTO();
         foreach (var album in albums)
         {
             var albumDto = GetAlbumDTO.FromAlbum(album);
-            dto._albums.Add(albumDto);
+            dto.Albums.Add(albumDto);
         }
 
-        return dto;
+        return dto.Albums;
     }
 }

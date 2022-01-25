@@ -4,18 +4,17 @@ namespace TL.Api.ArtistDTOs;
 
 public class GetArtistsDTO
 {
-    private List<GetArtistDTO> _artists { get; } = new List<GetArtistDTO>();
-    public IEnumerable<GetArtistDTO> AllArtists => _artists;
+    public List<GetArtistDTO> Artists = new List<GetArtistDTO>();
 
-    public static GetArtistsDTO GetAll(IEnumerable<Artist> artists)
+    public static List<GetArtistDTO> GetAll(IEnumerable<Artist> artists)
     {
         var dto = new GetArtistsDTO();
         foreach (var artist in artists)
         {
             var artistDto = GetArtistDTO.FromArtist(artist);
-            dto._artists.Add(artistDto);
+            dto.Artists.Add(artistDto);
         }
 
-        return dto;
+        return dto.Artists;
     }
 }

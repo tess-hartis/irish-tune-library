@@ -4,18 +4,16 @@ namespace TL.Api.TrackDTOs;
 
 public class GetTracksDTO
 {
-    private   List<GetTrackDTO> _tracks { get; }
-    public IEnumerable<GetTrackDTO> AllTracks => _tracks;
-
-    public static GetTracksDTO GetTracks(IEnumerable<Track> tracks)
+    public List<GetTrackDTO> Tracks = new List<GetTrackDTO>();
+    public static List<GetTrackDTO> GetAll(IEnumerable<Track> tracks)
     {
         var dto = new GetTracksDTO();
         foreach (var track in tracks)
         {
             var trackDto = GetTrackDTO.FromTrack(track);
-            dto._tracks.Add(trackDto);
+            dto.Tracks.Add(trackDto);
         }
 
-        return dto;
+        return dto.Tracks;
     }
 }
