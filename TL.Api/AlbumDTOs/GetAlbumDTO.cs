@@ -6,6 +6,7 @@ namespace TL.Api.AlbumDTOs;
 public class GetAlbumDTO
 {
     public string Title { get; set; }
+    public int Id { get; set; }
     public int Year { get; set; }
 
     public static GetAlbumDTO FromAlbum(Album album)
@@ -13,6 +14,7 @@ public class GetAlbumDTO
         return new GetAlbumDTO
         {
             Title = album.Title,
+            Id = album.Id,
             Year = album.Year
         };
     }

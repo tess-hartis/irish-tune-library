@@ -5,6 +5,7 @@ namespace TL.Api.TuneDTOs;
 public class GetTuneDTO
 {
     public string Title { get; set; }
+    public int Id { get; set; }
     public TuneTypeEnum Type { get; set; }
     public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
@@ -15,6 +16,7 @@ public class GetTuneDTO
         return new GetTuneDTO
         {
             Title = tune.Title,
+            Id = tune.Id,
             Type = tune.TuneType,
             Key = tune.TuneKey,
             Composer = tune.Composer,
