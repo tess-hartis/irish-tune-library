@@ -37,6 +37,10 @@ public class TuneController : Controller
     {
         var tunes = await _tuneRepository.FindByKey(key);
         var returned = GetTunesDTO.GetAll(tunes);
+
+        if (returned.Count < 1)
+            return NotFound("No tunes were found");
+
         return Ok(returned);
     }
 
