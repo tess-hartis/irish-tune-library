@@ -38,35 +38,23 @@ public class TrackController : Controller
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
-        var track = await _trackRepository.FindAsync(id);
-        var updated = PutTrackDTO.UpdatedTrack(track, dto);
-        var result = _trackRepository.UpdateAsync(updated);
-        if (!result.IsCompleted)
-        {
-            return new BadRequestResult();
-        }
-
+        await _trackRepository.UpdateTrack(id, dto.Title, dto.TrackNumber);
         return Ok();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTrack(int id)
     {
-        var track = _trackRepository.FindAsync(id);
-        if (track.IsCompleted)
-        {
-            await _trackRepository.DeleteTrack(track.Id);
-            return new NoContentResult();
-        }
-
-        return new NotFoundResult();
+        var track = await _trackRepository.FindAsync(id);
+        await _trackRepository.DeleteTrack(track.Id);
+        return NoContent();
     }
 
     [HttpGet("{title}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTitle(string title)
     {
         var tracks = await _trackRepository.FindByExactTitle(title);
-        var returned = GetTracksDTO.GetTracks(tracks);
+        var returned = GetTracksDTO.GetAll(tracks);
         return Ok(returned);
     }
 
@@ -74,7 +62,8 @@ public class TrackController : Controller
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTune(int tuneId)
     {
         var tracks = await _unitOfWork.FindTracksByTune(tuneId);
-        var returned = GetTracksDTO.GetTracks(tracks);
+        var returned = GetTracksDTO.GetAll(tracks);
         return Ok(returned);
     }
+    
 }
