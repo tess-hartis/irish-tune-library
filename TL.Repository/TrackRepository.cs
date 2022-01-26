@@ -12,14 +12,8 @@ public interface ITrackRepository : IGenericRepository<Track>
     Task<IEnumerable<Track>> FindByExactTitle(string title);
     Task<IEnumerable<Track>> FindByTuneFeatured(Tune tune);
     Task<IEnumerable<Track>> GetAllTracks();
-    Task UpdateTrackTitle(int id, string title);
-    Task UpdateTrackNumber(int id, int trackNumber);
-    Task UpdateTunesAddNew(int trackId, string title,
-        TuneTypeEnum type, TuneKeyEnum key, string composer);
-    Task UpdateTunesRemove(int trackId, int tuneId);
-
-
-
+    Task UpdateTrack(int id, string title, int trackNumber);
+    
 }
 
 public class TrackRepository : GenericRepository<Track>, ITrackRepository
@@ -69,36 +63,12 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         return await GetEntities().ToListAsync();
     }
 
-    public async Task UpdateTrackTitle(int id, string title)
+    public async Task UpdateTrack(int id, string title, int trackNumber)
     {
         var track = await FindAsync(id);
         track.UpdateTitle(title);
-        await SaveAsync();
-    }
-
-    public async Task UpdateTrackNumber(int id, int trackNumber)
-    {
-        var track = await FindAsync(id);
         track.UpdateTrackNumber(trackNumber);
         await SaveAsync();
     }
-
-    public async Task UpdateTunesAddNew(int trackId, string title,
-        TuneTypeEnum type, TuneKeyEnum key, string composer)
-    {
-        var track = await FindAsync(trackId);
-        track.AddNewTune(title, type, key, composer);
-        await SaveAsync();
-    }
     
-
-    public async Task UpdateTunesRemove(int trackId, int tuneId)
-    {
-        var track = await FindAsync(trackId);
-        track.RemoveTune(tuneId);
-        await SaveAsync();
-    }
-    
-    
-
 }
