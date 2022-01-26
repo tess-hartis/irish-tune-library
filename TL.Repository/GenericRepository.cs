@@ -34,10 +34,10 @@ public abstract class GenericRepository<T>
     public IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate)
     {
         var result = Context.Set<T>().Where(predicate).AsNoTracking();
-        if (!result.IsAny())
-        {
-            throw new Exception();
-        }
+        // if (!result.IsAny())
+        // {
+        //     throw new Exception();
+        // }
 
         return result;
     }
