@@ -11,6 +11,9 @@ public interface IUnitOfWork
     IArtistRepository ArtistRepository { get; }
     Task SaveChangesAsync();
     Task AddExistingTuneToTrack(int tuneId, int trackId);
+    Task AddNewTuneToTrack(int trackId, string title,
+        TuneTypeEnum type, TuneKeyEnum key, string composer);
+    Task RemoveTuneFromTrack(int trackId, int tuneId);
     Task<IEnumerable<Track>> FindTracksByTune(int tuneId);
     Task<IEnumerable<Album>> FindAlbumsByArtist(int artistId);
 
@@ -64,6 +67,13 @@ public class UnitOfWork : IUnitOfWork
     {
        await _context.SaveChangesAsync();
     }
+    public async Task AddNewTuneToTrack(int trackId, string title,
+        TuneTypeEnum type, TuneKeyEnum key, string composer)
+    {
+        var track = await _trackRepository.FindAsync(trackId);
+        track.AddNewTune(title, type, key, composer);
+        await SaveChangesAsync();
+    }
     public async Task AddExistingTuneToTrack(int tuneId, int trackId)
     {
         var tune = await _tuneRepository.FindAsync(tuneId);
@@ -71,6 +81,13 @@ public class UnitOfWork : IUnitOfWork
         track.AddExistingTune(tune);
         await SaveChangesAsync();
         
+    }
+    public async Task RemoveTuneFromTrack(int trackId, int tuneId)
+    {
+        var track = await _trackRepository.FindAsync(trackId);
+        var tune = await _tuneRepository.FindAsync(tuneId);
+        track.RemoveTune(tune.Id);
+        await SaveChangesAsync();
     }
     public async Task<IEnumerable<Track>> FindTracksByTune(int tuneId)
     {
