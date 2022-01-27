@@ -8,6 +8,9 @@ public class Artist
     public int Id { get; private set; }
     public string Name { get; private set; }
 
+    private List<Album> _albums = new List<Album>();
+    public IReadOnlyList<Album> Albums => _albums;
+
     public static Artist CreateArtist(string name)
     {
         var artist = new Artist
