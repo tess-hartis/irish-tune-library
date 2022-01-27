@@ -13,7 +13,6 @@ public interface ITrackRepository : IGenericRepository<Track>
     Task<IEnumerable<Track>> FindByTuneFeatured(Tune tune);
     Task<IEnumerable<Track>> GetAllTracks();
     Task UpdateTrack(int id, string title, int trackNumber);
-    
 }
 
 public class TrackRepository : GenericRepository<Track>, ITrackRepository
