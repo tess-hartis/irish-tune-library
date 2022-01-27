@@ -9,8 +9,8 @@ public class Album
     public string Title { get; private set; }
     public int Year { get; private set; }
     
-    private HashSet<Artist> _artists;
-    public IReadOnlyCollection<Artist> Artists => _artists.ToList();
+    private List<Artist> _artists;
+    public IReadOnlyList<Artist> Artists => _artists.ToList();
 
     private HashSet<Track> _tracks;
     public IReadOnlyCollection<Track> TrackListing => _tracks.ToList();
@@ -46,8 +46,7 @@ public class Album
         if (_artists == null)
             throw new InvalidOperationException("Artists collection not loaded");
 
-        var artist = _artists.SingleOrDefault(
-            x => x.Id == artistId);
+        var artist = _artists.SingleOrDefault(x => x.Id == artistId);
 
         if (artist == null)
             throw new InvalidOperationException("The artist was not found");
@@ -97,5 +96,6 @@ public class Album
         Year = year;
         
     }
+    
     
 }
