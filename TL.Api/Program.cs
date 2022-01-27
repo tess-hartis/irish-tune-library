@@ -15,8 +15,10 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITuneRepository, TuneRepository>();
+builder.Services.AddTransient<ITrackRepository, TrackRepository>();
 builder.Services.AddDbContext<TuneLibraryContext>();
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ITuneTrackService, TuneTrackService>();
+builder.Services.AddTransient<IAlbumArtistService, AlbumArtistService>();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
