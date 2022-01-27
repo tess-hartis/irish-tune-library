@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TL.Api.TrackDTOs;
+using TL.Api.TuneDTOs;
 using TL.Domain;
 using TL.Repository;
 
@@ -10,12 +11,12 @@ namespace TL.Api.Controllers;
 public class TrackController : Controller
 {
     private readonly ITrackRepository _trackRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITuneTrackService _tuneTrackService;
 
-    public TrackController(ITrackRepository trackRepository, IUnitOfWork unitOfWork)
+    public TrackController(ITrackRepository trackRepository, ITuneTrackService tuneTrackService)
     {
         _trackRepository = trackRepository;
-        _unitOfWork = unitOfWork;
+        _tuneTrackService = tuneTrackService;
     }
     
 
@@ -50,7 +51,7 @@ public class TrackController : Controller
         return NoContent();
     }
 
-    [HttpGet("{title}")]
+    [HttpGet("title/{title}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTitle(string title)
     {
         var tracks = await _trackRepository.FindByExactTitle(title);
@@ -58,12 +59,32 @@ public class TrackController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("{tuneId}")]
+    [HttpGet("tune/{tuneId}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTune(int tuneId)
     {
-        var tracks = await _unitOfWork.FindTracksByTune(tuneId);
+        var tracks = await _tuneTrackService.FindTracksByTune(tuneId);
         var returned = GetTracksDTO.GetAll(tracks);
         return Ok(returned);
     }
-    
+
+    [HttpPut("{trackId}/{tuneId}/remove")]
+    public async Task<ActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
+    {
+        await _tuneTrackService.RemoveTuneFromTrack(trackId, tuneId);
+        return Ok();
+    }
+
+    [HttpPost("{id}/tune")]
+    public async Task<ActionResult> AddExistingTuneToTrack(int id, [FromBody]AddRemoveTuneDTO dto)
+    {
+        await _tuneTrackService.AddExistingTuneToTrack(id, dto.Id);
+        return Ok();
+    }
+
+    [HttpPost("{id}/newtune")]
+    public async Task<ActionResult> AddNewTuneToTrack(int id, PostTuneDTO dto)
+    {
+        await _tuneTrackService.AddNewTuneToTrack(id, dto.Title, dto.Composer, dto.Type, dto.Key);
+        return Ok();
+    }
 }

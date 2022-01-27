@@ -8,12 +8,12 @@ namespace TL.Api.Controllers;
 public class ArtistController : Controller
 {
    private readonly IArtistRepository _artistRepository;
-   private readonly IUnitOfWork _unitOfWork;
+   private readonly IAlbumArtistService _albumArtistService;
 
-   public ArtistController(IArtistRepository artistRepository, IUnitOfWork unitOfWork)
+   public ArtistController(IArtistRepository artistRepository, IAlbumArtistService albumArtistService)
    {
       _artistRepository = artistRepository;
-      _unitOfWork = unitOfWork;
+      _albumArtistService = albumArtistService;
    }
    
    [HttpGet]

@@ -9,12 +9,12 @@ namespace TL.Api.Controllers;
 public class AlbumController : Controller
 {
   private readonly IAlbumRepository _albumRepository;
-  private readonly IUnitOfWork _unitOfWork;
+  private readonly IAlbumArtistService _albumArtistService;
 
-  public AlbumController(IAlbumRepository albumRepository, IUnitOfWork unitOfWork)
+  public AlbumController(IAlbumRepository albumRepository, IAlbumArtistService albumArtistService)
   {
     _albumRepository = albumRepository;
-    _unitOfWork = unitOfWork;
+    _albumArtistService = albumArtistService;
   }
 
   [HttpGet("{id}")]
