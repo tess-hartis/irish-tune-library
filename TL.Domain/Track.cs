@@ -8,9 +8,9 @@ public class Track
     public int Id { get; private set; }
     public string Title { get; private set; }
     public int TrackNumber { get; private set; }
-    
-    private List<Tune> _tuneList;
-    public IReadOnlyCollection<Tune> TuneList => _tuneList.ToList();
+
+    private List<Tune> _tuneList = new List<Tune>();
+    public IReadOnlyList<Tune> TuneList => _tuneList;
 
     public static Track CreateTrack(string title, int trackNumber)
     {
@@ -33,22 +33,9 @@ public class Track
     {
         CreateTrack(title, trackNumber);
     }
-
-    public void AddNewTune(string title, TuneTypeEnum type, 
-        TuneKeyEnum key, string composer)
+    
+    public void AddTune(Tune tune)
     {
-        if (_tuneList == null)
-            throw new InvalidOperationException("Tune collection was not loaded");
-
-        _tuneList.Add(new Tune(title, type, key, composer));
-    }
-
-    public void AddExistingTune(Tune tune)
-    {
-        if (_tuneList == null)
-            throw new InvalidOperationException("Tune collection was not loaded");
-        
-
         _tuneList.Add(tune);
     }
     
