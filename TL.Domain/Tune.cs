@@ -14,6 +14,9 @@ public class Tune
     public string Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
 
+    private List<Track> _tracks = new List<Track>();
+    public IReadOnlyList<Track> Tracks => _tracks;
+
     public static Tune CreateTune(string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         var tune = new Tune
