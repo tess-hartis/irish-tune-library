@@ -33,12 +33,25 @@ public class Album
         return album;
     }
 
-    public void AddArtist(string name)
+    public void AddNewArtist(string name)
     {
         if (_artists == null)
             throw new InvalidOperationException("Artists collection not loaded");
 
+        var existingArtist = _artists.Where(x => x.Name == name);
+
+        if (existingArtist.Any())
+            throw new InvalidOperationException("The artist already exists");
+            
         _artists.Add(new Artist(name));
+    }
+
+    public void AddExistingArtist(Artist artist)
+    {
+        if (_artists == null)
+            throw new InvalidOperationException("Artists collection not loaded");
+
+        _artists.Add(artist);
     }
 
     public void RemoveArtist(int artistId)
