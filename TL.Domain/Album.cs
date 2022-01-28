@@ -33,32 +33,20 @@ public class Album
         return album;
     }
 
-    public void AddNewArtist(string name)
+    private Album(){ }
+
+    public Album(string title, int year)
     {
-        if (_artists == null)
-            throw new InvalidOperationException("Artists collection not loaded");
-
-        var existingArtist = _artists.Where(x => x.Name == name);
-
-        if (existingArtist.Any())
-            throw new InvalidOperationException("The artist already exists");
-            
-        _artists.Add(new Artist(name));
+        CreateAlbum(title, year);
     }
 
-    public void AddExistingArtist(Artist artist)
+    public void AddArtist(Artist artist)
     {
-        if (_artists == null)
-            throw new InvalidOperationException("Artists collection not loaded");
-
         _artists.Add(artist);
     }
 
     public void RemoveArtist(int artistId)
     {
-        if (_artists == null)
-            throw new InvalidOperationException("Artists collection not loaded");
-
         var artist = _artists.SingleOrDefault(x => x.Id == artistId);
 
         if (artist == null)
@@ -69,9 +57,6 @@ public class Album
 
     public void AddTrack(string title, int trackNumber)
     {
-        if (_tracks == null)
-            throw new InvalidOperationException("Tracks collection not loaded");
-
         _tracks.Add(new Track(title, trackNumber));
     }
 
