@@ -63,7 +63,7 @@ public class ArtistRepoTest
         await repo.AddArtist(artist);
 
         //Act
-        await repo.UpdateName(artist.Id, "John Doyle");
+        await repo.UpdateArtist(artist.Id, "John Doyle");
 
         const string expected = "John Doyle";
         var actual = artist.Name;
