@@ -42,7 +42,7 @@ public class TuneTrackService : ITuneTrackService
     public async Task AddNewTuneToTrack(int trackId, string title, string composer,
         TuneTypeEnum type, TuneKeyEnum key)
     {
-        var tune = new Tune(title, type, key, composer);
+        var tune = Tune.CreateTune(title, composer, type, key);
         await _tuneRepository.AddTune(tune);
         var track = await _trackRepository.FindAsync(trackId);
         track.AddTune(tune);
