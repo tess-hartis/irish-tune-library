@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TL.Api.AlbumDTOs;
 using TL.Api.ArtistDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -23,15 +25,7 @@ public class ArtistController : Controller
       var returned = GetArtistsDTO.GetAll(artists);
       return Ok(returned);
    }
-   
-   // [HttpGet("{name}")]
-   // public async Task<ActionResult<IEnumerable<GetArtistsDTO>>> FindByName(string name)
-   // {
-   //    var artists = await _artistRepository.GetByExactName(name);
-   //    var returned = GetArtistsDTO.GetAll(artists);
-   //    return Ok(returned);
-   // }
-   
+
    [HttpGet("{id}")]
    public async Task<ActionResult<GetArtistDTO>> FindArtist(int id)
    {
@@ -64,5 +58,13 @@ public class ArtistController : Controller
       await _artistRepository.DeleteArtist(artist.Id);
       return Ok();
 
+   }
+
+   [HttpGet("{artistId}/albums")]
+   public async Task<ActionResult<IEnumerable<GetAlbumsDTO>>> FindArtistAlbums(int artistId)
+   {
+      var albums = await _albumArtistService.GetAlbumsByArtist(artistId);
+      var returned = GetAlbumsDTO.GetAll(albums);
+      return Ok(returned);
    }
 }
