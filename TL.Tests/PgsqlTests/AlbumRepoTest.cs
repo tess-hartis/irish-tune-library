@@ -64,36 +64,14 @@ public class AlbumRepoTest
         await repo.AddAlbum(album);
 
         //Act
-        await repo.UpdateTitle(album.Id, "New Title");
-
-        const string expected = "New Title";
-        var actual = album.Title;
+        await repo.UpdateAlbum(album.Id, "New Title",2003);
+        
 
         //Assert
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(album.Title, "New Title");
+        Assert.AreEqual(album.Year, 2003);
     }
-    
-    [Test]
-    public async Task Can_Update_Year_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var repo = new AlbumRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var album = Album.CreateAlbum("Making Time", 2000);
-        await repo.AddAlbum(album);
 
-        //Act
-        await repo.UpdateYear(album.Id, 2001);
-
-        const int expected = 2001;
-        var actual = album.Year;
-
-        //Assert
-        Assert.AreEqual(expected, actual);
-    }
-    
     [Test]
     public async Task Can_Find_Album_By_Id()
     {
