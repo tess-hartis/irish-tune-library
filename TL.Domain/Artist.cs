@@ -27,7 +27,7 @@ public class Artist
         return artist;
     }
     
-    internal Artist(string name)
+    public Artist(string name)
     {
         CreateArtist(name);
     }
