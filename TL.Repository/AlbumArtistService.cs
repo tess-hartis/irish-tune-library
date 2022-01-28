@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
 
@@ -5,8 +6,10 @@ namespace TL.Repository;
 
 public interface IAlbumArtistService
 {
-    Task<IEnumerable<Album>> FindArtistAlbums(int artistId);
-    Task SaveChangesAsync();
+    Task<IEnumerable<Album>> GetAlbumsByArtist(int artistId);
+    Task AddExistingArtistToAlbum(int albumId, int artistId);
+    Task AddNewArtistToAlbum(int albumId, string name);
+    Task RemoveArtistFromAlbum(int albumId, int artistId);
 }
 
 public class AlbumArtistService : IAlbumArtistService
@@ -21,16 +24,40 @@ public class AlbumArtistService : IAlbumArtistService
         _albumRepository = albumRepository;
         _artistRepository = artistRepository;
     }
-    
-    public async Task SaveChangesAsync()
+
+    private async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<Album>> FindArtistAlbums(int artistId)
+    public async Task<IEnumerable<Album>> GetAlbumsByArtist(int artistId)
     {
         var artist = await _artistRepository.FindAsync(artistId);
-        var albums = await _albumRepository.FindByArtist(artist);
+        var albums = await _albumRepository.GetByWhere(a => a.Artists.Contains(artist)).ToListAsync();
         return albums;
+    }
+    
+    public async Task AddExistingArtistToAlbum(int albumId, int artistId)
+    {
+        var album = await _albumRepository.FindAsync(albumId);
+        var artist = await _artistRepository.FindAsync(artistId);
+        album.AddArtist(artist);
+        await SaveChangesAsync();
+    }
+
+    public async Task AddNewArtistToAlbum(int albumId, string name)
+    {
+        var album = await _albumRepository.FindAsync(albumId);
+        var artist = Artist.CreateArtist(name);
+        await _artistRepository.AddArtist(artist);
+        album.AddArtist(artist);
+        await SaveChangesAsync();
+    }
+
+    public async Task RemoveArtistFromAlbum(int albumId, int artistId)
+    {
+        var album = await _albumRepository.FindAsync(albumId);
+        album.RemoveArtist(artistId);
+        await SaveChangesAsync();
     }
 }
