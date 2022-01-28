@@ -8,12 +8,12 @@ public class Album
     public int Id { get; private set; }
     public string Title { get; private set; }
     public int Year { get; private set; }
-    
-    private List<Artist> _artists;
-    public IReadOnlyList<Artist> Artists => _artists.ToList();
 
-    private HashSet<Track> _tracks;
-    public IReadOnlyCollection<Track> TrackListing => _tracks.ToList();
+    private List<Artist> _artists = new List<Artist>();
+    public IReadOnlyList<Artist> Artists => _artists;
+
+    private List<Track> _tracks = new List<Track>();
+    public IReadOnlyList<Track> TrackListing => _tracks;
     
     
     public static Album CreateAlbum(string title, int year)
