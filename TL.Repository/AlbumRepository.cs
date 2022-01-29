@@ -51,12 +51,6 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
     {
         var album = await FindAsync(id);
         album.UpdateTitle(title);
-        await SaveAsync();
-    }
-
-    public async Task UpdateYear(int id, int year)
-    {
-        var album = await FindAsync(id);
         album.UpdateYear(year);
         await SaveAsync();
     }
