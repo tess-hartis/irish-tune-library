@@ -6,12 +6,11 @@ namespace TL.Repository;
 public interface ITuneTrackService
 {
     Task AddExistingTuneToTrack(int trackId, int tuneId);
-    Task RemoveTuneFromTrack(int trackId, int tuneId);
+    // Task RemoveTuneFromTrack(int trackId, int tuneId);
     Task<IEnumerable<Track>> FindTracksByTune(int tuneId);
     Task AddNewTuneToTrack(int trackId, string title, string composer,
         TuneTypeEnum type, TuneKeyEnum key);
 }
-
 
 public class TuneTrackService : ITuneTrackService
 {
@@ -49,14 +48,14 @@ public class TuneTrackService : ITuneTrackService
         await SaveChangesAsync();
     }
     
-    public async Task RemoveTuneFromTrack(int trackId, int tuneId)
-    {
-        var track = await _trackRepository.FindAsync(trackId);
-        var tune = await _tuneRepository.FindAsync(tuneId);
-        track.RemoveTune(tune.Id);
-        await SaveChangesAsync();
-    }
-    
+    // public async Task RemoveTuneFromTrack(int trackId, int tuneId)
+    // {
+    //     var track = await _trackRepository.FindAsync(trackId);
+    //     var tune = await _tuneRepository.FindAsync(tuneId);
+    //     track.RemoveTune(tune.Id);
+    //     await SaveChangesAsync();
+    // }
+    //
     public async Task<IEnumerable<Track>> FindTracksByTune(int tuneId)
     {
         var tune = await _tuneRepository.FindAsync(tuneId);
