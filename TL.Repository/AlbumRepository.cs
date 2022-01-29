@@ -41,13 +41,6 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         
         return album;
     }
-    
-
-    public async Task<IEnumerable<Album>> FindByArtist(Artist artist)
-    {
-        return await GetByWhere
-            (x => x.Artists.Contains(artist)).ToListAsync();
-    }
 
     public async Task<IEnumerable<Album>> GetAllAlbums()
     {
