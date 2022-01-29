@@ -55,9 +55,9 @@ public class Album
         _artists.Remove(artist);
     }
 
-    public void AddTrack(string title, int trackNumber)
+    public void AddTrack(Track track)
     {
-        _tracks.Add(new Track(title, trackNumber));
+        _tracks.Add(track);
     }
 
     public void RemoveTrack(int trackId)
