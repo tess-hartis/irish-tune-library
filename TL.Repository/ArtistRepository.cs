@@ -10,7 +10,6 @@ public interface IArtistRepository : IGenericRepository<Artist>
     Task DeleteArtist(int id);
     new Task<Artist> FindAsync (int id);
     Task<IEnumerable<Artist>> GetAllArtists();
-    Task<IEnumerable<Artist>> GetByExactName(string name);
     Task UpdateArtist(int id, string name);
 }
 
@@ -47,12 +46,7 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
     {
         return await GetEntities().ToListAsync();
     }
-
-    public async Task<IEnumerable<Artist>> GetByExactName(string name)
-    {
-        return await GetByWhere(artist => artist.Name == name).ToListAsync();
-    }
-
+    
     public async Task UpdateArtist(int id, string name)
     {
         var artist = await FindAsync(id);
