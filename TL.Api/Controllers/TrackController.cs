@@ -28,6 +28,14 @@ public class TrackController : Controller
         return Ok(returned);
     }
 
+    [HttpGet]
+    public async Task<ActionResult<GetTracksDTO>> GetAllTracks()
+    {
+        var tracks = await _trackRepository.GetAllTracks();
+        var returned = tracks.Select(GetTrackDTO.FromTrack);
+        return Ok(returned);
+    }
+
     [HttpPost]
     public async Task<ActionResult> AddTrack([FromBody] PostTrackDTO dto)
     {
@@ -50,14 +58,7 @@ public class TrackController : Controller
         await _trackRepository.DeleteTrack(track.Id);
         return NoContent();
     }
-
-    [HttpGet("title/{title}")]
-    public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTitle(string title)
-    {
-        var tracks = await _trackRepository.FindByExactTitle(title);
-        var returned = GetTracksDTO.GetAll(tracks);
-        return Ok(returned);
-    }
+    
 
     [HttpGet("tune/{tuneId}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTune(int tuneId)
@@ -67,22 +68,22 @@ public class TrackController : Controller
         return Ok(returned);
     }
 
-    [HttpPut("{trackId}/{tuneId}/remove")]
-    public async Task<ActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
+    // [HttpPut("{trackId}/removeTune")]
+    // public async Task<ActionResult> RemoveTuneFromTrack(int trackId, [FromBody] AddRemoveTuneDTO dto)
+    // {
+    //     await _tuneTrackService.RemoveTuneFromTrack(trackId, dto.Id);
+    //     return Ok();
+    // }
+
+    [HttpPost("{trackId}/tune/{tuneId}")]
+    public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId )
     {
-        await _tuneTrackService.RemoveTuneFromTrack(trackId, tuneId);
+        await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId);
         return Ok();
     }
 
     [HttpPost("{id}/tune")]
-    public async Task<ActionResult> AddExistingTuneToTrack(int id, [FromBody]AddRemoveTuneDTO dto)
-    {
-        await _tuneTrackService.AddExistingTuneToTrack(id, dto.Id);
-        return Ok();
-    }
-
-    [HttpPost("{id}/newtune")]
-    public async Task<ActionResult> AddNewTuneToTrack(int id, PostTuneDTO dto)
+    public async Task<ActionResult> AddNewTuneToTrack(int id, [FromBody] PostTuneDTO dto)
     {
         await _tuneTrackService.AddNewTuneToTrack(id, dto.Title, dto.Composer, dto.Type, dto.Key);
         return Ok();
