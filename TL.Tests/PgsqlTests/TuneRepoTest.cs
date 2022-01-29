@@ -238,51 +238,7 @@ public class TuneRepoTest
         //Assert
         Assert.AreEqual(expected, actual.Count());
     }
+    
 
-    [Test]
-    public async Task Can_Find_Tunes_By_Exact_Composer_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var repo = new TuneRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var tune1 = Tune.CreateTune("Kesh", "Traditional", 
-            TuneTypeEnum.Jig, TuneKeyEnum.GMaj);
-        await repo.AddTune(tune1);
-        var tune2 = Tune.CreateTune("Dram Circle", "Sean Heely", 
-            TuneTypeEnum.Jig, TuneKeyEnum.DMaj);
-        await repo.AddTune(tune2);
-        
-        //Act
-        const int expected = 1;
-        var actual = await repo.FindByExactComposer("Sean Heely");
-        
-        //Assert
-        Assert.AreEqual(expected, actual.Count());
-
-    }
-
-    [Test]
-    public async Task Can_Find_Tune_By_Exact_Title_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var repo = new TuneRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var tune1 = Tune.CreateTune("Kesh", "Traditional", 
-            TuneTypeEnum.Jig, TuneKeyEnum.GMaj);
-        await repo.AddTune(tune1);
-        var tune2 = Tune.CreateTune("Rolling Waves", "Traditional", 
-            TuneTypeEnum.Jig, TuneKeyEnum.DMaj);
-        await repo.AddTune(tune2);
-
-        //Act
-        const int expected = 1;
-        var actual = await repo.FindByExactTitle("Kesh");
-
-        //Assert
-        Assert.AreEqual(expected, actual.Count());
-    }
+   
 }
