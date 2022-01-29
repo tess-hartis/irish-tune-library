@@ -108,22 +108,4 @@ public class ArtistRepoTest
         Assert.AreEqual(expected, actual);
     }
     
-    [Test]
-    public async Task Can_Find_By_Exact_Name_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var repo = new ArtistRepository(context);
-        var artist = Artist.CreateArtist("Liz Carroll");
-        await repo.AddArtist(artist);
-        
-        //Act
-        const int expected = 1;
-        var actual = await repo.GetByExactName("Liz Carroll");
-
-        //Assert
-        Assert.AreEqual(expected, actual.Count());
-    }
 }
