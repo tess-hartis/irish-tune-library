@@ -8,7 +8,7 @@ public interface ITrackRepository : IGenericRepository<Track>
 {
     Task AddTrack(Track track);
     Task DeleteTrack(int id);
-    Task<Track> FindTrack(int id);
+    new Task<Track> FindAsync(int id);
     Task<IEnumerable<Track>> GetAllTracks();
     Task UpdateTrack(int id, string title, int trackNumber);
 }
@@ -31,10 +31,11 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         await DeleteAsync(track);
     }
 
-    public async Task<Track> FindTrack(int id)
+    public override async Task<Track> FindAsync(int id)
     {
-        var track = await FindAsync(id);
-
+        var track = await Context.Tracks.Include(t => t.TuneList)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
         if (track == null)
             throw new InvalidOperationException("Track not found");
 
