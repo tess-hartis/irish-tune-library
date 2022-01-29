@@ -6,10 +6,10 @@ namespace TL.Repository;
 
 public interface IAlbumArtistService
 {
-    Task<IEnumerable<Album>> GetAlbumsByArtist(int artistId);
+    Task<IEnumerable<Album>> FindArtistAlbums(int artistId);
     Task AddExistingArtistToAlbum(int albumId, int artistId);
     Task AddNewArtistToAlbum(int albumId, string name);
-    Task RemoveArtistFromAlbum(int albumId, int artistId);
+    // Task RemoveArtistFromAlbum(int albumId, int artistId);
 }
 
 public class AlbumArtistService : IAlbumArtistService
@@ -30,7 +30,7 @@ public class AlbumArtistService : IAlbumArtistService
         await _context.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<Album>> GetAlbumsByArtist(int artistId)
+    public async Task<IEnumerable<Album>> FindArtistAlbums(int artistId)
     {
         var artist = await _artistRepository.FindAsync(artistId);
         var albums = await _albumRepository.GetByWhere(a => a.Artists.Contains(artist)).ToListAsync();
@@ -54,10 +54,11 @@ public class AlbumArtistService : IAlbumArtistService
         await SaveChangesAsync();
     }
 
-    public async Task RemoveArtistFromAlbum(int albumId, int artistId)
-    {
-        var album = await _albumRepository.FindAsync(albumId);
-        album.RemoveArtist(artistId);
-        await SaveChangesAsync();
-    }
+    // public async Task RemoveArtistFromAlbum(int albumId, int artistId)
+    // {
+    //     var album = await _albumRepository.FindAsync(albumId);
+    //     var artist = await _artistRepository.FindAsync(artistId);
+    //     album.RemoveArtist(artist.Id);
+    //     await SaveChangesAsync();
+    // }
 }
