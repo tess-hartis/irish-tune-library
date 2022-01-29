@@ -14,13 +14,14 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<TuneLibraryContext>();
 builder.Services.AddTransient<ITuneRepository, TuneRepository>();
 builder.Services.AddTransient<ITrackRepository, TrackRepository>();
-builder.Services.AddDbContext<TuneLibraryContext>();
 builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
 builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
 builder.Services.AddTransient<ITuneTrackService, TuneTrackService>();
 builder.Services.AddTransient<IAlbumArtistService, AlbumArtistService>();
+builder.Services.AddTransient<IAlbumTrackService, AlbumTrackService>();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
