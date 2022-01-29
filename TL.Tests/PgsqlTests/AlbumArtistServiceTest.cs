@@ -28,7 +28,7 @@ public class AlbumArtistServiceTest
         await context.SaveChangesAsync();
 
         //Act
-        var returned = await service.GetAlbumsByArtist(artist.Id);
+        var returned = await service.FindArtistAlbums(artist.Id);
 
         //Assert
         var expected = 1;
