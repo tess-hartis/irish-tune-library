@@ -77,12 +77,12 @@ public class AlbumController : Controller
     return Ok();
   }
 
-  // [HttpDelete("{albumId}/removeArtist")]
-  // public async Task<ActionResult> RemoveArtistFromAlbum(int albumId, [FromBody] AddRemoveArtistDTO dto)
-  // {
-  //   await _albumArtistService.RemoveArtistFromAlbum(albumId, dto.Id);
-  //   return Ok();
-  // }
+  [HttpDelete("{albumId}/artist/{artistId}")]
+  public async Task<ActionResult> RemoveArtistFromAlbum(int albumId, int artistId)
+  {
+    await _albumArtistService.RemoveArtistFromAlbum(albumId, artistId);
+    return Ok();
+  }
 
   [HttpPost("{albumId}/track")]
   public async Task<ActionResult> AddTrackToAlbum(int albumId, [FromBody] PostTrackDTO dto)
@@ -91,10 +91,10 @@ public class AlbumController : Controller
     return Ok();
   }
 
-  // [HttpPut("{albumId}/removeTrack")]
-  // public async Task<ActionResult> RemoveTrackFromAlbum(int albumId, [FromBody] RemoveTrackDTO dto)
-  // {
-  //   await _albumTrackService.RemoveTrackFromAlbum(albumId, dto.Id);
-  //   return Ok();
-  // }
+  [HttpDelete("{albumId}/track/{trackId}")]
+  public async Task<ActionResult> RemoveTrackFromAlbum(int albumId, int trackId)
+  {
+    await _albumTrackService.RemoveTrackFromAlbum(albumId, trackId);
+    return Ok();
+  }
 }
