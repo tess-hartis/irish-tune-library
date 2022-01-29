@@ -6,14 +6,12 @@ public class Tune
     
     public int Id { get; private set; }
     public string Title { get;  private set; }
-
     private List<string> _alternateTitles = new List<string>();
     public List<string> AlternateTitles => _alternateTitles;
     public TuneTypeEnum TuneType { get; private set; }
     public TuneKeyEnum TuneKey { get; private set; }
     public string Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
-
     private List<Track> _tracks = new List<Track>();
     public IReadOnlyList<Track> Tracks => _tracks;
 
@@ -47,11 +45,6 @@ public class Tune
             throw new ArgumentException(string.Format("Invalid tune key"));
         
         return tune;
-    }
-
-    public Tune(string title, TuneTypeEnum type, TuneKeyEnum key, string composer)
-    {
-        CreateTune(title, composer, type, key);
     }
 
     public void AddAlternateTitle(string title)

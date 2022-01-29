@@ -7,7 +7,6 @@ public class Artist
     private Artist(){ }
     public int Id { get; private set; }
     public string Name { get; private set; }
-
     private List<Album> _albums = new List<Album>();
     public IReadOnlyList<Album> Albums => _albums;
 
@@ -27,11 +26,6 @@ public class Artist
         return artist;
     }
     
-    public Artist(string name)
-    {
-        CreateArtist(name);
-    }
-
     public void UpdateName(string name)
     {
         if (!name.IsValidNameOrTitle())
@@ -39,6 +33,5 @@ public class Artist
 
         Name = name;
     }
-
     
 }

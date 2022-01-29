@@ -8,10 +8,8 @@ public class Album
     public int Id { get; private set; }
     public string Title { get; private set; }
     public int Year { get; private set; }
-
     private List<Artist> _artists = new List<Artist>();
     public IReadOnlyList<Artist> Artists => _artists;
-
     private List<Track> _tracks = new List<Track>();
     public IReadOnlyList<Track> TrackListing => _tracks;
     
@@ -34,12 +32,7 @@ public class Album
     }
 
     private Album(){ }
-
-    public Album(string title, int year)
-    {
-        CreateAlbum(title, year);
-    }
-
+    
     public void AddArtist(Artist artist)
     {
         _artists.Add(artist);

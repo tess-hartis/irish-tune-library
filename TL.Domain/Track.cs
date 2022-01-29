@@ -8,7 +8,6 @@ public class Track
     public int Id { get; private set; }
     public string Title { get; private set; }
     public int TrackNumber { get; private set; }
-
     private List<Tune> _tuneList = new List<Tune>();
     public IReadOnlyList<Tune> TuneList => _tuneList;
 
@@ -29,11 +28,6 @@ public class Track
         return track;
     }
 
-    internal Track(string title, int trackNumber)
-    {
-        CreateTrack(title, trackNumber);
-    }
-    
     public void AddTune(Tune tune)
     {
         _tuneList.Add(tune);
