@@ -42,9 +42,6 @@ public class Track
 
     public void RemoveTune(int tuneId)
     {
-        if (_tuneList == null)
-            throw new InvalidOperationException("Tune list was not loaded");
-
         var tune = _tuneList.SingleOrDefault(
             x => x.Id == tuneId);
 
