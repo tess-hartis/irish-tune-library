@@ -28,19 +28,15 @@ public class TuneController : Controller
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByType(TuneTypeEnum type)
     {
         var tunes = await _tuneRepository.FindByType(type);
-        var returned = GetTunesDTO.GetAll(tunes);
-        return Ok(returned);
+        var returned = tunes.Select(GetTuneDTO.FromTune);
+        return Ok();
     }
 
     [HttpGet("key/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByKey(TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.FindByKey(key);
-        var returned = GetTunesDTO.GetAll(tunes);
-
-        if (returned.Count < 1)
-            return NotFound("No tunes were found");
-
+        var returned = tunes.Select(GetTuneDTO.FromTune);
         return Ok(returned);
     }
 
@@ -48,7 +44,7 @@ public class TuneController : Controller
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.FindByTypeAndKey(type, key);
-        var returned = GetTunesDTO.GetAll(tunes);
+        var returned = tunes.Select(GetTuneDTO.FromTune);
         return Ok(returned);
     }
     
@@ -56,9 +52,8 @@ public class TuneController : Controller
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> GetAllTunes()
     {
         var tunes = await _tuneRepository.GetAllTunes();
-        var shortsyntax = tunes.Select(GetTuneDTO.FromTune);
-        // var returned = GetTunesDTO.GetAll(tunes);
-        return Ok(shortsyntax);
+        var returned = tunes.Select(GetTuneDTO.FromTune);
+        return Ok(returned);
     }
 
     [HttpPost]
