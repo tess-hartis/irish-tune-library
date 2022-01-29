@@ -51,25 +51,9 @@ public class TuneController : Controller
         var returned = GetTunesDTO.GetAll(tunes);
         return Ok(returned);
     }
-
-    [HttpGet("composer/{composer}")]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByComposer(string composer)
-    {
-        var tunes = await _tuneRepository.FindByExactComposer(composer);
-        var returned = GetTunesDTO.GetAll(tunes);
-        return Ok(returned);
-    }
-
-    [HttpGet("title/{title}")]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTitle(string title)
-    {
-        var tunes = await _tuneRepository.FindByExactTitle(title);
-        var returned = GetTunesDTO.GetAll(tunes);
-        return Ok(returned);
-    }
-
+    
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindAllTunes()
+    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> GetAllTunes()
     {
         var tunes = await _tuneRepository.GetAllTunes();
         var shortsyntax = tunes.Select(GetTuneDTO.FromTune);
@@ -95,7 +79,7 @@ public class TuneController : Controller
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTune(int id)
     {
-        var tune = _tuneRepository.FindAsync(id);
+        var tune = await _tuneRepository.FindAsync(id);
         await _tuneRepository.DeleteTune(tune.Id);
         return Ok();
 
