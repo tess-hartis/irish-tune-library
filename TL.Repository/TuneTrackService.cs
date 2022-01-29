@@ -59,7 +59,7 @@ public class TuneTrackService : ITuneTrackService
     public async Task<IEnumerable<Track>> FindTracksByTune(int tuneId)
     {
         var tune = await _tuneRepository.FindAsync(tuneId);
-        var tracks = await _trackRepository.FindByTuneFeatured(tune);
+        var tracks = await _trackRepository.GetByWhere(x => x.TuneList.Contains(tune)).ToListAsync();
         return tracks;
     }
 }
