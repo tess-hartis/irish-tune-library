@@ -68,12 +68,12 @@ public class TrackController : Controller
         return Ok(returned);
     }
 
-    // [HttpPut("{trackId}/removeTune")]
-    // public async Task<ActionResult> RemoveTuneFromTrack(int trackId, [FromBody] AddRemoveTuneDTO dto)
-    // {
-    //     await _tuneTrackService.RemoveTuneFromTrack(trackId, dto.Id);
-    //     return Ok();
-    // }
+    [HttpDelete("{trackId}/tune/{tuneId}")]
+    public async Task<ActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
+    {
+        await _tuneTrackService.RemoveTuneFromTrack(trackId, tuneId);
+        return Ok();
+    }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
     public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId )
