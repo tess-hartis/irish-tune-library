@@ -44,7 +44,7 @@ public class TuneController : Controller
         return Ok(returned);
     }
 
-    [HttpGet("typekey/{type}/{key}")]
+    [HttpGet("type/{type}/key/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         var tunes = await _tuneRepository.FindByTypeAndKey(type, key);
