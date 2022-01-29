@@ -63,7 +63,7 @@ public class ArtistController : Controller
    [HttpGet("{artistId}/albums")]
    public async Task<ActionResult<IEnumerable<GetAlbumsDTO>>> FindArtistAlbums(int artistId)
    {
-      var albums = await _albumArtistService.GetAlbumsByArtist(artistId);
+      var albums = await _albumArtistService.FindArtistAlbums(artistId);
       var returned = GetAlbumsDTO.GetAll(albums);
       return Ok(returned);
    }
