@@ -31,11 +31,9 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         await DeleteAsync(track);
     }
 
-    public override async Task<Track> FindAsync(int id)
+    public async Task<Track> FindTrack(int id)
     {
-        var track = await Context.Tracks
-            .Include(t => t.TuneList)
-            .FirstOrDefaultAsync(t => t.Id == id);
+        var track = await FindAsync(id);
 
         if (track == null)
             throw new InvalidOperationException("Track not found");
