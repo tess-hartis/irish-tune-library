@@ -9,7 +9,7 @@ public interface ITuneRepository : IGenericRepository<Tune>
     Task<IEnumerable<Tune>> GetAllTunes();
     Task AddTune(Tune tune);
     Task DeleteTune(int id);
-    new Task<Tune> FindAsync(int id);
+    Task<Tune> FindTune(int id);
     Task<IEnumerable<Tune>> FindByType(TuneTypeEnum type);
     Task<IEnumerable<Tune>> FindByKey(TuneKeyEnum key);
     Task<IEnumerable<Tune>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key);
@@ -41,10 +41,9 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
         await DeleteAsync(tune);
     }
     
-    public override async Task<Tune> FindAsync(int id)
+    public  async Task<Tune> FindTune(int id)
     {
-        var tune = await Context.Tunes
-            .FirstOrDefaultAsync(t => t.Id == id);
+        var tune = await FindAsync(id);
 
         if (tune == null)
             throw new InvalidOperationException("Tune not found");
