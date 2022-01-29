@@ -8,7 +8,7 @@ public interface IAlbumRepository : IGenericRepository<Album>
 {
     Task AddAlbum(Album album);
     Task DeleteAlbum(int id);
-    Task<Album> FindAlbum(int id);
+    new Task<Album> FindAsync(int id);
     Task<IEnumerable<Album>> GetAllAlbums();
     Task UpdateAlbum(int id, string title, int year);
 }
@@ -31,9 +31,12 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         await DeleteAsync(album);
     }
 
-    public async Task<Album> FindAlbum(int id)
+    public override async Task<Album> FindAsync(int id)
     {
-        var album = await FindAsync(id);
+        var album = await Context.Albums
+            .Include(x => x.Artists)
+            .Include(x => x.TrackListing)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (album == null)
             throw new InvalidOperationException("Album not found");
