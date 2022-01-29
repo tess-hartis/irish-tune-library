@@ -39,15 +39,8 @@ public class Track
         _tuneList.Add(tune);
     }
     
-
-    public void RemoveTune(int tuneId)
+    public void RemoveTune(Tune tune)
     {
-        var tune = _tuneList.SingleOrDefault(
-            x => x.Id == tuneId);
-
-        if (tune == null)
-            throw new InvalidOperationException("The tune was not found");
-
         _tuneList.Remove(tune);
     }
     
