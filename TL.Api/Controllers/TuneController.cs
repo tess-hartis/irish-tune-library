@@ -19,7 +19,7 @@ public class TuneController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<GetTuneDTO>> FindTune(int id)
     {
-        var tune = await _tuneRepository.FindAsync(id);
+        var tune = await _tuneRepository.FindTune(id);
         var returned = GetTuneDTO.FromTune(tune);
         return Ok(returned);
     }
