@@ -47,7 +47,7 @@ public class ArtistController : Controller
    {
       var artist = await _artistRepository.FindAsync(id);
       var updated = PutArtistDTO.UpdatedArtist(artist, dto);
-      await _artistRepository.UpdateAsync(updated);
+      await _artistRepository.UpdateArtist(updated.Id, dto.Name);
       return Ok();
    }
    
@@ -67,4 +67,5 @@ public class ArtistController : Controller
       var returned = GetAlbumsDTO.GetAll(albums);
       return Ok(returned);
    }
+   
 }
