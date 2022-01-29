@@ -5,6 +5,7 @@
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumArtistServiceTest.Can_Add_Existing_Artist_To_Album&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumArtistServiceTest.Can_Add_New_Artist_To_Album&lt;/TestId&gt;
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumArtistServiceTest.Can_Remove_Artist_From_Album&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumRepoTest.Can_Delete_Album_Using_Repository&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bcb8132e_002D9b8d_002D45d3_002D8dca_002D7b33848c1013/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Can_Add_Tune_Using_Repository" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
