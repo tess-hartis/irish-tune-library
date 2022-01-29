@@ -12,17 +12,7 @@ public interface IAlbumRepository : IGenericRepository<Album>
     new Task<Album> FindAsync(int id);
     Task<IEnumerable<Album>> FindByArtist(Artist artist);
     Task<IEnumerable<Album>> GetAllAlbums();
-    Task<IEnumerable<Album>> FindByExactTitle(string title);
-    Task UpdateTitle(int id, string title);
-    Task UpdateYear(int id, int year);
-    Task AddNewArtist(int albumId, string name);
-    Task AddExistingArtist(int albumId, Artist artist);
-    Task RemoveArtist(int albumId, int artistId);
-    Task AddTrack(int albumId, string title, int trackNumber);
-    Task RemoveTrack(int albumId, int trackId);
-
-
-
+    Task UpdateAlbum(int id, string title, int year);
 }
 
 public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
@@ -69,13 +59,8 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
     {
         return await GetEntities().ToListAsync();
     }
-
-    public async Task<IEnumerable<Album>> FindByExactTitle(string title)
-    {
-        return await GetByWhere(album => album.Title == title).ToListAsync();
-    }
-
-    public async Task UpdateTitle(int id, string title)
+    
+    public async Task UpdateAlbum(int id, string title, int year)
     {
         var album = await FindAsync(id);
         album.UpdateTitle(title);
@@ -88,40 +73,5 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         album.UpdateYear(year);
         await SaveAsync();
     }
-
-    public async Task AddNewArtist(int albumId, string name)
-    {
-        var album = await FindAsync(albumId);
-        album.AddNewArtist(name);
-        await SaveAsync();
-    }
-
-    public async Task AddExistingArtist(int albumId, Artist artist)
-    {
-        var album = await FindAsync(albumId);
-        album.AddExistingArtist(artist);
-        await SaveAsync();
-    }
-
-    public async Task RemoveArtist(int albumId, int artistId)
-    {
-        var album = await FindAsync(albumId);
-        album.RemoveArtist(artistId);
-        await SaveAsync();
-    }
-
-    public async Task AddTrack(int albumId, string title, int trackNumber)
-    {
-        var album = await FindAsync(albumId);
-        album.AddTrack(title, trackNumber);
-        await SaveAsync();
-    }
-
-    public async Task RemoveTrack(int albumId, int trackId)
-    {
-        var album = await FindAsync(albumId);
-        album.RemoveTrack(trackId);
-        await SaveAsync();
-    }
-
+    
 }
