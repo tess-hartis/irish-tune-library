@@ -23,7 +23,7 @@ public class TrackController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<GetTrackDTO>> FindTrack(int id)
     {
-        var track = await _trackRepository.FindAsync(id);
+        var track = await _trackRepository.FindTrack(id);
         var returned = GetTrackDTO.FromTrack(track);
         return Ok(returned);
     }
