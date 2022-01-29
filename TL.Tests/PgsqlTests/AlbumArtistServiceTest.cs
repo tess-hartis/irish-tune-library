@@ -83,27 +83,27 @@ public class AlbumArtistServiceTest
         Assert.AreEqual(expected, actual);
     }
     
-    [Test]
-    public async Task Can_Remove_Artist_From_Album()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var albumRepo = new AlbumRepository(context);
-        var artistRepo = new ArtistRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var service = new AlbumArtistService(context, albumRepo, artistRepo);
-        var album = Album.CreateAlbum("its the title", 2001);
-        await albumRepo.AddAlbum(album);
-        var artist = Artist.CreateArtist("its the name");
-        await artistRepo.AddArtist(artist);
-        await service.AddExistingArtistToAlbum(album.Id, artist.Id);
-        
-        //Act
-        await service.RemoveArtistFromAlbum(album.Id, artist.Id);
-        
-        const int expected = 0;
-        var actual = album.Artists.Count;
-        Assert.AreEqual(expected, actual);
-    }
+    // [Test]
+    // public async Task Can_Remove_Artist_From_Album()
+    // {
+    //     //Arrange
+    //     await using var context = new TuneLibraryContext();
+    //     var albumRepo = new AlbumRepository(context);
+    //     var artistRepo = new ArtistRepository(context);
+    //     await context.Database.EnsureDeletedAsync();
+    //     await context.Database.EnsureCreatedAsync();
+    //     var service = new AlbumArtistService(context, albumRepo, artistRepo);
+    //     var album = Album.CreateAlbum("its the title", 2001);
+    //     await albumRepo.AddAlbum(album);
+    //     var artist = Artist.CreateArtist("its the name");
+    //     await artistRepo.AddArtist(artist);
+    //     await service.AddExistingArtistToAlbum(album.Id, artist.Id);
+    //     
+    //     //Act
+    //     await service.RemoveArtistFromAlbum(album.Id, artist.Id);
+    //     
+    //     const int expected = 0;
+    //     var actual = album.Artists.Count;
+    //     Assert.AreEqual(expected, actual);
+    // }
 }
