@@ -24,7 +24,7 @@ public class AlbumController : Controller
   [HttpGet("{id}")]
   public async Task<ActionResult<GetAlbumDTO>> FindAlbum(int id)
   {
-    var album = await _albumRepository.FindAlbum(id);
+    var album = await _albumRepository.FindAsync(id);
     var returned = GetAlbumDTO.FromAlbum(album);
     return Ok(returned);
   }
