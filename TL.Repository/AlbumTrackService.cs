@@ -6,7 +6,7 @@ namespace TL.Repository;
 public interface IAlbumTrackService
 {
     Task AddNewTrackToAlbum(int albumId, string title, int trackNumber);
-    // Task RemoveTrackFromAlbum(int albumId, int trackId);
+    Task RemoveTrackFromAlbum(int albumId, int trackId);
 
 }
 public class AlbumTrackService : IAlbumTrackService
@@ -35,11 +35,11 @@ public class AlbumTrackService : IAlbumTrackService
         await SaveChangesAsync();
     }
 
-    // public async Task RemoveTrackFromAlbum(int albumId, int trackId)
-    // {
-    //     var album = await _albumRepository.FindAsync(albumId);
-    //     var track = await _trackRepository.FindAsync(trackId);
-    //     album.RemoveTrack(track.Id);
-    //     await SaveChangesAsync();
-    // }
+    public async Task RemoveTrackFromAlbum(int albumId, int trackId)
+    {
+        var album = await _albumRepository.FindAsync(albumId);
+        var track = await _trackRepository.FindAsync(trackId);
+        album.RemoveTrack(track);
+        await SaveChangesAsync();
+    }
 }
