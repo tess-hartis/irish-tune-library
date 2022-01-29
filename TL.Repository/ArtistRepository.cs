@@ -8,7 +8,7 @@ public interface IArtistRepository : IGenericRepository<Artist>
 {
     Task AddArtist(Artist artist);
     Task DeleteArtist(int id);
-    new Task<Artist> FindAsync (int id);
+    Task<Artist> FindArtist (int id);
     Task<IEnumerable<Artist>> GetAllArtists();
     Task UpdateArtist(int id, string name);
 }
@@ -31,15 +31,14 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
         await DeleteAsync(artist);
     }
 
-    public override async Task<Artist> FindAsync (int id)
+    public async Task<Artist> FindArtist (int id)
     {
-        var result = await Context.Artists
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var artist = await FindAsync(id);
         
-        if (result == null)
+        if (artist == null)
             throw new InvalidOperationException("Artist not found");
 
-        return result;
+        return artist;
     }
     
     public async Task<IEnumerable<Artist>> GetAllArtists()
