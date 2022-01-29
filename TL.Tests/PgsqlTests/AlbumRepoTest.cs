@@ -109,22 +109,4 @@ public class AlbumRepoTest
         Assert.AreEqual(expected, actual.Count());
     }
     
-    [Test]
-    public async Task Can_Find_By_Exact_Title_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var repo = new AlbumRepository(context);
-        var album = Album.CreateAlbum("Making Time", 2000);
-        await repo.AddAlbum(album);
-        
-        //Act
-        const int expected = 1;
-        var actual = await repo.FindByExactTitle("Making Time");
-
-        //Assert
-        Assert.AreEqual(expected, actual.Count());
-    }
 }
