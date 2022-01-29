@@ -45,13 +45,8 @@ public class Album
         _artists.Add(artist);
     }
 
-    public void RemoveArtist(int artistId)
+    public void RemoveArtist(Artist artist)
     {
-        var artist = _artists.SingleOrDefault(x => x.Id == artistId);
-
-        if (artist == null)
-            throw new InvalidOperationException("The artist was not found");
-        
         _artists.Remove(artist);
     }
 
@@ -60,17 +55,8 @@ public class Album
         _tracks.Add(track);
     }
 
-    public void RemoveTrack(int trackId)
+    public void RemoveTrack(Track track)
     {
-        if (_tracks == null)
-            throw new InvalidOperationException("Tracks collection not loaded");
-
-        var track = _tracks.SingleOrDefault(
-            x => x.Id == trackId);
-
-        if (track == null)
-            throw new InvalidOperationException("The track was not found");
-
         _tracks.Remove(track);
     }
     
