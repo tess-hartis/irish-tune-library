@@ -49,7 +49,7 @@ public class AlbumArtistService : IAlbumArtistService
     {
         var album = await _albumRepository.FindAsync(albumId);
         var artist = Artist.CreateArtist(name);
-        await _artistRepository.AddArtist(artist);
+        await _artistRepository.AddAsync(artist);
         album.AddArtist(artist);
         await SaveChangesAsync();
     }

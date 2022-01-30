@@ -44,7 +44,7 @@ public class TuneTrackService : ITuneTrackService
         TuneTypeEnum type, TuneKeyEnum key)
     {
         var tune = Tune.CreateTune(title, composer, type, key);
-        await _tuneRepository.AddTune(tune);
+        await _tuneRepository.AddAsync(tune);
         var track = await _trackRepository.FindAsync(trackId);
         track.AddTune(tune);
         await SaveChangesAsync();
@@ -53,7 +53,7 @@ public class TuneTrackService : ITuneTrackService
     public async Task RemoveTuneFromTrack(int trackId, int tuneId)
     {
         var track = await _trackRepository.FindAsync(trackId);
-        var tune = await _tuneRepository.FindTune(tuneId);
+        var tune = await _tuneRepository.FindAsync(tuneId);
         track.RemoveTune(tune);
         await SaveChangesAsync();
     }

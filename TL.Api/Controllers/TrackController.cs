@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TL.Api.TrackDTOs;
 using TL.Api.TuneDTOs;
 using TL.Domain;
@@ -31,7 +32,7 @@ public class TrackController : Controller
     [HttpGet]
     public async Task<ActionResult<GetTracksDTO>> GetAllTracks()
     {
-        var tracks = await _trackRepository.GetAllTracks();
+        var tracks = await _trackRepository.GetEntities().ToListAsync();
         var returned = tracks.Select(GetTrackDTO.FromTrack);
         return Ok(returned);
     }
@@ -40,26 +41,33 @@ public class TrackController : Controller
     public async Task<ActionResult> AddTrack([FromBody] PostTrackDTO dto)
     {
         var track = PostTrackDTO.ToTrack(dto);
-        await _trackRepository.AddTrack(track);
+        await _trackRepository.AddAsync(track);
         return Ok();
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
-        await _trackRepository.UpdateTrack(id, dto.Title, dto.TrackNumber);
+        var track  = await _trackRepository.FindAsync(id);
+        var updated = PutTrackDTO.UpdatedTrack(track, dto);
+        if (!await _trackRepository.UpdateTrack(updated, dto.Title, dto.TrackNumber))
+            return new BadRequestResult();
+        
         return Ok();
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTrack(int id)
     {
-        var track = await _trackRepository.FindAsync(id);
-        await _trackRepository.DeleteTrack(track.Id);
-        return NoContent();
+        var isDeleted = await _trackRepository.DeleteAsync(id);
+        if (!isDeleted)
+        {
+            return NotFound($"Track with ID '{id}' was not found");
+        }
+
+        return Ok();
     }
     
-
     [HttpGet("tune/{tuneId}")]
     public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTune(int tuneId)
     {

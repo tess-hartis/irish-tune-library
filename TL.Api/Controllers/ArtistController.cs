@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TL.Api.AlbumDTOs;
 using TL.Api.ArtistDTOs;
 using TL.Domain;
@@ -21,7 +22,7 @@ public class ArtistController : Controller
    [HttpGet]
    public async Task<ActionResult<IEnumerable<GetArtistsDTO>>> FindAll()
    {
-      var artists = await _artistRepository.GetAllArtists();
+      var artists = await _artistRepository.GetEntities().ToListAsync();
       var returned = GetArtistsDTO.GetAll(artists);
       return Ok(returned);
    }
@@ -38,7 +39,9 @@ public class ArtistController : Controller
    public async Task<ActionResult> AddArtist([FromBody] PostArtistDTO dto)
    {
       var artist = PostArtistDTO.ToArtist(dto);
-      await _artistRepository.AddArtist(artist);
+      if (!await _artistRepository.AddAsync(artist))
+         return new BadRequestResult();
+      
       return Ok();
    }
 
@@ -47,15 +50,21 @@ public class ArtistController : Controller
    {
       var artist = await _artistRepository.FindAsync(id);
       var updated = PutArtistDTO.UpdatedArtist(artist, dto);
-      await _artistRepository.UpdateArtist(updated.Id, dto.Name);
+     
+      if (!await _artistRepository.UpdateArtist(updated, dto.Name))
+         return new BadRequestResult();
+      
       return Ok();
    }
    
    [HttpDelete("{id}")]
    public async Task<ActionResult> DeleteArtist(int id)
    {
-      var artist = _artistRepository.FindAsync(id);
-      await _artistRepository.DeleteArtist(artist.Id);
+      if (!await _artistRepository.DeleteAsync(id))
+      {
+         return NotFound($"Artist with ID '{id}' was not found");
+      }
+      
       return Ok();
 
    }

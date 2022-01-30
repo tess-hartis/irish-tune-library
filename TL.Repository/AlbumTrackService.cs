@@ -30,7 +30,7 @@ public class AlbumTrackService : IAlbumTrackService
     {
         var album = await _albumRepository.FindAsync(albumId);
         var track = Track.CreateTrack(title, trackNumber);
-        await _trackRepository.AddTrack(track);
+        await _trackRepository.AddAsync(track);
         album.AddTrack(track);
         await SaveChangesAsync();
     }

@@ -6,11 +6,8 @@ namespace TL.Repository;
 
 public interface IAlbumRepository : IGenericRepository<Album>
 {
-    Task AddAlbum(Album album);
-    Task DeleteAlbum(int id);
     new Task<Album> FindAsync(int id);
-    Task<IEnumerable<Album>> GetAllAlbums();
-    Task UpdateAlbum(int id, string title, int year);
+    Task<bool> UpdateAlbum(Album album, string title, int year);
 }
 
 public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
@@ -18,17 +15,6 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
     public AlbumRepository(TuneLibraryContext context) : base(context)
     {
         
-    }
-
-    public async Task AddAlbum(Album album)
-    {
-        await AddAsync(album);
-    }
-
-    public async Task DeleteAlbum(int id)
-    {
-        var album = await FindAsync(id);
-        await DeleteAsync(album);
     }
 
     public override async Task<Album> FindAsync(int id)
@@ -44,17 +30,11 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         return album;
     }
 
-    public async Task<IEnumerable<Album>> GetAllAlbums()
+    public async Task<bool> UpdateAlbum(Album album, string title, int year)
     {
-        return await GetEntities().ToListAsync();
-    }
-    
-    public async Task UpdateAlbum(int id, string title, int year)
-    {
-        var album = await FindAsync(id);
         album.UpdateTitle(title);
         album.UpdateYear(year);
-        await SaveAsync();
+        return await SaveAsync() > 0;
     }
     
 }

@@ -9,11 +9,10 @@ public interface IGenericRepository<T> where T : class
 {
     IQueryable<T> GetEntities();
     IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate);
-    Task AddAsync(T entity);
-    Task UpdateAsync(T entity);
-    Task DeleteAsync(T entity);
+    Task<bool> AddAsync(T entity);
+    Task<bool> DeleteAsync(int id);
     Task<T> FindAsync(int id);
-    Task SaveAsync();
+    Task<int> SaveAsync();
 }
 
 public abstract class GenericRepository<T>
@@ -38,37 +37,33 @@ public abstract class GenericRepository<T>
         return result;
     }
 
-    public virtual async Task AddAsync(T entity)
+    public virtual async Task<bool> AddAsync(T entity)
     {
         await Context.Set<T>().AddAsync(entity);
-        await Context.SaveChangesAsync();
+        return await Context.SaveChangesAsync() > 0;
     }
 
-    public virtual async Task UpdateAsync(T entity)
+    public virtual async Task<bool> DeleteAsync(int id)
     {
-        Context.Update(entity);
-        await Context.SaveChangesAsync();
-    }
-
-    public virtual async Task DeleteAsync(T entity)
-    {
+        var entity = await Context.Set<T>().FindAsync(id);
+        if (entity == null)
+        {
+            return false;
+        }
         Context.Set<T>().Remove(entity);
-        await Context.SaveChangesAsync();
+        return await Context.SaveChangesAsync() > 0;
     }
 
     public virtual async Task<T> FindAsync(int id)
     {
         var result = await Context.Set<T>().FindAsync(id);
         if (result == null)
-        {
-            throw new NullReferenceException();
-        }
-
+            throw new NullReferenceException($"No entity with ID '{id}' was found");
         return result;
     }
 
-    public virtual async Task SaveAsync()
+    public virtual async Task<int> SaveAsync()
     {
-        await Context.SaveChangesAsync();
+        return await Context.SaveChangesAsync();
     }
 }

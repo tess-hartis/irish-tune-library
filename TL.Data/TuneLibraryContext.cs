@@ -56,6 +56,5 @@ public class TuneLibraryContext : DbContext
         modelBuilder.Entity<Album>()
             .HasMany(a => a.Artists)
             .WithMany(a => a.Albums);
-
     }
 }

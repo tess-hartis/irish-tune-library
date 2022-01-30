@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TL.Api.TuneDTOs;
 using TL.Domain;
 using TL.Repository;
@@ -19,7 +20,7 @@ public class TuneController : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<GetTuneDTO>> FindTune(int id)
     {
-        var tune = await _tuneRepository.FindTune(id);
+        var tune = await _tuneRepository.FindAsync(id);
         var returned = GetTuneDTO.FromTune(tune);
         return Ok(returned);
     }
@@ -27,7 +28,8 @@ public class TuneController : Controller
     [HttpGet("type/{type}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByType(TuneTypeEnum type)
     {
-        var tunes = await _tuneRepository.FindByType(type);
+        var tunes = await _tuneRepository
+            .GetByWhere(x => x.TuneType == type).ToListAsync();
         var returned = tunes.Select(GetTuneDTO.FromTune);
         return Ok();
     }
@@ -35,7 +37,8 @@ public class TuneController : Controller
     [HttpGet("key/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByKey(TuneKeyEnum key)
     {
-        var tunes = await _tuneRepository.FindByKey(key);
+        var tunes = await _tuneRepository
+            .GetByWhere(x => x.TuneKey == key).ToListAsync();
         var returned = tunes.Select(GetTuneDTO.FromTune);
         return Ok(returned);
     }
@@ -43,7 +46,8 @@ public class TuneController : Controller
     [HttpGet("type/{type}/key/{key}")]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
-        var tunes = await _tuneRepository.FindByTypeAndKey(type, key);
+        var tunes = await _tuneRepository
+            .GetByWhere(x => x.TuneType == type & x.TuneKey == key).ToListAsync();
         var returned = tunes.Select(GetTuneDTO.FromTune);
         return Ok(returned);
     }
@@ -51,7 +55,7 @@ public class TuneController : Controller
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GetTunesDTO>>> GetAllTunes()
     {
-        var tunes = await _tuneRepository.GetAllTunes();
+        var tunes = await _tuneRepository.GetEntities().ToListAsync();
         var returned = tunes.Select(GetTuneDTO.FromTune);
         return Ok(returned);
     }
@@ -60,31 +64,39 @@ public class TuneController : Controller
     public async Task<ActionResult> AddTune([FromBody] PostTuneDTO dto)
     {
         var tune = PostTuneDTO.Create(dto);
-        await _tuneRepository.AddTune(tune);
+        if (!await _tuneRepository.AddAsync(tune))
+        {
+            return new UnprocessableEntityResult();
+        }
+
         return Ok();
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
     {
-        await _tuneRepository.UpdateTune(id, dto.Title, dto.Composer, dto.Type, dto.Key);
+        if (!await _tuneRepository.UpdateTune(id, dto.Title, dto.Composer, dto.Type, dto.Key))
+            return new BadRequestResult();
+        
         return Ok();
     }
     
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTune(int id)
     {
-        var tune = await _tuneRepository.FindAsync(id);
-        await _tuneRepository.DeleteTune(tune.Id);
-        return Ok();
-
+       if(!await _tuneRepository.DeleteAsync(id))
+           return NotFound($"Tune with ID '{id}' was not found");
+       
+       return Ok();
     }
 
     [HttpPost("{id}/titles")]
     public async Task<ActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var altTitle = dto.AlternateTitle;
-        await _tuneRepository.AddAlternateTitle(id, altTitle);
+        if (!await _tuneRepository.AddAlternateTitle(id, altTitle))
+            return new BadRequestResult();
+        
         return Ok();
     }
     
@@ -92,7 +104,8 @@ public class TuneController : Controller
     public async Task<ActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var title = dto.AlternateTitle;
-        await _tuneRepository.RemoveAlternateTitle(id, title);
+        if (!await _tuneRepository.RemoveAlternateTitle(id, title))
+            return new BadRequestResult();
         return Ok();
     }
     

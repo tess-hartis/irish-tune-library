@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TL.Api.AlbumDTOs;
 using TL.Api.ArtistDTOs;
 using TL.Api.TrackDTOs;
@@ -32,7 +33,7 @@ public class AlbumController : Controller
   [HttpGet]
   public async Task<ActionResult<IEnumerable<GetAlbumsDTO>>> FindAllAlbums()
   {
-    var albums = await _albumRepository.GetAllAlbums();
+    var albums = await _albumRepository.GetEntities().ToListAsync();
     var returned = GetAlbumsDTO.GetAll(albums);
     return Ok(returned);
   }
@@ -41,7 +42,7 @@ public class AlbumController : Controller
   public async Task<ActionResult> AddAlbum([FromBody] PostAlbumDTO dto)
   {
     var album = PostAlbumDTO.ToAlbum(dto);
-    await _albumRepository.AddAlbum(album);
+    await _albumRepository.AddAsync(album);
     return Ok();
   }
   
@@ -50,17 +51,21 @@ public class AlbumController : Controller
   {
     var album = await _albumRepository.FindAsync(id);
     var updated = PutAlbumDTO.UpdatedAlbum(album, dto);
-    await _albumRepository.UpdateAlbum(updated.Id, dto.Title, dto.Year);
+    if (!await _albumRepository.UpdateAlbum(updated, dto.Title, dto.Year))
+      return new BadRequestResult();
     return Ok();
   }
   
   [HttpDelete("{id}")]
   public async Task<ActionResult> DeleteAlbum(int id)
   {
-    var album = await _albumRepository.FindAsync(id);
-    await _albumRepository.DeleteAlbum(album.Id);
+    var isDeleted = await _albumRepository.DeleteAsync(id);
+    if (!isDeleted)
+    {
+      return NotFound($"Album with ID '{id}' was not found");
+    }
+    
     return Ok();
-
   }
 
   [HttpPost("{albumId}/artist/{artistId}")]
