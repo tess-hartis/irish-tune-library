@@ -64,20 +64,14 @@ public class TuneController : Controller
     public async Task<ActionResult> AddTune([FromBody] PostTuneDTO dto)
     {
         var tune = PostTuneDTO.Create(dto);
-        if (!await _tuneRepository.AddAsync(tune))
-        {
-            return new UnprocessableEntityResult();
-        }
-
+        await _tuneRepository.AddAsync(tune);
         return Ok();
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
     {
-        if (!await _tuneRepository.UpdateTune(id, dto.Title, dto.Composer, dto.Type, dto.Key))
-            return new BadRequestResult();
-        
+        await _tuneRepository.UpdateTune(id, dto.Title, dto.Composer, dto.Type, dto.Key);
         return Ok();
     }
     

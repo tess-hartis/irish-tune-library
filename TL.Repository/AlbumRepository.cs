@@ -1,13 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
 
 namespace TL.Repository;
 
 public interface IAlbumRepository : IGenericRepository<Album>
 {
     new Task<Album> FindAsync(int id);
-    Task<bool> UpdateAlbum(Album album, string title, int year);
+    Task UpdateAlbum(Album album, string title, int year);
 }
 
 public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
@@ -16,6 +18,8 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
     {
         
     }
+
+    private readonly AlbumValidator _validator = new AlbumValidator();
 
     public override async Task<Album> FindAsync(int id)
     {
@@ -30,11 +34,24 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         return album;
     }
 
-    public async Task<bool> UpdateAlbum(Album album, string title, int year)
+    public async Task UpdateAlbum(Album album, string title, int year)
     {
         album.UpdateTitle(title);
         album.UpdateYear(year);
-        return await SaveAsync() > 0;
+        
+        var errors = new List<string>();
+        var results = await _validator.ValidateAsync(album);
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
+        
+        await SaveAsync();
     }
     
 }

@@ -1,4 +1,6 @@
 using TL.Common;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
 
 namespace TL.Domain;
 
@@ -16,21 +18,25 @@ public class Artist
         {
             Name = name
         };
-
-        if (string.IsNullOrWhiteSpace(name))
-            throw new FormatException("Artist name cannot be empty");
         
-        if (name.Length > 50)
-            throw new FormatException("Artist name must be 50 characters or fewer");
-
+        var validator = new ArtistValidator();
+        var errors = new List<string>();
+        var results = validator.Validate(artist);
+        
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
         return artist;
     }
     
     public void UpdateName(string name)
     {
-        if (!name.IsValidNameOrTitle())
-            throw new FormatException("Invalid name");
-
         Name = name;
     }
     

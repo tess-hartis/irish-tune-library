@@ -1,13 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
 
 namespace TL.Repository;
 
 public interface ITrackRepository : IGenericRepository<Track>
 {
     new Task<Track> FindAsync(int id);
-    Task<bool> UpdateTrack(Track track, string title, int trackNumber);
+    Task UpdateTrack(Track track, string title, int trackNumber);
 }
 
 public class TrackRepository : GenericRepository<Track>, ITrackRepository
@@ -17,6 +19,8 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
 
     }
 
+    private readonly TrackValidator Validator = new TrackValidator();
+    
     public override async Task<Track> FindAsync(int id)
     {
         var track = await Context.Tracks.Include(t => t.TuneList)
@@ -28,11 +32,24 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         return track;
     }
 
-    public async Task<bool> UpdateTrack(Track track, string title, int trackNumber)
+    public async Task UpdateTrack(Track track, string title, int trackNumber)
     {
         track.UpdateTitle(title);
         track.UpdateTrackNumber(trackNumber);
-        return await SaveAsync() > 0;
+
+        var errors = new List<string>();
+        var results = await Validator.ValidateAsync(track);
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
+
+        await SaveAsync();
     }
     
 }

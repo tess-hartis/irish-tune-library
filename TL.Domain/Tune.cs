@@ -1,3 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using TL.Common;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
+
 namespace TL.Domain;
 
 public class Tune
@@ -14,7 +19,7 @@ public class Tune
     public DateOnly DateAdded { get; private set; }
     private List<Track> _tracks = new List<Track>();
     public IReadOnlyList<Track> Tracks => _tracks;
-
+    
     public static Tune CreateTune(string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         var tune = new Tune
@@ -26,84 +31,50 @@ public class Tune
             DateAdded = DateOnly.FromDateTime(DateTime.Today)
         };
 
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Tune title cannot be empty");
+        var validator = new TuneValidator();
+        var errors = new List<string>();
+        var results = validator.Validate(tune);
         
-        if (title.Length > 75)
-            throw new FormatException("Tune title must be 75 characters or fewer");
-        
-        if (string.IsNullOrWhiteSpace(composer))
-            throw new FormatException("Tune composer cannot be empty");
-        
-        if (composer.Length > 50)
-            throw new FormatException("Tune composer must be 50 characters or fewer");
-
-        if (!Enum.IsDefined(typeof(TuneTypeEnum), type))
-            throw new ArgumentException(string.Format("Invalid tune type"));
-        
-        if (!Enum.IsDefined(typeof(TuneKeyEnum), key))
-            throw new ArgumentException(string.Format("Invalid tune key"));
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
         
         return tune;
     }
 
     public void AddAlternateTitle(string title)
     {
-        
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Alternate title cannot be empty");
-
-        if (title.Length > 75)
-            throw new FormatException("Alternate title must be 75 characters or fewer");
-
         _alternateTitles.Add(title);
-        
     }
 
     public void RemoveAlternateTitle(string title)
     {
-        if (!_alternateTitles.Contains(title))
-            throw new InvalidOperationException("The alternate title was not found");
-        
         _alternateTitles.Remove(title);
     }
 
     public void UpdateTitle(string title)
     {
-
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Tune title cannot be empty");
-        
-        if (title.Length > 75)
-            throw new FormatException("Tune title must be 75 characters or fewer");
-        
         Title = title;
     }
 
     public void UpdateType(TuneTypeEnum type)
     {
-        if (!Enum.IsDefined(typeof(TuneTypeEnum), type))
-            throw new ArgumentException(string.Format("Invalid tune type"));
-
         TuneType = type;
     }
 
     public void UpdateKey(TuneKeyEnum key)
     {
-        if (!Enum.IsDefined(typeof(TuneKeyEnum), key))
-            throw new ArgumentException(string.Format("Invalid tune key"));
-
         TuneKey = key;
     }
 
     public void UpdateComposer(string composer)
     {
-        if (string.IsNullOrWhiteSpace(composer))
-            throw new FormatException("Tune composer cannot be empty");
-        
-        if (composer.Length > 50)
-            throw new FormatException("Tune composer must be 50 characters or fewer");
-
         Composer = composer;
     }
     

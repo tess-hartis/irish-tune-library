@@ -1,5 +1,7 @@
 using Microsoft.VisualBasic;
 using TL.Common;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
 
 namespace TL.Domain;
 
@@ -22,11 +24,19 @@ public class Album
             Year = year
         };
 
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Album title cannot be empty");
-
-        if (!year.IsValidYear())
-            throw new FormatException("Invalid year");
+        var validator = new AlbumValidator();
+        var errors = new List<string>();
+        var results = validator.Validate(album);
+        
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
         
         return album;
     }
@@ -55,23 +65,12 @@ public class Album
     
     public void UpdateTitle(string title)
     {
-
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Album title cannot be empty");
-        
-        if (title.Length > 75)
-            throw new FormatException("Album title must be 75 characters or fewer");
-        
         Title = title;
     }
 
     public void UpdateYear(int year)
     {
-        if (!year.IsValidYear())
-            throw new FormatException("Invalid year");
-
         Year = year;
-        
     }
     
     

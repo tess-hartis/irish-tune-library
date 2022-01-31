@@ -50,9 +50,7 @@ public class TrackController : Controller
     {
         var track  = await _trackRepository.FindAsync(id);
         var updated = PutTrackDTO.UpdatedTrack(track, dto);
-        if (!await _trackRepository.UpdateTrack(updated, dto.Title, dto.TrackNumber))
-            return new BadRequestResult();
-        
+        await _trackRepository.UpdateTrack(updated, dto.Title, dto.TrackNumber);
         return Ok();
     }
 

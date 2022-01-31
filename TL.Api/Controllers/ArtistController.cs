@@ -39,9 +39,7 @@ public class ArtistController : Controller
    public async Task<ActionResult> AddArtist([FromBody] PostArtistDTO dto)
    {
       var artist = PostArtistDTO.ToArtist(dto);
-      if (!await _artistRepository.AddAsync(artist))
-         return new BadRequestResult();
-      
+      await _artistRepository.AddAsync(artist);
       return Ok();
    }
 
@@ -50,10 +48,7 @@ public class ArtistController : Controller
    {
       var artist = await _artistRepository.FindAsync(id);
       var updated = PutArtistDTO.UpdatedArtist(artist, dto);
-     
-      if (!await _artistRepository.UpdateArtist(updated, dto.Name))
-         return new BadRequestResult();
-      
+      await _artistRepository.UpdateArtist(updated, dto.Name);
       return Ok();
    }
    

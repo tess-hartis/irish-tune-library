@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
 
 namespace TL.Repository;
 
 public interface IArtistRepository : IGenericRepository<Artist>
 {
-    Task<bool> UpdateArtist(Artist artist, string name);
+    Task UpdateArtist(Artist artist, string name);
 }
 
 public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
@@ -16,10 +18,24 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
        
     }
 
-    public async Task<bool> UpdateArtist(Artist artist, string name)
+    private readonly ArtistValidator _validator = new ArtistValidator();
+
+    public async Task UpdateArtist(Artist artist, string name)
     {
         artist.UpdateName(name);
-        return await SaveAsync() > 0;
+        
+        var errors = new List<string>();
+        var results = await _validator.ValidateAsync(artist);
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
+        await SaveAsync();
     }
 
     

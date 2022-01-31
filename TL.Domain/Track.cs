@@ -1,4 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 using TL.Common;
+using TL.Domain.Exceptions;
+using TL.Domain.Validators;
 
 namespace TL.Domain;
 
@@ -20,15 +24,23 @@ public class Track
             TrackNumber = trackNumber
         };
 
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Track title cannot be empty");
-
-        if (!trackNumber.IsValidTrackNumber())
-            throw new FormatException("Invalid track number");
+        var validator = new TrackValidator();
+        var errors = new List<string>();
+        var results = validator.Validate(track);
+        
+        if (results.IsValid == false)
+        {
+            foreach (var validationFailure in results.Errors)
+            {
+                errors.Add($"{validationFailure.ErrorMessage}");
+            }
+            
+            throw new InvalidEntityException(string.Join(", ", errors));
+        }
 
         return track;
     }
-
+    
     public void AddTune(Tune tune)
     {
         _tuneList.Add(tune);
@@ -39,23 +51,13 @@ public class Track
         _tuneList.Remove(tune);
     }
     
-    public void UpdateTitle(string title) 
+    public void UpdateTitle(string title)
     {
-        
-        if (string.IsNullOrWhiteSpace(title))
-            throw new FormatException("Track title cannot be empty");
-        
-        if (title.Length > 75)
-            throw new FormatException("Track title must be 75 characters or fewer");
-        
         Title = title;
     }
 
     public void UpdateTrackNumber(int trackNumber)
     {
-        if (!trackNumber.IsValidTrackNumber())
-            throw new FormatException("Invalid track number");
-
         TrackNumber = trackNumber;
     }
     

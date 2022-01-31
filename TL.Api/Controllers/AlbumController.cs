@@ -51,8 +51,7 @@ public class AlbumController : Controller
   {
     var album = await _albumRepository.FindAsync(id);
     var updated = PutAlbumDTO.UpdatedAlbum(album, dto);
-    if (!await _albumRepository.UpdateAlbum(updated, dto.Title, dto.Year))
-      return new BadRequestResult();
+    await _albumRepository.UpdateAlbum(updated, dto.Title, dto.Year);
     return Ok();
   }
   
