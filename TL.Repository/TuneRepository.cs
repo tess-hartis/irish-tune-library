@@ -25,37 +25,22 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     public async Task UpdateTune(int id, string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         var tune = await FindAsync(id);
-        tune.UpdateTitle(title);
-        tune.UpdateComposer(composer);
-        tune.UpdateType(type);
-        tune.UpdateKey(key);
-        
-        var errors = new List<string>();
-        var results = await _validator.ValidateAsync(tune);
-        if (results.IsValid == false)
-        {
-            foreach (var validationFailure in results.Errors)
-            {
-                errors.Add($"{validationFailure.ErrorMessage}");
-            }
-            
-            throw new InvalidEntityException(string.Join(", ", errors));
-        }
+        tune.Update(title, composer, type, key);
         await SaveAsync();
     }
 
-    public async Task<bool> AddAlternateTitle(int id, string title)
+    public async Task AddAlternateTitle(int id, string title)
     {
         var tune = await FindAsync(id);
         tune.AddAlternateTitle(title);
-        return await SaveAsync() > 0;
+        await SaveAsync();
     }
 
-    public async Task<bool> RemoveAlternateTitle(int id, string title)
+    public async Task RemoveAlternateTitle(int id, string title)
     {
         var tune = await FindAsync(id);
         tune.RemoveAlternateTitle(title);
-        return await SaveAsync() > 0;
+        await SaveAsync();
     }
     
     // public async Task<List<Tune>> AnthonyExampleRegex(string query)
