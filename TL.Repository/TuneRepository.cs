@@ -9,8 +9,8 @@ namespace TL.Repository;
 public interface ITuneRepository : IGenericRepository<Tune>
 {
     Task UpdateTune(int id, string title, string composer, TuneTypeEnum type, TuneKeyEnum key);
-    Task<bool> AddAlternateTitle(int id, string title);
-    Task<bool> RemoveAlternateTitle(int id, string title);
+    Task AddAlternateTitle(int id, string title);
+    Task RemoveAlternateTitle(int id, string title);
 }
 
 public class TuneRepository : GenericRepository<Tune>, ITuneRepository
