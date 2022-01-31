@@ -1,5 +1,3 @@
-using System.Net;
-using System.Xml;
 using TL.Domain;
 
 namespace TL.Api.TuneDTOs;
@@ -16,5 +14,4 @@ public class PostTuneDTO
         var tune = Tune.CreateTune(dto.Title, dto.Composer, dto.Type, dto.Key);
         return tune;
     }
-    
 }
