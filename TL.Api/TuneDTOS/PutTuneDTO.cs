@@ -12,10 +12,7 @@ public class PutTuneDTO
 
     public static Tune UpdatedTune(Tune tune, PutTuneDTO dto)
     {
-        tune.UpdateTitle(dto.Title);
-        tune.UpdateComposer(dto.Composer);
-        tune.UpdateType(dto.Type);
-        tune.UpdateKey(dto.Key);
+        tune.Update(dto.Title, dto.Composer, dto.Type, dto.Key);
         
         return tune;
     }
