@@ -50,32 +50,65 @@ public class Tune
 
     public void AddAlternateTitle(string title)
     {
+        var errors = new List<string?>();
+        
+        if (string.IsNullOrWhiteSpace(title))
+            errors.Add("title cannot be empty");
+        
+        if (title.Length < 2)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if (title.Length > 75)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if(_alternateTitles.Contains(title))
+            errors.Add("Alternate title already exists");
+
+        if (errors.Any())
+            throw new InvalidEntityException(string.Join(", ", errors));
+        
         _alternateTitles.Add(title);
+        
     }
 
     public void RemoveAlternateTitle(string title)
     {
+        if (!_alternateTitles.Contains(title))
+            throw new InvalidOperationException($"The title {title} was not found");
+        
         _alternateTitles.Remove(title);
     }
-
-    public void UpdateTitle(string title)
+    
+    public void Update(string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
+        var errors = new List<string>();
+        
+        if (string.IsNullOrWhiteSpace(composer))
+            errors.Add("title cannot be empty");
+        
+        if (composer.Length < 2)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if (composer.Length > 75)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if (string.IsNullOrWhiteSpace(title))
+            errors.Add("title cannot be empty");
+        
+        if (title.Length < 2)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if (title.Length > 75)
+            errors.Add("title must be between 2 and 75 characters");
+
+        if (errors.Any())
+            throw new InvalidEntityException(string.Join(", ", errors));
+
         Title = title;
-    }
-
-    public void UpdateType(TuneTypeEnum type)
-    {
-        TuneType = type;
-    }
-
-    public void UpdateKey(TuneKeyEnum key)
-    {
-        TuneKey = key;
-    }
-
-    public void UpdateComposer(string composer)
-    {
         Composer = composer;
+        TuneType = type;
+        TuneKey = key;
+
     }
     
     
