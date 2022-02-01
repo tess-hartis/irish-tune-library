@@ -19,7 +19,7 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
 
     }
 
-    private readonly TrackValidator Validator = new TrackValidator();
+    private readonly TrackValidator _validator = new TrackValidator();
     
     public override async Task<Track> FindAsync(int id)
     {
