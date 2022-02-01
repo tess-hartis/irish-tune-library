@@ -9,7 +9,7 @@ namespace TL.Repository;
 public interface ITrackRepository : IGenericRepository<Track>
 {
     new Task<Track> FindAsync(int id);
-    Task UpdateTrack(Track track, string title, int trackNumber);
+    Task UpdateTrack(int id, string title, int trackNumber);
 }
 
 public class TrackRepository : GenericRepository<Track>, ITrackRepository
@@ -32,23 +32,10 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         return track;
     }
 
-    public async Task UpdateTrack(Track track, string title, int trackNumber)
+    public async Task UpdateTrack(int id, string title, int trackNumber)
     {
-        track.UpdateTitle(title);
-        track.UpdateTrackNumber(trackNumber);
-
-        var errors = new List<string>();
-        var results = await Validator.ValidateAsync(track);
-        if (results.IsValid == false)
-        {
-            foreach (var validationFailure in results.Errors)
-            {
-                errors.Add($"{validationFailure.ErrorMessage}");
-            }
-            
-            throw new InvalidEntityException(string.Join(", ", errors));
-        }
-
+        var track = await FindAsync(id);
+        track.Update(title, trackNumber);
         await SaveAsync();
     }
     
