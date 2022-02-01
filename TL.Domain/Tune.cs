@@ -82,13 +82,13 @@ public class Tune
         var errors = new List<string>();
         
         if (string.IsNullOrWhiteSpace(composer))
-            errors.Add("title cannot be empty");
+            errors.Add("composer cannot be empty");
         
         if (composer.Length < 2)
-            errors.Add("title must be between 2 and 75 characters");
+            errors.Add("composer must be between 2 and 75 characters");
         
         if (composer.Length > 75)
-            errors.Add("title must be between 2 and 75 characters");
+            errors.Add("composer must be between 2 and 75 characters");
         
         if (string.IsNullOrWhiteSpace(title))
             errors.Add("title cannot be empty");
