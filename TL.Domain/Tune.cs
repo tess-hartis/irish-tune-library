@@ -50,14 +50,8 @@ public class Tune
     {
         var errors = new List<string?>();
         
-        if (string.IsNullOrWhiteSpace(title))
-            errors.Add("title cannot be empty");
-        
-        if (title.Length < 2)
-            errors.Add("title must be between 2 and 75 characters");
-        
-        if (title.Length > 75)
-            errors.Add("title must be between 2 and 75 characters");
+        if (!title.IsValidNameOrTitle())
+            errors.Add("Title must be between 2 and 75 characters");
         
         if(_alternateTitles.Contains(title))
             errors.Add("Alternate title already exists");
@@ -81,22 +75,10 @@ public class Tune
     {
         var errors = new List<string>();
         
-        if (string.IsNullOrWhiteSpace(composer))
-            errors.Add("composer cannot be empty");
-        
-        if (composer.Length < 2)
+        if (!title.IsValidNameOrTitle())
             errors.Add("composer must be between 2 and 75 characters");
         
-        if (composer.Length > 75)
-            errors.Add("composer must be between 2 and 75 characters");
-        
-        if (string.IsNullOrWhiteSpace(title))
-            errors.Add("title cannot be empty");
-        
-        if (title.Length < 2)
-            errors.Add("title must be between 2 and 75 characters");
-        
-        if (title.Length > 75)
+        if (!composer.IsValidNameOrTitle())
             errors.Add("title must be between 2 and 75 characters");
 
         if (errors.Any())

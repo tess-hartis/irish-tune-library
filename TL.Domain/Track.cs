@@ -58,13 +58,7 @@ public class Track
     {
         var errors = new List<string?>();
         
-        if (string.IsNullOrWhiteSpace(title))
-            errors.Add("title cannot be empty");
-        
-        if (title.Length < 2)
-            errors.Add("title must be between 2 and 75 characters");
-        
-        if (title.Length > 75)
+        if(!title.IsValidNameOrTitle())
             errors.Add("title must be between 2 and 75 characters");
 
         if (!trackNumber.IsValidTrackNum())
