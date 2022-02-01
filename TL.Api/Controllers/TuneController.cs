@@ -88,9 +88,7 @@ public class TuneController : Controller
     public async Task<ActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var altTitle = dto.AlternateTitle;
-        if (!await _tuneRepository.AddAlternateTitle(id, altTitle))
-            return new BadRequestResult();
-        
+        await _tuneRepository.AddAlternateTitle(id, altTitle);
         return Ok();
     }
     
@@ -98,8 +96,7 @@ public class TuneController : Controller
     public async Task<ActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var title = dto.AlternateTitle;
-        if (!await _tuneRepository.RemoveAlternateTitle(id, title))
-            return new BadRequestResult();
+        await _tuneRepository.RemoveAlternateTitle(id, title);
         return Ok();
     }
     
