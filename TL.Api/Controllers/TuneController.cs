@@ -77,11 +77,9 @@ public class TuneController : Controller
     
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTune(int id)
-    {
-       if(!await _tuneRepository.DeleteAsync(id))
-           return NotFound($"Tune with ID '{id}' was not found");
-       
-       return Ok();
+    { 
+        await _tuneRepository.DeleteAsync(id);
+        return Ok();
     }
 
     [HttpPost("{id}/titles")]
