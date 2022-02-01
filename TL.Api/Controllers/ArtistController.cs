@@ -55,11 +55,7 @@ public class ArtistController : Controller
    [HttpDelete("{id}")]
    public async Task<ActionResult> DeleteArtist(int id)
    {
-      if (!await _artistRepository.DeleteAsync(id))
-      {
-         return NotFound($"Artist with ID '{id}' was not found");
-      }
-      
+      await _artistRepository.DeleteAsync(id);
       return Ok();
 
    }
