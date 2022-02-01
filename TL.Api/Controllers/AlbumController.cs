@@ -58,12 +58,7 @@ public class AlbumController : Controller
   [HttpDelete("{id}")]
   public async Task<ActionResult> DeleteAlbum(int id)
   {
-    var isDeleted = await _albumRepository.DeleteAsync(id);
-    if (!isDeleted)
-    {
-      return NotFound($"Album with ID '{id}' was not found");
-    }
-    
+    await _albumRepository.DeleteAsync(id);
     return Ok();
   }
 
