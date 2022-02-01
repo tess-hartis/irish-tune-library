@@ -55,12 +55,7 @@ public class TrackController : Controller
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTrack(int id)
     {
-        var isDeleted = await _trackRepository.DeleteAsync(id);
-        if (!isDeleted)
-        {
-            return NotFound($"Track with ID '{id}' was not found");
-        }
-
+        await _trackRepository.DeleteAsync(id);
         return Ok();
     }
     
