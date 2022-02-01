@@ -40,7 +40,8 @@ public class ArtistController : Controller
    {
       var artist = PostArtistDTO.ToArtist(dto);
       await _artistRepository.AddAsync(artist);
-      return Ok();
+      var returned = GetArtistDTO.FromArtist(artist);
+      return CreatedAtAction(nameof(FindArtist), new {id = artist.Id}, returned);
    }
 
    [HttpPut("{id}")]

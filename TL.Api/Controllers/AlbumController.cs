@@ -43,7 +43,8 @@ public class AlbumController : Controller
   {
     var album = PostAlbumDTO.ToAlbum(dto);
     await _albumRepository.AddAsync(album);
-    return Ok();
+    var returned = GetAlbumDTO.FromAlbum(album);
+    return CreatedAtAction(nameof(FindAlbum), new {id = album.Id}, returned);
   }
   
   [HttpPut("{id}")]

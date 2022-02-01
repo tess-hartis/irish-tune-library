@@ -42,7 +42,8 @@ public class TrackController : Controller
     {
         var track = PostTrackDTO.ToTrack(dto);
         await _trackRepository.AddAsync(track);
-        return Ok();
+        var returned = GetTrackDTO.FromTrack(track);;
+        return CreatedAtAction(nameof(FindTrack), new {id = track.Id}, returned);
     }
 
     [HttpPut("{id}")]

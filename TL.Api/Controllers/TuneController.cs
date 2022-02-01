@@ -65,7 +65,9 @@ public class TuneController : Controller
     {
         var tune = PostTuneDTO.Create(dto);
         await _tuneRepository.AddAsync(tune);
-        return Ok();
+        var returned = GetTuneDTO.FromTune(tune);
+        return CreatedAtAction(nameof(FindTune),
+            new {id = tune.Id}, returned);
     }
 
     [HttpPut("{id}")]
