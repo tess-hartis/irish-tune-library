@@ -33,6 +33,12 @@ public class ExceptionHandlingMiddleware
             case InvalidEntityException:
                 statusCode = (int) HttpStatusCode.UnprocessableEntity;
                 break;
+            case InvalidOperationException:
+                statusCode = (int) HttpStatusCode.BadRequest;
+                break;
+            case EntityNotFoundException:
+                statusCode = (int) HttpStatusCode.NotFound;
+                break;
             
                 
         }
