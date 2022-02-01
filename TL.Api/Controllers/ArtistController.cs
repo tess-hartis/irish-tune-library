@@ -46,9 +46,7 @@ public class ArtistController : Controller
    [HttpPut("{id}")]
    public async Task<ActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
    {
-      var artist = await _artistRepository.FindAsync(id);
-      var updated = PutArtistDTO.UpdatedArtist(artist, dto);
-      await _artistRepository.UpdateArtist(updated, dto.Name);
+      await _artistRepository.UpdateArtist(id, dto.Name);
       return Ok();
    }
    
