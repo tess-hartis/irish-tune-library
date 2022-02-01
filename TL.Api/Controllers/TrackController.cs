@@ -48,9 +48,7 @@ public class TrackController : Controller
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
-        var track  = await _trackRepository.FindAsync(id);
-        var updated = PutTrackDTO.UpdatedTrack(track, dto);
-        await _trackRepository.UpdateTrack(updated, dto.Title, dto.TrackNumber);
+        await _trackRepository.UpdateTrack(id, dto.Title, dto.TrackNumber);
         return Ok();
     }
 
