@@ -49,9 +49,7 @@ public class AlbumController : Controller
   [HttpPut("{id}")]
   public async Task<ActionResult> PutAlbum(int id, [FromBody] PutAlbumDTO dto)
   {
-    var album = await _albumRepository.FindAsync(id);
-    var updated = PutAlbumDTO.UpdatedAlbum(album, dto);
-    await _albumRepository.UpdateAlbum(updated, dto.Title, dto.Year);
+    await _albumRepository.UpdateAlbum(id, dto.Title, dto.Year);
     return Ok();
   }
   
