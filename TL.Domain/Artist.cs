@@ -37,6 +37,20 @@ public class Artist
     
     public void UpdateName(string name)
     {
+        var errors = new List<string?>();
+        
+        if (string.IsNullOrWhiteSpace(name))
+            errors.Add("title cannot be empty");
+        
+        if (name.Length < 2)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if (name.Length > 75)
+            errors.Add("title must be between 2 and 75 characters");
+
+        if (errors.Any())
+            throw new InvalidEntityException(string.Join(", ", errors));
+        
         Name = name;
     }
     

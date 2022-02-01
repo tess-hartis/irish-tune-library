@@ -42,22 +42,42 @@ public class Track
     
     public void AddTune(Tune tune)
     {
+        if (_tuneList.Contains(tune))
+            throw new InvalidOperationException("The specified tune already exists on the track");
+        
         _tuneList.Add(tune);
     }
     
     public void RemoveTune(Tune tune)
     {
+        if (!_tuneList.Contains(tune))
+            throw new InvalidOperationException("The specified tune was not found on the track");
+        
         _tuneList.Remove(tune);
     }
-    
-    public void UpdateTitle(string title)
-    {
-        Title = title;
-    }
 
-    public void UpdateTrackNumber(int trackNumber)
+    public void Update(string title, int trackNumber)
     {
+        var errors = new List<string?>();
+        
+        if (string.IsNullOrWhiteSpace(title))
+            errors.Add("title cannot be empty");
+        
+        if (title.Length < 2)
+            errors.Add("title must be between 2 and 75 characters");
+        
+        if (title.Length > 75)
+            errors.Add("title must be between 2 and 75 characters");
+
+        if (!trackNumber.IsValidTrackNum())
+            errors.Add("invalid track number");
+
+        if (errors.Any())
+            throw new InvalidEntityException(string.Join(", ", errors));
+
+        Title = title;
         TrackNumber = trackNumber;
+
     }
     
 }
