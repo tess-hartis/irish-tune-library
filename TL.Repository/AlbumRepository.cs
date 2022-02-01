@@ -9,7 +9,7 @@ namespace TL.Repository;
 public interface IAlbumRepository : IGenericRepository<Album>
 {
     new Task<Album> FindAsync(int id);
-    Task UpdateAlbum(Album album, string title, int year);
+    Task UpdateAlbum(int id, string title, int year);
 }
 
 public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
@@ -29,28 +29,15 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (album == null)
-            throw new InvalidOperationException("Album not found");
+            throw new EntityNotFoundException($"Album with ID '{id}' was not found");
         
         return album;
     }
 
-    public async Task UpdateAlbum(Album album, string title, int year)
+    public async Task UpdateAlbum(int id, string title, int year)
     {
-        album.UpdateTitle(title);
-        album.UpdateYear(year);
-        
-        var errors = new List<string>();
-        var results = await _validator.ValidateAsync(album);
-        if (results.IsValid == false)
-        {
-            foreach (var validationFailure in results.Errors)
-            {
-                errors.Add($"{validationFailure.ErrorMessage}");
-            }
-            
-            throw new InvalidEntityException(string.Join(", ", errors));
-        }
-        
+        var album = await FindAsync(id);
+        album.Update(title, year);
         await SaveAsync();
     }
     
