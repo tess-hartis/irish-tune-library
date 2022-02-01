@@ -33,7 +33,8 @@ public class AlbumArtistService : IAlbumArtistService
     public async Task<IEnumerable<Album>> FindArtistAlbums(int artistId)
     {
         var artist = await _artistRepository.FindAsync(artistId);
-        var albums = await _albumRepository.GetByWhere(a => a.Artists.Contains(artist)).ToListAsync();
+        var albums = await _albumRepository
+            .GetByWhere(a => a.Artists.Contains(artist)).ToListAsync();
         return albums;
     }
     
