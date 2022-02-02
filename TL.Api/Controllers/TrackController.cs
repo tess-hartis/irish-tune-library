@@ -82,10 +82,10 @@ public class TrackController : Controller
         return Ok();
     }
 
-    [HttpPost("{id}/tune")]
-    public async Task<ActionResult> AddNewTuneToTrack(int id, [FromBody] PostTuneDTO dto)
-    {
-        await _tuneTrackService.AddNewTuneToTrack(id, dto.Title, dto.Composer, dto.Type, dto.Key);
-        return Ok();
-    }
+    // [HttpPost("{id}/tune")]
+    // public async Task<ActionResult> AddNewTuneToTrack(int id, [FromBody] PostTuneDTO dto)
+    // {
+    //     await _tuneTrackService.AddNewTuneToTrack(id, dto.Title, dto.Composer, dto.Type, dto.Key);
+    //     return Ok();
+    // }
 }

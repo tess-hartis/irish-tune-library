@@ -12,6 +12,7 @@ public class TuneValidator : AbstractValidator<Tune>
         RuleFor(x => x.Composer)
             .NotEmpty().WithMessage("composer cannot be empty")
             .Length(2, 75).WithMessage("composer must be between 2 and 75 characters");
+        RuleFor(x => x.TuneType).IsInEnum();
 
     }
 }

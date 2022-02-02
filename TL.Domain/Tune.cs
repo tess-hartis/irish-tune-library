@@ -18,13 +18,11 @@ public class Tune
     private List<Track> _tracks = new List<Track>();
     public IReadOnlyList<Track> Tracks => _tracks;
     
-    public static Tune CreateTune(string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
+    public static Tune CreateTune(string title, string composer, string type, string key)
     {
         var tune = new Tune
         {
             Title = title,
-            TuneType = type,
-            TuneKey = key,
             Composer = composer,
             DateAdded = DateOnly.FromDateTime(DateTime.Today)
         };
@@ -39,9 +37,20 @@ public class Tune
             {
                 errors.Add($"{validationFailure.ErrorMessage}");
             }
-            
-            throw new InvalidEntityException(string.Join(", ", errors));
         }
+
+        if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
+            errors.Add("invalid tune type");
+        
+        tune.TuneType = tuneType;
+        
+        if(!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
+            errors.Add("invalid tune key");
+
+        tune.TuneKey = tuneKey;
+        
+        if (errors.Any())
+            throw new InvalidEntityException(string.Join(", ", errors));
         
         return tune;
     }

@@ -5,8 +5,8 @@ namespace TL.Api.TuneDTOs;
 public class PostTuneDTO
 {
     public string Title { get; set; }
-    public TuneTypeEnum Type { get; set; }
-    public TuneKeyEnum Key { get; set; }
+    public string Type { get; set; }
+    public string Key { get; set; }
     public string Composer { get; set; }
 
     public static Tune Create(PostTuneDTO dto)
