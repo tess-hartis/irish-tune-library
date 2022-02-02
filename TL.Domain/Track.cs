@@ -12,6 +12,9 @@ public class Track
     public int TrackNumber { get; private set; }
     private List<Tune> _tuneList = new List<Tune>();
     public IReadOnlyList<Tune> TuneList => _tuneList;
+    
+    public int AlbumId { get; set; }
+    public Album Album { get; set; }
 
     public static Track CreateTrack(string title, int trackNumber)
     {
