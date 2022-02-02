@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using TL.Data;
 using TL.Domain;
@@ -21,7 +22,7 @@ public class ArtistRepoTest
         var artist = Artist.CreateArtist("Liz Carroll");
         
         //Act
-        await repo.AddArtist(artist);
+        await repo.AddAsync(artist);
 
         const int expected = 1;
         var actual = artist.Id;
@@ -39,39 +40,18 @@ public class ArtistRepoTest
         await context.Database.EnsureCreatedAsync();
         var repo = new ArtistRepository(context);
         var artist = Artist.CreateArtist("Liz Carroll");
-        await repo.AddArtist(artist);
+        await repo.AddAsync(artist);
         
         //Act
-        await repo.DeleteArtist(artist.Id);
-        var list = await repo.GetAllArtists();
+        await repo.DeleteAsync(artist.Id);
+        var list = await repo.GetEntities().ToListAsync();
         const int expected = 0;
-        var actual = list.Count();
+        var actual = list.Count;
 
         //Assert
         Assert.AreEqual(expected, actual);
     }
 
-    [Test]
-    public async Task Can_Update_Name_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var repo = new ArtistRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var artist = Artist.CreateArtist("Liz Carroll");
-        await repo.AddArtist(artist);
-
-        //Act
-        await repo.UpdateArtist(artist.Id, "John Doyle");
-
-        const string expected = "John Doyle";
-        var actual = artist.Name;
-
-        //Assert
-        Assert.AreEqual(expected, actual);
-    }
-    
     [Test]
     public async Task Can_Find_Artist_By_Id()
     {
@@ -81,7 +61,7 @@ public class ArtistRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var artist = Artist.CreateArtist("Liz Carroll");
-        await repo.AddArtist(artist);
+        await repo.AddAsync(artist);
 
         //Act
         const string expected = "Liz Carroll";
@@ -100,9 +80,9 @@ public class ArtistRepoTest
         await context.Database.EnsureCreatedAsync();
 
         //Act
-        var artists = await repo.GetAllArtists();
+        var artists = await repo.GetEntities().ToListAsync();
         const int expected = 0;
-        var actual = artists.Count();
+        var actual = artists.Count;
 
         //Assert
         Assert.AreEqual(expected, actual);

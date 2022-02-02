@@ -10,7 +10,7 @@ public class TuneDomainTests
     [Test]
     public void CanCreateTune()
     {
-        var tune = Tune.CreateTune("Title", "Composer", TuneTypeEnum.Air, TuneKeyEnum.Ador);
+        var tune = Tune.CreateTune("Title", "Composer", "Jig", "Ador");
         
         Assert.AreEqual("Title", tune.Title);
         Assert.AreEqual("Composer", tune.Composer);
@@ -22,14 +22,14 @@ public class TuneDomainTests
     public void Cannot_Create_When_Title_Invalid()
     {
         Assert.Throws<FormatException>(() => 
-            Tune.CreateTune("", "Composer", TuneTypeEnum.Air, TuneKeyEnum.Ador));
+            Tune.CreateTune("", "Composer", "Jig", "Ador"));
     }
     
     [Test]
     public void Cannot_Create_When_Composer_Invalid()
     {
         Assert.Throws<FormatException>(() => 
-            Tune.CreateTune("Title", "", TuneTypeEnum.Air, TuneKeyEnum.Ador));
+            Tune.CreateTune("Title", "", "Jig", "Ador"));
     }
 
     

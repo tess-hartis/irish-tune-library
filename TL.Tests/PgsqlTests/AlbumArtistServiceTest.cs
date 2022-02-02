@@ -21,9 +21,9 @@ public class AlbumArtistServiceTest
         await context.Database.EnsureCreatedAsync();
         var service = new AlbumArtistService(context, albumRepo, artistRepo);
         var artist = Artist.CreateArtist("its the name");
-        await artistRepo.AddArtist(artist);
+        await artistRepo.AddAsync(artist);
         var album = Album.CreateAlbum("its the title", 2001);
-        await albumRepo.AddAlbum(album);
+        await albumRepo.AddAsync(album);
         await service.AddExistingArtistToAlbum(album.Id, artist.Id);
         await context.SaveChangesAsync();
 
@@ -48,9 +48,9 @@ public class AlbumArtistServiceTest
         await context.Database.EnsureCreatedAsync();
         var service = new AlbumArtistService(context, albumRepo, artistRepo);
         var artist = Artist.CreateArtist("its the name");
-        await artistRepo.AddArtist(artist);
+        await artistRepo.AddAsync(artist);
         var album = Album.CreateAlbum("its the title", 2001);
-        await albumRepo.AddAlbum(album);
+        await albumRepo.AddAsync(album);
 
         //Act
         await service.AddExistingArtistToAlbum(album.Id, artist.Id);
@@ -72,7 +72,7 @@ public class AlbumArtistServiceTest
         await context.Database.EnsureCreatedAsync();
         var service = new AlbumArtistService(context, albumRepo, artistRepo);
         var album = Album.CreateAlbum("its the title", 2001);
-        await albumRepo.AddAlbum(album);
+        await albumRepo.AddAsync(album);
 
         //Act
         await service.AddNewArtistToAlbum(album.Id, "new artist name");

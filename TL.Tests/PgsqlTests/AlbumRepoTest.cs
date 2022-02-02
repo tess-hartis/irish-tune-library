@@ -22,7 +22,7 @@ public class AlbumRepoTest
         var album = Album.CreateAlbum("Making Time", 2000);
         
         //Act
-        await repo.AddAlbum(album);
+        await repo.AddAsync(album);
 
         const int expected = 1;
         var actual = album.Id;
@@ -40,36 +40,16 @@ public class AlbumRepoTest
         await context.Database.EnsureCreatedAsync();
         var repo = new AlbumRepository(context);
         var album = Album.CreateAlbum("Making Time", 2000);
-        await repo.AddAlbum(album);
+        await repo.AddAsync(album);
         
         //Act
-        await repo.DeleteAlbum(album.Id);
+        await repo.DeleteAsync(album.Id);
         var list =  await repo.GetEntities().ToListAsync();
         const int expected = 0;
         var actual = list.Count;
 
         //Assert
         Assert.AreEqual(expected, actual);
-    }
-
-    [Test]
-    public async Task Can_Update_Title_Using_Repository()
-    {
-        //Arrange
-        await using var context = new TuneLibraryContext();
-        var repo = new AlbumRepository(context);
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
-        var album = Album.CreateAlbum("Making Time", 2000);
-        await repo.AddAlbum(album);
-
-        //Act
-        await repo.UpdateAlbum(album.Id, "New Title",2003);
-        
-
-        //Assert
-        Assert.AreEqual(album.Title, "New Title");
-        Assert.AreEqual(album.Year, 2003);
     }
 
     [Test]
@@ -81,7 +61,7 @@ public class AlbumRepoTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var album = Album.CreateAlbum("Making Time", 2000);
-        await repo.AddAlbum(album);
+        await repo.AddAsync(album);
 
         //Act
         const string expected = "Making Time";
@@ -103,7 +83,7 @@ public class AlbumRepoTest
         //Act
        
         const int expected = 0;
-        var actual = await repo.GetAllAlbums();
+        var actual = await repo.GetEntities().ToListAsync();
 
         //Assert
         Assert.AreEqual(expected, actual.Count());
