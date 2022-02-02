@@ -56,5 +56,17 @@ public class TuneLibraryContext : DbContext
         modelBuilder.Entity<Album>()
             .HasMany(a => a.Artists)
             .WithMany(a => a.Albums);
+
+        modelBuilder.Entity<Track>()
+            .HasOne(t => t.Album)
+            .WithMany(a => a.TrackListing)
+            .HasForeignKey(t => t.AlbumId)
+            .IsRequired();
+
+        modelBuilder.Entity<Album>()
+            .Navigation(a => a.TrackListing)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+
     }
 }
