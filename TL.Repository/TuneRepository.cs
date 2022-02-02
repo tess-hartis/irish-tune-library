@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
-using TL.Domain.Exceptions;
 using TL.Domain.Validators;
 
 namespace TL.Repository;
