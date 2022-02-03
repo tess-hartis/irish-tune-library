@@ -59,11 +59,6 @@ public class Album
         _artists.Remove(artist);
     }
 
-    public void AddTrack(Track track)
-    {
-        _tracks.Add(track);
-    }
-
     public void RemoveTrack(Track track)
     {
         if (!_tracks.Contains(track))
