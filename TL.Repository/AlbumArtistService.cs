@@ -41,7 +41,13 @@ public class AlbumArtistService : IAlbumArtistService
     
     public async Task AddExistingArtistToAlbum(int albumId, int artistId)
     {
-        var album = await _albumRepository.FindAsync(albumId);
+        var album = await _context.Albums
+            .Include(a => a.Artists)
+            .FirstOrDefaultAsync(a => a.Id == albumId);
+
+        if (album == null)
+            throw new EntityNotFoundException($"Album with ID '{albumId}' was not found");
+        
         var artist = await _artistRepository.FindAsync(artistId);
         album.AddArtist(artist);
         await SaveChangesAsync();
