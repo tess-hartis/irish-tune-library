@@ -9,8 +9,6 @@ public interface ITuneTrackService
     Task AddExistingTuneToTrack(int trackId, int tuneId);
     Task RemoveTuneFromTrack(int trackId, int tuneId);
     Task<IEnumerable<Track>> FindTracksByTune(int tuneId);
-    // Task AddNewTuneToTrack(int trackId, string title, string composer,
-    //     TuneTypeEnum type, TuneKeyEnum key);
 }
 
 public class TuneTrackService : ITuneTrackService
@@ -40,16 +38,6 @@ public class TuneTrackService : ITuneTrackService
         await SaveChangesAsync();
     }
 
-    // public async Task AddNewTuneToTrack(int trackId, string title, string composer,
-    //     TuneTypeEnum type, TuneKeyEnum key)
-    // {
-    //     var tune = Tune.CreateTune(title, composer, type, key);
-    //     await _tuneRepository.AddAsync(tune);
-    //     var track = await _trackRepository.FindAsync(trackId);
-    //     track.AddTune(tune);
-    //     await SaveChangesAsync();
-    // }
-    
     public async Task RemoveTuneFromTrack(int trackId, int tuneId)
     {
         var track = await _trackRepository.FindAsync(trackId);
