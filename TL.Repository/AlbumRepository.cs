@@ -20,8 +20,6 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         
     }
 
-    private readonly AlbumValidator _validator = new AlbumValidator();
-
     public override async Task<Album> FindAsync(int id)
     {
         var album = await Context.Albums
