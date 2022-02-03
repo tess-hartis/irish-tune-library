@@ -82,6 +82,7 @@ public class Album
             throw new InvalidEntityException(string.Join(", ", errors));
         
         Title = title;
+        Year = year;
     }
 
     
