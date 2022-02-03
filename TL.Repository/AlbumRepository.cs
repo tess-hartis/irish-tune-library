@@ -10,6 +10,7 @@ public interface IAlbumRepository : IGenericRepository<Album>
 {
     new Task<Album> FindAsync(int id);
     Task UpdateAlbum(int id, string title, int year);
+    new Task DeleteAsync(int id);
 }
 
 public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
@@ -24,14 +25,24 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
     public override async Task<Album> FindAsync(int id)
     {
         var album = await Context.Albums
-            .Include(x => x.Artists)
-            .Include(x => x.TrackListing)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (album == null)
             throw new EntityNotFoundException($"Album with ID '{id}' was not found");
         
         return album;
+    }
+    
+    public override async Task DeleteAsync(int id)
+    {
+        var album = await Context.Albums
+            .Include(x => x.TrackListing)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (album == null)
+            throw new EntityNotFoundException($"No album with ID of '{id}' was found");
+        
+        Context.Remove(album);
+        await SaveAsync();
     }
 
     public async Task UpdateAlbum(int id, string title, int year)
