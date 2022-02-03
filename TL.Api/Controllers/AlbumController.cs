@@ -51,48 +51,48 @@ public class AlbumController : Controller
   public async Task<ActionResult> PutAlbum(int id, [FromBody] PutAlbumDTO dto)
   {
     await _albumRepository.UpdateAlbum(id, dto.Title, dto.Year);
-    return Ok();
+    return Ok($"Album with ID '{id}' was updated");
   }
   
   [HttpDelete("{id}")]
   public async Task<ActionResult> DeleteAlbum(int id)
   {
     await _albumRepository.DeleteAsync(id);
-    return Ok();
+    return Ok($"Album with ID '{id}' was deleted");
   }
 
   [HttpPost("{albumId}/artist/{artistId}")]
   public async Task<ActionResult> AddExistingArtistToAlbum(int albumId, int artistId)
   {
     await _albumArtistService.AddExistingArtistToAlbum(albumId, artistId);
-    return Ok();
+    return Ok($"Artist with ID '{artistId} was added to album with ID '{albumId}'");
   }
 
   [HttpPost("{albumId}/artist")]
   public async Task<ActionResult> AddNewArtistToAlbum(int albumId, [FromBody] PostArtistDTO dto)
   {
     await _albumArtistService.AddNewArtistToAlbum(albumId, dto.Name);
-    return Ok();
+    return Ok($"New artist '{dto.Name}' was added to album with ID '{albumId}'");
   }
 
   [HttpDelete("{albumId}/artist/{artistId}")]
   public async Task<ActionResult> RemoveArtistFromAlbum(int albumId, int artistId)
   {
     await _albumArtistService.RemoveArtistFromAlbum(albumId, artistId);
-    return Ok();
+    return Ok($"Artist with ID '{artistId}' was removed from album with ID '{albumId}'");
   }
 
   [HttpPost("{albumId}/track")]
   public async Task<ActionResult> AddTrackToAlbum(int albumId, [FromBody] PostTrackDTO dto)
   {
     await _albumTrackService.AddNewTrackToAlbum(albumId, dto.Title, dto.TrackNumber);
-    return Ok();
+    return Ok("New track successfully added");
   }
 
   [HttpDelete("{albumId}/track/{trackId}")]
   public async Task<ActionResult> RemoveTrackFromAlbum(int albumId, int trackId)
   {
     await _albumTrackService.RemoveTrackFromAlbum(albumId, trackId);
-    return Ok();
+    return Ok($"Track with ID '{trackId}' was removed from album with ID '{albumId}'");
   }
 }
