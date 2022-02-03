@@ -48,14 +48,14 @@ public class ArtistController : Controller
    public async Task<ActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
    {
       await _artistRepository.UpdateArtist(id, dto.Name);
-      return Ok();
+      return Ok($"Artist with ID '{id}' was updated");
    }
    
    [HttpDelete("{id}")]
    public async Task<ActionResult> DeleteArtist(int id)
    {
       await _artistRepository.DeleteAsync(id);
-      return Ok();
+      return Ok($"Artist with ID '{id}' was deleted");
 
    }
 
