@@ -7,6 +7,7 @@ public interface IAlbumTrackService
 {
     Task AddNewTrackToAlbum(int albumId, string title, int trackNumber);
     Task RemoveTrackFromAlbum(int albumId, int trackId);
+    Task<IEnumerable<Track>> GetAlbumTracks(int albumId);
 
 }
 public class AlbumTrackService : IAlbumTrackService
@@ -41,5 +42,13 @@ public class AlbumTrackService : IAlbumTrackService
         var track = await _trackRepository.FindAsync(trackId);
         album.RemoveTrack(track);
         await SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Track>> GetAlbumTracks(int albumId)
+    {
+        return await _trackRepository
+            .GetByWhere(x => x.AlbumId == albumId)
+            .OrderBy(x => x.TrackNumber)
+            .ToListAsync();
     }
 }
