@@ -10,8 +10,16 @@ public static class IntegerValidator
                 if (!char.IsNumber(c))
                     return false;
             }
-            int num = year;
-            return num <= 2100 && num >= 1800;
+
+            var thisYear = DateTime.Now.Year;
+
+            if (year > thisYear)
+                return false;
+
+            if (year < 1900)
+                return false;
+
+            return true;
         }
 
         public static bool IsValidTrackNum(this int track)
