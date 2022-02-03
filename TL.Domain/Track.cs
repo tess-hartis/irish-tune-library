@@ -74,5 +74,10 @@ public class Track
         TrackNumber = trackNumber;
 
     }
+
+    public void SetAlbumId(int id)
+    {
+        AlbumId = id;
+    }
     
 }
