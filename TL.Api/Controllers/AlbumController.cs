@@ -95,4 +95,13 @@ public class AlbumController : Controller
     await _albumTrackService.RemoveTrackFromAlbum(albumId, trackId);
     return Ok($"Track with ID '{trackId}' was removed from album with ID '{albumId}'");
   }
+
+  [HttpGet("{albumId}/tracks")]
+  public async Task<ActionResult<IEnumerable<GetTracksDTO>>> GetAlbumTracks(int albumId)
+  {
+    var tracks = await _albumTrackService.GetAlbumTracks(albumId);
+    var returned = GetTracksDTO.GetAll(tracks);
+    return Ok(returned);
+    
+  }
 }
