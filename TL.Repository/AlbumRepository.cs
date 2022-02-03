@@ -36,6 +36,7 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         var album = await Context.Albums
             .Include(x => x.TrackListing)
             .FirstOrDefaultAsync(x => x.Id == id);
+        
         if (album == null)
             throw new EntityNotFoundException($"No album with ID of '{id}' was found");
         
