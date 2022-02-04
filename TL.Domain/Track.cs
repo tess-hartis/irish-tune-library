@@ -10,8 +10,8 @@ public class Track
     public int Id { get; private set; }
     public string Title { get; private set; }
     public int TrackNumber { get; private set; }
-    private List<Tune> _tuneList = new List<Tune>();
-    public IReadOnlyList<Tune> TuneList => _tuneList;
+    private List<TuneOnTrack> _tunesOnTrack = new List<TuneOnTrack>();
+    public IReadOnlyList<TuneOnTrack> TunesOnTrack => _tunesOnTrack;
     
     public int AlbumId { get; set; }
     public Album Album { get; set; }
@@ -37,24 +37,26 @@ public class Track
             
             throw new InvalidEntityException(string.Join(", ", errors));
         }
+        
+        //add validation to prevent tracks with the same track number from being added
 
         return track;
     }
     
-    public void AddTune(Tune tune)
+    public void AddTune(TuneOnTrack tuneOnTrack)
     {
-        if (_tuneList.Contains(tune))
+        if (_tunesOnTrack.Contains(tuneOnTrack))
             throw new InvalidOperationException("The specified tune already exists on the track");
         
-        _tuneList.Add(tune);
+        _tunesOnTrack.Add(tuneOnTrack);
     }
     
-    public void RemoveTune(Tune tune)
+    public void RemoveTune(TuneOnTrack tuneOnTrack)
     {
-        if (!_tuneList.Contains(tune))
+        if (!_tunesOnTrack.Contains(tuneOnTrack))
             throw new InvalidOperationException("The specified tune was not found on the track");
         
-        _tuneList.Remove(tune);
+        _tunesOnTrack.Remove(tuneOnTrack);
     }
 
     public void Update(string title, int trackNumber)
