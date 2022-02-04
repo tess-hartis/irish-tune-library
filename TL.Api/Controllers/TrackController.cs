@@ -41,14 +41,14 @@ public class TrackController : Controller
     public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
         await _trackRepository.UpdateTrack(id, dto.Title, dto.TrackNumber);
-        return Ok();
+        return Ok($"Track with ID '{id}' was updated");
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTrack(int id)
     {
         await _trackRepository.DeleteAsync(id);
-        return Ok();
+        return Ok($"Track with ID '{id}' was deleted");
     }
     
     [HttpGet("tune/{tuneId}")]
@@ -63,14 +63,14 @@ public class TrackController : Controller
     public async Task<ActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
     {
         await _tuneTrackService.RemoveTuneFromTrack(trackId, tuneId);
-        return Ok();
+        return Ok($"Tune with ID '{tuneId}' was removed from track with ID '{trackId}'");
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
     public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId )
     {
         await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId);
-        return Ok();
+        return Ok($"Tune with ID '{tuneId}' was added to track with ID '{trackId}'");
     }
     
 }
