@@ -27,8 +27,8 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
             .FirstOrDefaultAsync(x => x.Id == id);
         
         if (track == null)
-            throw new InvalidOperationException("Track not found");
-
+            throw new InvalidOperationException($"Track with ID '{id}' was not found");
+    
         return track;
     }
 
