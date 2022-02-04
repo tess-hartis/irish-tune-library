@@ -18,9 +18,10 @@ public class TuneTrackServiceTest
         var trackRepo = new TrackRepository(context);
         var tuneRepo = new TuneRepository(context);
         var albumRepo = new AlbumRepository(context);
+        var tuneOnTrackRepo = new TuneOnTrackRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-        var service = new TuneTrackService(context, tuneRepo, trackRepo);
+        var service = new TuneTrackService(context, tuneRepo, tuneOnTrackRepo, trackRepo);
         var album = Album.CreateAlbum("album title", 2000);
         await albumRepo.AddAsync(album);
         var tune = Tune.CreateTune("tune title", "composerrr", "Jig", "DMaj");
@@ -28,7 +29,7 @@ public class TuneTrackServiceTest
         var track = Track.CreateTrack("track title", 3);
         track.AlbumId = album.Id;
         await trackRepo.AddAsync(track);
-        await service.AddExistingTuneToTrack(track.Id, tune.Id);
+        await service.AddExistingTuneToTrack(track.Id, tune.Id, 1);
         await context.SaveChangesAsync();
 
         //Act
