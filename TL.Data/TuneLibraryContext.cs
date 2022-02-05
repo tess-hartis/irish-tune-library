@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Domain;
 using TL.Domain.ValueObjects.ArtistValueObjects;
+using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Data;
 
@@ -96,6 +97,11 @@ public class TuneLibraryContext : DbContext
             .OwnsOne(a => a.Year)
             .Property(x => x.Value)
             .HasColumnName("Year");
+
+        modelBuilder.Entity<Track>()
+            .OwnsOne(t => t.Title)
+            .Property(x => x.Value)
+            .HasColumnName("Title");
 
     }
 }

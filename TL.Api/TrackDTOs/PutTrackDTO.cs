@@ -1,4 +1,5 @@
 using TL.Domain;
+using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Api.TrackDTOs;
 
@@ -9,7 +10,8 @@ public class PutTrackDTO
 
     public static Track UpdatedTrack(Track track, PutTrackDTO dto)
     {
-        track.Update(dto.Title, dto.TrackNumber);
+        var title = TrackTitle.Create(dto.Title);
+        track.Update(title, dto.TrackNumber);
         return track;
     }
 }

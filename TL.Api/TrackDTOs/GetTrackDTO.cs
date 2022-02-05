@@ -13,7 +13,7 @@ public class GetTrackDTO
         return new GetTrackDTO
         {
             Id = track.Id,
-            Title = track.Title,
+            Title = track.Title.Value,
             TrackNumber = track.TrackNumber,
             
         };

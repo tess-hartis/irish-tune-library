@@ -1,4 +1,5 @@
 using TL.Domain;
+using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Api.TrackDTOs;
 
@@ -9,7 +10,8 @@ public class PostTrackDTO
 
     public static Track ToTrack(PostTrackDTO dto)
     {
-        var track = Track.CreateTrack(dto.Title, dto.TrackNumber);
+        var title = TrackTitle.Create(dto.Title);
+        var track = Track.CreateTrack(title, dto.TrackNumber);
         return track;
     }
 }

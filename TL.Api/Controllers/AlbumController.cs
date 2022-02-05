@@ -5,6 +5,7 @@ using TL.Api.ArtistDTOs;
 using TL.Api.TrackDTOs;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 using TL.Domain.ValueObjects.ArtistValueObjects;
+using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -90,7 +91,8 @@ public class AlbumController : Controller
   [HttpPost("{albumId}/track")]
   public async Task<ActionResult> AddTrackToAlbum(int albumId, [FromBody] PostTrackDTO dto)
   {
-    await _albumTrackService.AddNewTrackToAlbum(albumId, dto.Title, dto.TrackNumber);
+    var title = TrackTitle.Create(dto.Title);
+    await _albumTrackService.AddNewTrackToAlbum(albumId, title, dto.TrackNumber);
     return Ok("New track successfully added");
   }
 

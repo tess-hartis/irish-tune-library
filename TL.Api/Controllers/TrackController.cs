@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TL.Api.TrackDTOs;
+using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -38,7 +39,8 @@ public class TrackController : Controller
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
-        await _trackRepository.UpdateTrack(id, dto.Title, dto.TrackNumber);
+        var title = TrackTitle.Create(dto.Title);
+        await _trackRepository.UpdateTrack(id, title, dto.TrackNumber);
         return Ok($"Track with ID '{id}' was updated");
     }
 
