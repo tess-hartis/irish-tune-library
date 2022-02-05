@@ -7,11 +7,13 @@ namespace TL.Domain;
 public class Track
 {
     private Track(){}
+    
     public int Id { get; private set; }
     public string Title { get; private set; }
     public int TrackNumber { get; private set; }
-    private List<TuneOnTrack> _tunesOnTrack = new List<TuneOnTrack>();
-    public IReadOnlyList<TuneOnTrack> TunesOnTrack => _tunesOnTrack;
+    
+    private List<TrackTune> _trackTunes = new List<TrackTune>();
+    public IReadOnlyList<TrackTune> TrackTunes => _trackTunes;
     
     public int AlbumId { get; set; }
     public Album Album { get; set; }
