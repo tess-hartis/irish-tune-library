@@ -1,4 +1,5 @@
 using TL.Domain;
+using TL.Domain.ValueObjects.TuneValueObjects;
 
 namespace TL.Api.TuneDTOs;
 
@@ -11,7 +12,8 @@ public class PostTuneDTO
 
     public static Tune Create(PostTuneDTO dto)
     {
-        var tune = Tune.CreateTune(dto.Title, dto.Composer, dto.Type, dto.Key);
+        var title = TuneTitle.Create(dto.Title);
+        var tune = Tune.CreateTune(title, dto.Composer, dto.Type, dto.Key);
         return tune;
     }
 }

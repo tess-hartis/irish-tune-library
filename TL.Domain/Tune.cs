@@ -1,5 +1,6 @@
 using TL.Domain.Exceptions;
 using TL.Domain.Validators;
+using TL.Domain.ValueObjects.TuneValueObjects;
 
 namespace TL.Domain;
 
@@ -8,9 +9,9 @@ public class Tune
     private Tune(){ }
     
     public int Id { get; private set; }
-    public string Title { get;  private set; }
-    private List<string> _alternateTitles = new List<string>();
-    public List<string> AlternateTitles => _alternateTitles;
+    public TuneTitle Title { get;  private set; }
+    private List<TuneTitle> _alternateTitles = new List<TuneTitle>();
+    public List<TuneTitle> AlternateTitles => _alternateTitles;
     public TuneTypeEnum TuneType { get; private set; }
     public TuneKeyEnum TuneKey { get; private set; }
     public string Composer { get; private set; }
@@ -18,7 +19,7 @@ public class Tune
     private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
     public IReadOnlyList<TrackTune> FeaturedOnTrack => _featuredOnTrack;
     
-    public static Tune CreateTune(string title, string composer, string type, string key)
+    public static Tune CreateTune(TuneTitle title, string composer, string type, string key)
     {
         var tune = new Tune
         {
@@ -27,52 +28,30 @@ public class Tune
             DateAdded = DateOnly.FromDateTime(DateTime.Today)
         };
 
-        var validator = new TuneValidator();
-        var errors = new List<string>();
-        var results = validator.Validate(tune);
-        
-        if (results.IsValid == false)
-        {
-            foreach (var validationFailure in results.Errors)
-            {
-                errors.Add($"{validationFailure.ErrorMessage}");
-            }
-        }
 
         if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
-            errors.Add("invalid tune type");
+            throw new Exception();
         
         tune.TuneType = tuneType;
-        
-        if(!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
-            errors.Add("invalid tune key");
+
+        if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
+            throw new Exception();
 
         tune.TuneKey = tuneKey;
         
-        if (errors.Any())
-            throw new InvalidEntityException(string.Join(", ", errors));
+        
         
         return tune;
     }
 
-    public void AddAlternateTitle(string title)
+    public void AddAlternateTitle(TuneTitle title)
     {
-        var errors = new List<string?>();
-        
-        if (!title.IsValidNameOrTitle())
-            errors.Add("Title must be between 2 and 75 characters");
-        
-        if(_alternateTitles.Contains(title))
-            errors.Add("Alternate title already exists");
 
-        if (errors.Any())
-            throw new InvalidEntityException(string.Join(", ", errors));
-        
         _alternateTitles.Add(title);
         
     }
 
-    public void RemoveAlternateTitle(string title)
+    public void RemoveAlternateTitle(TuneTitle title)
     {
         if (!_alternateTitles.Contains(title))
             throw new InvalidOperationException($"The title {title} was not found");
@@ -80,24 +59,12 @@ public class Tune
         _alternateTitles.Remove(title);
     }
     
-    public void Update(string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
+    public void Update(TuneTitle title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
-        var errors = new List<string>();
-        
-        if (!title.IsValidNameOrTitle())
-            errors.Add("composer must be between 2 and 75 characters");
-        
-        if (!composer.IsValidNameOrTitle())
-            errors.Add("title must be between 2 and 75 characters");
-
-        if (errors.Any())
-            throw new InvalidEntityException(string.Join(", ", errors));
-
         Title = title;
         Composer = composer;
         TuneType = type;
         TuneKey = key;
-
     }
     
     

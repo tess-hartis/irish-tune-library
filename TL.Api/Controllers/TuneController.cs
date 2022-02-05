@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.TrackDTOs;
 using TL.Api.TuneDTOs;
 using TL.Domain;
+using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -76,7 +77,8 @@ public class TuneController : Controller
     [HttpPut("{id}")]
     public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
     {
-        await _tuneRepository.UpdateTune(id, dto.Title, dto.Composer, dto.Type, dto.Key);
+        var title = TuneTitle.Create(dto.Title);
+        await _tuneRepository.UpdateTune(id, title, dto.Composer, dto.Type, dto.Key);
         return Ok();
     }
     
@@ -90,15 +92,15 @@ public class TuneController : Controller
     [HttpPost("{id}/titles")]
     public async Task<ActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
-        var altTitle = dto.AlternateTitle;
-        await _tuneRepository.AddAlternateTitle(id, altTitle);
+        var title = TuneTitle.Create(dto.AlternateTitle);
+        await _tuneRepository.AddAlternateTitle(id, title);
         return Ok();
     }
     
     [HttpDelete("{id}/titles")]
     public async Task<ActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
-        var title = dto.AlternateTitle;
+        var title = TuneTitle.Create(dto.AlternateTitle);
         await _tuneRepository.RemoveAlternateTitle(id, title);
         return Ok();
     }

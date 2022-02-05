@@ -2,14 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
 using TL.Domain.Validators;
+using TL.Domain.ValueObjects.TuneValueObjects;
 
 namespace TL.Repository;
 
 public interface ITuneRepository : IGenericRepository<Tune>
 {
-    Task UpdateTune(int id, string title, string composer, TuneTypeEnum type, TuneKeyEnum key);
-    Task AddAlternateTitle(int id, string title);
-    Task RemoveAlternateTitle(int id, string title);
+    Task UpdateTune(int id, TuneTitle title, string composer, TuneTypeEnum type, TuneKeyEnum key);
+    Task AddAlternateTitle(int id, TuneTitle title);
+    Task RemoveAlternateTitle(int id, TuneTitle title);
 }
 
 public class TuneRepository : GenericRepository<Tune>, ITuneRepository
@@ -19,23 +20,21 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
        
     }
 
-    private readonly TuneValidator _validator = new TuneValidator();
-    
-    public async Task UpdateTune(int id, string title, string composer, TuneTypeEnum type, TuneKeyEnum key)
+    public async Task UpdateTune(int id, TuneTitle title, string composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         var tune = await FindAsync(id);
         tune.Update(title, composer, type, key);
         await SaveAsync();
     }
 
-    public async Task AddAlternateTitle(int id, string title)
+    public async Task AddAlternateTitle(int id, TuneTitle title)
     {
         var tune = await FindAsync(id);
         tune.AddAlternateTitle(title);
         await SaveAsync();
     }
 
-    public async Task RemoveAlternateTitle(int id, string title)
+    public async Task RemoveAlternateTitle(int id, TuneTitle title)
     {
         var tune = await FindAsync(id);
         tune.RemoveAlternateTitle(title);

@@ -48,7 +48,7 @@ public class TuneTrackService : ITuneTrackService
         trackTune.SetTrack(track);
         trackTune.SetTuneId(tune.Id);
         trackTune.SetTune(tune);
-        trackTune.SetTitle(tune.Title);
+        trackTune.SetTitle(tune.Title.Value);
         
         await SaveChangesAsync();
     }
