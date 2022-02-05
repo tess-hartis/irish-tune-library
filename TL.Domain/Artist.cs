@@ -21,21 +21,7 @@ public class Artist
         {
             Name = name
         };
-        
-        // var validator = new ArtistValidator();
-        // var errors = new List<string>();
-        // var results = validator.Validate(artist);
-        //
-        // if (results.IsValid == false)
-        // {
-        //     foreach (var validationFailure in results.Errors)
-        //     {
-        //         errors.Add($"{validationFailure.ErrorMessage}");
-        //     }
-        //     
-        //     throw new InvalidEntityException(string.Join(", ", errors));
-        // }
-        
+
         return artist;
     }
     
