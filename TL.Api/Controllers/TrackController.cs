@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TL.Api.TrackDTOs;
-using TL.Api.TuneDTOs;
-using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
