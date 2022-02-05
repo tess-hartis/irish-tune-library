@@ -15,8 +15,8 @@ public class Tune
     public TuneKeyEnum TuneKey { get; private set; }
     public string Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
-    private List<TuneOnTrack> _featuredOnTrack = new List<TuneOnTrack>();
-    public IReadOnlyList<TuneOnTrack> FeaturedOnTrack => _featuredOnTrack;
+    private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
+    public IReadOnlyList<TrackTune> FeaturedOnTrack => _featuredOnTrack;
     
     public static Tune CreateTune(string title, string composer, string type, string key)
     {

@@ -23,7 +23,8 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
     
     public override async Task<Track> FindAsync(int id)
     {
-        var track = await Context.Tracks.Include(t => t.TuneList)
+        var track = await Context.Tracks
+            .Include(t => t.TrackTunes)
             .FirstOrDefaultAsync(x => x.Id == id);
         
         if (track == null)

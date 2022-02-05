@@ -18,7 +18,7 @@ public class TuneTrackServiceTest
         var trackRepo = new TrackRepository(context);
         var tuneRepo = new TuneRepository(context);
         var albumRepo = new AlbumRepository(context);
-        var tuneOnTrackRepo = new TuneOnTrackRepository(context);
+        var tuneOnTrackRepo = new TrackTuneRepository(context);
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         var service = new TuneTrackService(context, tuneRepo, tuneOnTrackRepo, trackRepo);

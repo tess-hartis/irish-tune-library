@@ -11,10 +11,12 @@ namespace TL.Api.Controllers;
 public class TuneController : Controller
 {
     private readonly ITuneRepository _tuneRepository;
+    private readonly ITuneTrackService _tuneTrackService;
 
-    public TuneController(ITuneRepository tuneRepository)
+    public TuneController(ITuneRepository tuneRepository, ITuneTrackService tuneTrackService)
     {
         _tuneRepository = tuneRepository;
+        _tuneTrackService = tuneTrackService;
     }
 
     [HttpGet("{id}")]

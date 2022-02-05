@@ -23,7 +23,7 @@ builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
 builder.Services.AddTransient<ITuneTrackService, TuneTrackService>();
 builder.Services.AddTransient<IAlbumArtistService, AlbumArtistService>();
 builder.Services.AddTransient<IAlbumTrackService, AlbumTrackService>();
-builder.Services.AddTransient<ITuneOnTrackRepository, TuneOnTrackRepository>();
+builder.Services.AddTransient<ITrackTuneRepository, TrackTuneRepository>();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
