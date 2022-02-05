@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
-using TL.Domain.Exceptions;
-using TL.Domain.Validators;
 
 namespace TL.Repository;
 
@@ -17,8 +15,6 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
     {
        
     }
-
-    private readonly ArtistValidator _validator = new ArtistValidator();
 
     public async Task UpdateArtist(int id, string name)
     {
