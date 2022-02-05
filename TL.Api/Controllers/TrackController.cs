@@ -30,7 +30,7 @@ public class TrackController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetTracksDTO>> GetAllTracks()
+    public async Task<ActionResult<IEnumerable<GetTrackDTO>>> GetAllTracks()
     {
         var tracks = await _trackRepository.GetEntities().ToListAsync();
         var returned = tracks.Select(GetTrackDTO.FromTrack);
@@ -67,9 +67,9 @@ public class TrackController : Controller
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
-    public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId )
+    public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] PostTuneToTrackDTO dto )
     {
-        await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId);
+        await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId, dto.Order);
         return Ok($"Tune with ID '{tuneId}' was added to track with ID '{trackId}'");
     }
     

@@ -26,7 +26,7 @@ public class TuneController : Controller
     }
 
     [HttpGet("type/{type}")]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByType(TuneTypeEnum type)
+    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> FindByType(TuneTypeEnum type)
     {
         var tunes = await _tuneRepository
             .GetByWhere(x => x.TuneType == type).ToListAsync();
@@ -35,7 +35,7 @@ public class TuneController : Controller
     }
 
     [HttpGet("key/{key}")]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByKey(TuneKeyEnum key)
+    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> FindByKey(TuneKeyEnum key)
     {
         var tunes = await _tuneRepository
             .GetByWhere(x => x.TuneKey == key).ToListAsync();
@@ -44,7 +44,7 @@ public class TuneController : Controller
     }
 
     [HttpGet("type/{type}/key/{key}")]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
+    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         var tunes = await _tuneRepository
             .GetByWhere(x => x.TuneType == type & x.TuneKey == key).ToListAsync();
@@ -53,7 +53,7 @@ public class TuneController : Controller
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetTunesDTO>>> GetAllTunes()
+    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> GetAllTunes()
     {
         var tunes = await _tuneRepository.GetEntities().ToListAsync();
         var returned = tunes.Select(GetTuneDTO.FromTune);

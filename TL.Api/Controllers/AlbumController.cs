@@ -31,10 +31,10 @@ public class AlbumController : Controller
   }
   
   [HttpGet]
-  public async Task<ActionResult<IEnumerable<GetAlbumsDTO>>> FindAllAlbums()
+  public async Task<ActionResult<IEnumerable<GetAlbumDTO>>> FindAllAlbums()
   {
     var albums = await _albumRepository.GetEntities().ToListAsync();
-    var returned = GetAlbumsDTO.GetAll(albums);
+    var returned = albums.Select(GetAlbumDTO.FromAlbum);
     return Ok(returned);
   }
   
@@ -97,10 +97,10 @@ public class AlbumController : Controller
   }
 
   [HttpGet("{albumId}/tracks")]
-  public async Task<ActionResult<IEnumerable<GetTracksDTO>>> GetAlbumTracks(int albumId)
+  public async Task<ActionResult<IEnumerable<GetTrackDTO>>> GetAlbumTracks(int albumId)
   {
     var tracks = await _albumTrackService.GetAlbumTracks(albumId);
-    var returned = GetTracksDTO.GetAll(tracks);
+    var returned = tracks.Select(GetTrackDTO.FromTrack);
     return Ok(returned);
     
   }

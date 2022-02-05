@@ -20,10 +20,10 @@ public class ArtistController : Controller
    }
    
    [HttpGet]
-   public async Task<ActionResult<IEnumerable<GetArtistsDTO>>> FindAll()
+   public async Task<ActionResult<IEnumerable<GetArtistDTO>>> FindAll()
    {
       var artists = await _artistRepository.GetEntities().ToListAsync();
-      var returned = GetArtistsDTO.GetAll(artists);
+      var returned = artists.Select(GetArtistDTO.FromArtist);
       return Ok(returned);
    }
 
@@ -60,10 +60,10 @@ public class ArtistController : Controller
    }
 
    [HttpGet("{artistId}/albums")]
-   public async Task<ActionResult<IEnumerable<GetAlbumsDTO>>> FindArtistAlbums(int artistId)
+   public async Task<ActionResult<IEnumerable<GetAlbumDTO>>> FindArtistAlbums(int artistId)
    {
       var albums = await _albumArtistService.FindArtistAlbums(artistId);
-      var returned = GetAlbumsDTO.GetAll(albums);
+      var returned = albums.Select(GetAlbumDTO.FromAlbum);
       return Ok(returned);
    }
    
