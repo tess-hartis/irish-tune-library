@@ -1,6 +1,3 @@
-using FluentValidation;
-using TL.Domain.Exceptions;
-using TL.Domain.Validators;
 using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Domain;
@@ -11,7 +8,7 @@ public class Track
     
     public int Id { get; private set; }
     public TrackTitle Title { get; private set; }
-    public int TrackNumber { get; private set; }
+    public TrackNumber TrackNumber { get; private set; }
     
     private List<TrackTune> _trackTunes = new List<TrackTune>();
     public IReadOnlyList<TrackTune> TrackTunes => _trackTunes;
@@ -19,7 +16,7 @@ public class Track
     public int AlbumId { get; set; }
     public Album Album { get; set; }
 
-    public static Track CreateTrack(TrackTitle title, int trackNumber)
+    public static Track CreateTrack(TrackTitle title, TrackNumber trackNumber)
     {
         var track = new Track()
         {
@@ -49,7 +46,7 @@ public class Track
         _trackTunes.Remove(trackTune);
     }
 
-    public void Update(TrackTitle title, int trackNumber)
+    public void Update(TrackTitle title, TrackNumber trackNumber)
     {
         Title = title;
         TrackNumber = trackNumber;

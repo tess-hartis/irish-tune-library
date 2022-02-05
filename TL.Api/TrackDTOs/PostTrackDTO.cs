@@ -6,12 +6,13 @@ namespace TL.Api.TrackDTOs;
 public class PostTrackDTO
 {
     public string Title { get; set; }
-    public int TrackNumber { get; set; }
+    public int Number { get; set; }
 
     public static Track ToTrack(PostTrackDTO dto)
     {
         var title = TrackTitle.Create(dto.Title);
-        var track = Track.CreateTrack(title, dto.TrackNumber);
+        var trackNumber = TrackNumber.Create(dto.Number);
+        var track = Track.CreateTrack(title, trackNumber);
         return track;
     }
 }

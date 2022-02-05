@@ -40,7 +40,8 @@ public class TrackController : Controller
     public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
         var title = TrackTitle.Create(dto.Title);
-        await _trackRepository.UpdateTrack(id, title, dto.TrackNumber);
+        var trackNumber = TrackNumber.Create(dto.Number);
+        await _trackRepository.UpdateTrack(id, title, trackNumber);
         return Ok($"Track with ID '{id}' was updated");
     }
 

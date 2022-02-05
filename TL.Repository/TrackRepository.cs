@@ -10,7 +10,7 @@ namespace TL.Repository;
 public interface ITrackRepository : IGenericRepository<Track>
 {
     new Task<Track> FindAsync(int id);
-    Task UpdateTrack(int id, TrackTitle title, int trackNumber);
+    Task UpdateTrack(int id, TrackTitle title, TrackNumber trackNumber);
 }
 
 public class TrackRepository : GenericRepository<Track>, ITrackRepository
@@ -32,7 +32,7 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
         return track;
     }
 
-    public async Task UpdateTrack(int id, TrackTitle title, int trackNumber)
+    public async Task UpdateTrack(int id, TrackTitle title, TrackNumber trackNumber)
     {
         var track = await FindAsync(id);
         track.Update(title, trackNumber);

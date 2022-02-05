@@ -103,5 +103,10 @@ public class TuneLibraryContext : DbContext
             .Property(x => x.Value)
             .HasColumnName("Title");
 
+        modelBuilder.Entity<Track>()
+            .OwnsOne(t => t.TrackNumber)
+            .Property(x => x.Value)
+            .HasColumnName("TrackNumber");
+
     }
 }

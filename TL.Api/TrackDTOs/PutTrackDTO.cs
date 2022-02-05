@@ -6,12 +6,13 @@ namespace TL.Api.TrackDTOs;
 public class PutTrackDTO
 {
     public string Title { get; set; }
-    public int TrackNumber { get; set; }
+    public int Number { get; set; }
 
     public static Track UpdatedTrack(Track track, PutTrackDTO dto)
     {
         var title = TrackTitle.Create(dto.Title);
-        track.Update(title, dto.TrackNumber);
+        var trackNumber = TrackNumber.Create(dto.Number);
+        track.Update(title, trackNumber);
         return track;
     }
 }

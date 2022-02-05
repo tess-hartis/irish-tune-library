@@ -14,7 +14,7 @@ public class GetTrackDTO
         {
             Id = track.Id,
             Title = track.Title.Value,
-            TrackNumber = track.TrackNumber,
+            TrackNumber = track.TrackNumber.Value,
             
         };
     }
