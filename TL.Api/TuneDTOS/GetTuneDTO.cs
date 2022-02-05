@@ -10,7 +10,7 @@ public class GetTuneDTO
     public TuneTypeEnum Type { get; set; }
     public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
-    public List<TuneTitle> AlternateTitles { get; set; }
+    public List<string> AlternateTitles { get; set; }
 
     public static GetTuneDTO FromTune(Tune tune)
     {
@@ -22,6 +22,8 @@ public class GetTuneDTO
             Key = tune.TuneKey,
             Composer = tune.Composer.Value,
             AlternateTitles = tune.AlternateTitles
+                .Select(x => x.Value)
+                .ToList()
         };
     }
 }
