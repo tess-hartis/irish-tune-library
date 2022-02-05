@@ -41,24 +41,24 @@ public class Track
         }
         
         //add validation to prevent tracks with the same track number from being added
-
+        //add validation for tracknumber
         return track;
     }
     
-    public void AddTune(TuneOnTrack tuneOnTrack)
+    public void AddTune(TrackTune trackTune)
     {
-        if (_tunesOnTrack.Contains(tuneOnTrack))
+        if (_trackTunes.Contains(trackTune))
             throw new InvalidOperationException("The specified tune already exists on the track");
         
-        _tunesOnTrack.Add(tuneOnTrack);
+        _trackTunes.Add(trackTune);
     }
     
-    public void RemoveTune(TuneOnTrack tuneOnTrack)
+    public void RemoveTune(TrackTune trackTune)
     {
-        if (!_tunesOnTrack.Contains(tuneOnTrack))
+        if (!_trackTunes.Contains(trackTune))
             throw new InvalidOperationException("The specified tune was not found on the track");
         
-        _tunesOnTrack.Remove(tuneOnTrack);
+        _trackTunes.Remove(trackTune);
     }
 
     public void Update(string title, int trackNumber)
