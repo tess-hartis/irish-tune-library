@@ -13,7 +13,7 @@ public class GetAlbumDTO
     {
         return new GetAlbumDTO
         {
-            Title = album.Title,
+            Title = album.Title.Value,
             Id = album.Id,
             Year = album.Year
         };

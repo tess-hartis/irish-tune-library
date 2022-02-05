@@ -1,40 +1,30 @@
 using TL.Domain.Exceptions;
 using TL.Domain.Validators;
+using TL.Domain.ValueObjects.AlbumValueObjects;
 
 namespace TL.Domain;
 
 public class Album
 {
     public int Id { get; private set; }
-    public string Title { get; private set; }
+    public AlbumTitle Title { get; private set; }
     public int Year { get; private set; }
+   
+    
     private List<Artist> _artists = new List<Artist>();
     public IReadOnlyList<Artist> Artists => _artists;
+    
     private List<Track> _tracks = new List<Track>();
     public IReadOnlyList<Track> TrackListing => _tracks;
     
     
-    public static Album CreateAlbum(string title, int year)
+    public static Album CreateAlbum(AlbumTitle title, int year)
     {
         var album = new Album()
         {
             Title = title,
             Year = year
         };
-
-        var validator = new AlbumValidator();
-        var errors = new List<string>();
-        var results = validator.Validate(album);
-        
-        if (results.IsValid == false)
-        {
-            foreach (var validationFailure in results.Errors)
-            {
-                errors.Add($"{validationFailure.ErrorMessage}");
-            }
-            
-            throw new InvalidEntityException(string.Join(", ", errors));
-        }
         
         return album;
     }
@@ -68,19 +58,8 @@ public class Album
         _tracks.Remove(track);
     }
     
-    public void Update(string title, int year)
+    public void Update(AlbumTitle title, int year)
     {
-        var errors = new List<string?>();
-        
-        if (!title.IsValidNameOrTitle())
-            errors.Add("title must be between 2 and 75 characters");
-        
-        if (!year.ValidYear())
-            errors.Add("invalid year");
-        
-        if (errors.Any())
-            throw new InvalidEntityException(string.Join(", ", errors));
-        
         Title = title;
         Year = year;
     }

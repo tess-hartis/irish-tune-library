@@ -3,13 +3,14 @@ using TL.Data;
 using TL.Domain;
 using TL.Domain.Exceptions;
 using TL.Domain.Validators;
+using TL.Domain.ValueObjects.AlbumValueObjects;
 
 namespace TL.Repository;
 
 public interface IAlbumRepository : IGenericRepository<Album>
 {
     new Task<Album> FindAsync(int id);
-    Task UpdateAlbum(int id, string title, int year);
+    Task UpdateAlbum(int id, AlbumTitle title, int year);
     new Task DeleteAsync(int id);
 }
 
@@ -44,7 +45,7 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         await SaveAsync();
     }
 
-    public async Task UpdateAlbum(int id, string title, int year)
+    public async Task UpdateAlbum(int id, AlbumTitle title, int year)
     {
         var album = await FindAsync(id);
         album.Update(title, year);

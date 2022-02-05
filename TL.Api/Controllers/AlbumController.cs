@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.AlbumDTOs;
 using TL.Api.ArtistDTOs;
 using TL.Api.TrackDTOs;
+using TL.Domain.ValueObjects.AlbumValueObjects;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;
 
@@ -51,7 +52,8 @@ public class AlbumController : Controller
   [HttpPut("{id}")]
   public async Task<ActionResult> PutAlbum(int id, [FromBody] PutAlbumDTO dto)
   {
-    await _albumRepository.UpdateAlbum(id, dto.Title, dto.Year);
+    var title = AlbumTitle.Create(dto.Title);
+    await _albumRepository.UpdateAlbum(id, title, dto.Year);
     return Ok($"Album with ID '{id}' was updated");
   }
   

@@ -83,9 +83,14 @@ public class TuneLibraryContext : DbContext
             .UsePropertyAccessMode(PropertyAccessMode.Property);
 
         modelBuilder.Entity<Artist>()
-            .OwnsOne<ArtistName>(a => a.Name)
+            .OwnsOne(a => a.Name)
             .Property(x => x.Value)
             .HasColumnName("Name");
+
+        modelBuilder.Entity<Album>()
+            .OwnsOne(a => a.Title)
+            .Property(x => x.Value)
+            .HasColumnName("Title");
 
     }
 }
