@@ -104,4 +104,12 @@ public class AlbumController : Controller
     return Ok(returned);
     
   }
+
+  [HttpGet("{albumId}/artists")]
+  public async Task<ActionResult<IEnumerable<GetArtistDTO>>> GetAlbumArtists(int albumId)
+  {
+    var artists = await _albumArtistService.FindAlbumArtists(albumId);
+    var returned = artists.Select(GetArtistDTO.FromArtist);
+    return Ok(returned);
+  }
 }
