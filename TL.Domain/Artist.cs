@@ -6,31 +6,34 @@ namespace TL.Domain;
 public class Artist
 {
     private Artist(){ }
+    
     public int Id { get; private set; }
     public string Name { get; private set; }
+    
     private List<Album> _albums = new List<Album>();
     public IReadOnlyList<Album> Albums => _albums;
 
     public static Artist CreateArtist(string name)
     {
-        var artist = new Artist
+        var artist = new Artist()
         {
             Name = name
         };
         
-        var validator = new ArtistValidator();
-        var errors = new List<string>();
-        var results = validator.Validate(artist);
+        // var validator = new ArtistValidator();
+        // var errors = new List<string>();
+        // var results = validator.Validate(artist);
+        //
+        // if (results.IsValid == false)
+        // {
+        //     foreach (var validationFailure in results.Errors)
+        //     {
+        //         errors.Add($"{validationFailure.ErrorMessage}");
+        //     }
+        //     
+        //     throw new InvalidEntityException(string.Join(", ", errors));
+        // }
         
-        if (results.IsValid == false)
-        {
-            foreach (var validationFailure in results.Errors)
-            {
-                errors.Add($"{validationFailure.ErrorMessage}");
-            }
-            
-            throw new InvalidEntityException(string.Join(", ", errors));
-        }
         return artist;
     }
     
