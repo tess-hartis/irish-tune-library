@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.TrackDTOs;
 using TL.Api.TuneDTOs;
 using TL.Domain;
 using TL.Repository;
@@ -101,5 +102,15 @@ public class TuneController : Controller
         await _tuneRepository.RemoveAlternateTitle(id, title);
         return Ok();
     }
+    
+    [HttpGet("{tuneId}/recordings")]
+    public async Task<ActionResult<IEnumerable<GetTrackDTO>>> FindTuneRecordings(int tuneId)
+    {
+        var tracks = await _tuneTrackService.FindTracksByTune(tuneId);
+        var returned = tracks.Select(GetTrackDTO.FromTrack);
+        return Ok(returned);
+    }
+    
+    
     
 }
