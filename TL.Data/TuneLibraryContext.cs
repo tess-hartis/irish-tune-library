@@ -9,6 +9,7 @@ public class TuneLibraryContext : DbContext
     public DbSet<Album> Albums { get; set; }
     public DbSet<Artist> Artists { get; set; }
     public DbSet<Track> Tracks { get; set; }
+    public DbSet<TrackTune> TrackTunes { get; set; }
 
     public TuneLibraryContext(){ } //have to specify a default constructor
 
@@ -48,10 +49,15 @@ public class TuneLibraryContext : DbContext
         modelBuilder.Entity<Tune>()
             .Property(t => t.AlternateTitles)
             .HasColumnName("Alternate Titles");
-        
+
         modelBuilder.Entity<Tune>()
-            .HasMany(t => t.Tracks)
-            .WithMany(t => t.TuneList);
+            .HasMany(t => t.FeaturedOnTrack)
+            .WithOne(t => t.Tune);
+
+        modelBuilder.Entity<Track>()
+            .HasMany(t => t.TrackTunes)
+            .WithOne(t => t.Track)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Album>()
             .HasMany(a => a.Artists)
@@ -67,6 +73,13 @@ public class TuneLibraryContext : DbContext
             .Navigation(a => a.TrackListing)
             .UsePropertyAccessMode(PropertyAccessMode.Property);
 
+        modelBuilder.Entity<TrackTune>()
+            .Navigation(t => t.Track)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+        modelBuilder.Entity<TrackTune>()
+            .Navigation(t => t.Tune)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
 
     }
 }
