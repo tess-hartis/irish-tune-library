@@ -14,7 +14,7 @@ public class GetTrackTuneDTO
         {
             TuneId = trackTune.TuneId,
             Title = trackTune.Title,
-            Order = trackTune.Order
+            Order = trackTune.Order.Value
         };
     }
 }

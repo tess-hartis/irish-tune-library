@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TL.Api.TrackDTOs;
+using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
 
@@ -63,7 +64,8 @@ public class TrackController : Controller
     [HttpPost("{trackId}/tune/{tuneId}")]
     public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] PostTuneToTrackDTO dto )
     {
-        await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId, dto.Order);
+        var order = TrackTuneOrder.Create(dto.Order);
+        await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId, order);
         return Ok($"Tune with ID '{tuneId}' was added to track with ID '{trackId}'");
     }
 

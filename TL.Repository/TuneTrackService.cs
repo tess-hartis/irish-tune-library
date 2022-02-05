@@ -2,12 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
 using TL.Domain.Exceptions;
+using TL.Domain.ValueObjects.TrackTuneValueObjects;
 
 namespace TL.Repository;
 
 public interface ITuneTrackService
 {
-    Task AddExistingTuneToTrack(int trackId, int tuneId, int order);
+    Task AddExistingTuneToTrack(int trackId, int tuneId, TrackTuneOrder order);
     Task RemoveTuneFromTrack(int trackId, int tuneId);
     Task<IEnumerable<Track>> FindTracksByTune(int tuneId);
     Task<IEnumerable<TrackTune>> GetTrackTunes(int trackId);
@@ -37,7 +38,7 @@ public class TuneTrackService : ITuneTrackService
     }
     
     
-    public async Task AddExistingTuneToTrack(int trackId, int tuneId, int order)
+    public async Task AddExistingTuneToTrack(int trackId, int tuneId, TrackTuneOrder order)
     {
         var track = await _trackRepository.FindAsync(trackId);
         var tune = await _tuneRepository.FindAsync(tuneId);

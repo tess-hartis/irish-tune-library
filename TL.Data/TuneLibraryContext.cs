@@ -119,5 +119,10 @@ public class TuneLibraryContext : DbContext
             .Property(x => x.Value)
             .HasColumnName("Composer");
 
+        modelBuilder.Entity<TrackTune>()
+            .OwnsOne(t => t.Order)
+            .Property(x => x.Value)
+            .HasColumnName("Order");
+
     }
 }

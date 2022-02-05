@@ -51,7 +51,7 @@ public class AlbumTrackService : IAlbumTrackService
         return await _trackRepository
             .GetByWhere(x => x.AlbumId == albumId)
             .Include(x => x.Album)
-            .OrderBy(x => x.TrackNumber)
+            .OrderBy(x => x.TrackNumber.Value)
             .ToListAsync();
     }
 }

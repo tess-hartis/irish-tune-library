@@ -1,6 +1,4 @@
-
-using TL.Domain.Exceptions;
-
+using TL.Domain.ValueObjects.TrackTuneValueObjects;
 
 namespace TL.Domain;
 
@@ -8,7 +6,7 @@ public class TrackTune
 {
     public int Id { get; set; }
     public string Title { get; set; }
-    public int Order { get; private set; }
+    public TrackTuneOrder Order { get; private set; }
     
     public int TrackId { get; set; }
     public Track Track { get; set; }
@@ -17,7 +15,7 @@ public class TrackTune
     public Tune Tune { get; set; }
     
     
-    public static TrackTune Create(int trackId, int tuneId, int order)
+    public static TrackTune Create(int trackId, int tuneId, TrackTuneOrder order)
     {
         var trackTune = new TrackTune
         {
@@ -26,14 +24,6 @@ public class TrackTune
             Order = order
             
         };
-
-        var errors = new List<string>();
-        
-        if (order > 25 || order < 1)
-            errors.Add("Tune order must be between 1 and 25");
-
-        if (errors.Any())
-            throw new InvalidEntityException("invalid tune order");
 
         return trackTune;
     }
