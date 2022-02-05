@@ -70,5 +70,13 @@ public class TrackController : Controller
         await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId, dto.Order);
         return Ok($"Tune with ID '{tuneId}' was added to track with ID '{trackId}'");
     }
+
+    [HttpGet("{trackId}/tunes")]
+    public async Task<ActionResult<IEnumerable<GetTrackTuneDTO>>> GetTunesOnTrack(int trackId)
+    {
+        var tunesOnTrack = await _tuneTrackService.GetTrackTunes(trackId);
+        var returned = tunesOnTrack.Select(GetTrackTuneDTO.FromTrackTune);
+        return Ok(returned);
+    }
     
 }
