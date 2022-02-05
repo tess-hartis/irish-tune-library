@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.AlbumDTOs;
 using TL.Api.ArtistDTOs;
 using TL.Api.TrackDTOs;
+using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -71,7 +72,8 @@ public class AlbumController : Controller
   [HttpPost("{albumId}/artist")]
   public async Task<ActionResult> AddNewArtistToAlbum(int albumId, [FromBody] PostArtistDTO dto)
   {
-    await _albumArtistService.AddNewArtistToAlbum(albumId, dto.Name);
+    var name = ArtistName.Create(dto.Name);
+    await _albumArtistService.AddNewArtistToAlbum(albumId, name);
     return Ok($"New artist '{dto.Name}' was added to album with ID '{albumId}'");
   }
 

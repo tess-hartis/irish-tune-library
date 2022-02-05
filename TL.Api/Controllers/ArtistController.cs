@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.AlbumDTOs;
 using TL.Api.ArtistDTOs;
 using TL.Domain;
+using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;
 
 namespace TL.Api.Controllers;
@@ -47,7 +48,8 @@ public class ArtistController : Controller
    [HttpPut("{id}")]
    public async Task<ActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
    {
-      await _artistRepository.UpdateArtist(id, dto.Name);
+      var name = ArtistName.Create(dto.Name);
+      await _artistRepository.UpdateArtist(id, name);
       return Ok($"Artist with ID '{id}' was updated");
    }
    

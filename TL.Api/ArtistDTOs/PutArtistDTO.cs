@@ -1,4 +1,5 @@
 using TL.Domain;
+using TL.Domain.ValueObjects.ArtistValueObjects;
 
 namespace TL.Api.ArtistDTOs;
 
@@ -8,7 +9,8 @@ public class PutArtistDTO
 
     public static Artist UpdatedArtist(Artist artist, PutArtistDTO dto)
     {
-        artist.UpdateName(dto.Name);
+        var name = ArtistName.Create(dto.Name);
+        artist.UpdateName(name);
         return artist;
     }
 }

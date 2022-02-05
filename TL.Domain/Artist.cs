@@ -1,5 +1,6 @@
 using TL.Domain.Exceptions;
 using TL.Domain.Validators;
+using TL.Domain.ValueObjects.ArtistValueObjects;
 
 namespace TL.Domain;
 
@@ -8,12 +9,13 @@ public class Artist
     private Artist(){ }
     
     public int Id { get; private set; }
-    public string Name { get; private set; }
+    
+    public ArtistName Name { get; private set; }
     
     private List<Album> _albums = new List<Album>();
     public IReadOnlyList<Album> Albums => _albums;
 
-    public static Artist CreateArtist(string name)
+    public static Artist CreateArtist(ArtistName name)
     {
         var artist = new Artist()
         {
@@ -37,16 +39,8 @@ public class Artist
         return artist;
     }
     
-    public void UpdateName(string name)
+    public void UpdateName(ArtistName name)
     {
-        var errors = new List<string?>();
-        
-        if (!name.IsValidNameOrTitle())
-            errors.Add("name must be between 2 and 75 characters");
-
-        if (errors.Any())
-            throw new InvalidEntityException(string.Join(", ", errors));
-        
         Name = name;
     }
     

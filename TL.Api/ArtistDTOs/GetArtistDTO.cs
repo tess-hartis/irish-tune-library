@@ -12,7 +12,7 @@ public class GetArtistDTO
     {
         return new GetArtistDTO
         {
-            Name = artist.Name,
+            Name = artist.Name.Value,
             Id = artist.Id
         };
     }

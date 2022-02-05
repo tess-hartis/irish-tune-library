@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
 using TL.Domain.Exceptions;
+using TL.Domain.ValueObjects.ArtistValueObjects;
 
 namespace TL.Repository;
 
@@ -10,7 +11,7 @@ public interface IAlbumArtistService
     Task<IEnumerable<Album>> FindArtistAlbums(int artistId);
     Task<IEnumerable<Artist>> FindAlbumArtists(int albumId);
     Task AddExistingArtistToAlbum(int albumId, int artistId);
-    Task AddNewArtistToAlbum(int albumId, string name);
+    Task AddNewArtistToAlbum(int albumId, ArtistName name);
     Task RemoveArtistFromAlbum(int albumId, int artistId);
     
 }
@@ -63,7 +64,7 @@ public class AlbumArtistService : IAlbumArtistService
         await SaveChangesAsync();
     }
 
-    public async Task AddNewArtistToAlbum(int albumId, string name)
+    public async Task AddNewArtistToAlbum(int albumId, ArtistName name)
     {
         var album = await _albumRepository.FindAsync(albumId);
         var artist = Artist.CreateArtist(name);

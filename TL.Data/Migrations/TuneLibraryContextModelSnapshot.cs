@@ -65,10 +65,6 @@ namespace TL.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("Artists");
@@ -179,6 +175,30 @@ namespace TL.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ArtistsId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TL.Domain.Artist", b =>
+                {
+                    b.OwnsOne("TL.Domain.ValueObjects.ArtistValueObjects.ArtistName", "Name", b1 =>
+                        {
+                            b1.Property<int>("ArtistId")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("Name");
+
+                            b1.HasKey("ArtistId");
+
+                            b1.ToTable("Artists");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ArtistId");
+                        });
+
+                    b.Navigation("Name")
                         .IsRequired();
                 });
 
