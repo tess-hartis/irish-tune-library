@@ -20,7 +20,7 @@ public class GetTuneDTO
             Id = tune.Id,
             Type = tune.TuneType,
             Key = tune.TuneKey,
-            Composer = tune.Composer,
+            Composer = tune.Composer.Value,
             AlternateTitles = tune.AlternateTitles
         };
     }

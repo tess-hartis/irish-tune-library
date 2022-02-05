@@ -14,7 +14,8 @@ public class PutTuneDTO
     public static Tune UpdatedTune(Tune tune, PutTuneDTO dto)
     {
         var title = TuneTitle.Create(dto.Title);
-        tune.Update(title, dto.Composer, dto.Type, dto.Key);
+        var composer = TuneComposer.Create(dto.Composer);
+        tune.Update(title, composer, dto.Type, dto.Key);
         
         return tune;
     }

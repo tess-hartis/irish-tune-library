@@ -14,12 +14,12 @@ public class Tune
     public List<TuneTitle> AlternateTitles => _alternateTitles;
     public TuneTypeEnum TuneType { get; private set; }
     public TuneKeyEnum TuneKey { get; private set; }
-    public string Composer { get; private set; }
+    public TuneComposer Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
     private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
     public IReadOnlyList<TrackTune> FeaturedOnTrack => _featuredOnTrack;
     
-    public static Tune CreateTune(TuneTitle title, string composer, string type, string key)
+    public static Tune CreateTune(TuneTitle title, TuneComposer composer, string type, string key)
     {
         var tune = new Tune
         {
@@ -59,7 +59,7 @@ public class Tune
         _alternateTitles.Remove(title);
     }
     
-    public void Update(TuneTitle title, string composer, TuneTypeEnum type, TuneKeyEnum key)
+    public void Update(TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         Title = title;
         Composer = composer;

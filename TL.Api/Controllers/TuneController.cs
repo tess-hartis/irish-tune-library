@@ -78,7 +78,8 @@ public class TuneController : Controller
     public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
     {
         var title = TuneTitle.Create(dto.Title);
-        await _tuneRepository.UpdateTune(id, title, dto.Composer, dto.Type, dto.Key);
+        var composer = TuneComposer.Create(dto.Composer);
+        await _tuneRepository.UpdateTune(id, title, composer, dto.Type, dto.Key);
         return Ok();
     }
     
