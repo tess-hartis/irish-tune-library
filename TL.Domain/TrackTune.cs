@@ -1,3 +1,7 @@
+
+using TL.Domain.Exceptions;
+
+
 namespace TL.Domain;
 
 public class TrackTune
