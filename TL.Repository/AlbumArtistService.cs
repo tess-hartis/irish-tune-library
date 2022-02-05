@@ -8,9 +8,11 @@ namespace TL.Repository;
 public interface IAlbumArtistService
 {
     Task<IEnumerable<Album>> FindArtistAlbums(int artistId);
+    Task<IEnumerable<Artist>> FindAlbumArtists(int albumId);
     Task AddExistingArtistToAlbum(int albumId, int artistId);
     Task AddNewArtistToAlbum(int albumId, string name);
     Task RemoveArtistFromAlbum(int albumId, int artistId);
+    
 }
 
 public class AlbumArtistService : IAlbumArtistService
@@ -37,6 +39,14 @@ public class AlbumArtistService : IAlbumArtistService
         var albums = await _albumRepository
             .GetByWhere(a => a.Artists.Contains(artist)).ToListAsync();
         return albums;
+    }
+
+    public async Task<IEnumerable<Artist>> FindAlbumArtists(int albumId)
+    {
+        var album = await _albumRepository.FindAsync(albumId);
+        var artists = await _artistRepository
+            .GetByWhere(a => a.Albums.Contains(album)).ToListAsync();
+        return artists;
     }
     
     public async Task AddExistingArtistToAlbum(int albumId, int artistId)
