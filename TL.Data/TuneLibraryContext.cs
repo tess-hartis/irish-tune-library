@@ -92,5 +92,10 @@ public class TuneLibraryContext : DbContext
             .Property(x => x.Value)
             .HasColumnName("Title");
 
+        modelBuilder.Entity<Album>()
+            .OwnsOne(a => a.Year)
+            .Property(x => x.Value)
+            .HasColumnName("Year");
+
     }
 }

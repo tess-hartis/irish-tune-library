@@ -8,7 +8,7 @@ public class Album
 {
     public int Id { get; private set; }
     public AlbumTitle Title { get; private set; }
-    public int Year { get; private set; }
+    public AlbumYear Year { get; private set; }
    
     
     private List<Artist> _artists = new List<Artist>();
@@ -18,7 +18,7 @@ public class Album
     public IReadOnlyList<Track> TrackListing => _tracks;
     
     
-    public static Album CreateAlbum(AlbumTitle title, int year)
+    public static Album CreateAlbum(AlbumTitle title, AlbumYear year)
     {
         var album = new Album()
         {
@@ -58,7 +58,7 @@ public class Album
         _tracks.Remove(track);
     }
     
-    public void Update(AlbumTitle title, int year)
+    public void Update(AlbumTitle title, AlbumYear year)
     {
         Title = title;
         Year = year;

@@ -53,7 +53,8 @@ public class AlbumController : Controller
   public async Task<ActionResult> PutAlbum(int id, [FromBody] PutAlbumDTO dto)
   {
     var title = AlbumTitle.Create(dto.Title);
-    await _albumRepository.UpdateAlbum(id, title, dto.Year);
+    var year = AlbumYear.Create(dto.Year);
+    await _albumRepository.UpdateAlbum(id, title, year);
     return Ok($"Album with ID '{id}' was updated");
   }
   
