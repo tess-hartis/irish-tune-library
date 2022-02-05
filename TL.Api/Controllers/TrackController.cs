@@ -49,13 +49,6 @@ public class TrackController : Controller
         return Ok($"Track with ID '{id}' was deleted");
     }
     
-    [HttpGet("tune/{tuneId}")]
-    public async Task<ActionResult<IEnumerable<GetTracksDTO>>> FindByTune(int tuneId)
-    {
-        var tracks = await _tuneTrackService.FindTracksByTune(tuneId);
-        var returned = GetTracksDTO.GetAll(tracks);
-        return Ok(returned);
-    }
 
     [HttpDelete("{trackId}/tune/{tuneId}")]
     public async Task<ActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
