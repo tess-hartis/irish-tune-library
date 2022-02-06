@@ -13,12 +13,10 @@ public class Tune
     public int Id { get; private set; }
     public TuneTitle Title { get; private set; }
 
-    private List<AlternateTitleInTune> _alternateTitles;
+    private List<TuneTitle> _alternateTitles = new List<TuneTitle>();
 
     public IReadOnlyList<TuneTitle> AlternateTitles =>
-        _alternateTitles
-            .Select(x => x.Title)
-            .ToList();
+        _alternateTitles;
 
     public TuneTypeEnum TuneType { get; private set; }
     public TuneKeyEnum TuneKey { get; private set; }
@@ -53,18 +51,19 @@ public class Tune
 
     public void AddAlternateTitle(TuneTitle title)
     {
-        _alternateTitles.Add(new AlternateTitleInTune(title, this));
+        // var altTitle = new AlternateTitleInTune(title, this);
+        _alternateTitles.Add(title);
     }
 
     public void RemoveAlternateTitle(TuneTitle title)
     {
-        var titleValue = title.Value;
-        var foundTitle = _alternateTitles.Find(x => x.Title.Value == titleValue);
+        // var titleValue = title.Value;
+        // var foundTitle = _alternateTitles.Find(x => x.Title.Value == titleValue);
+        //
+        // if (!_alternateTitles.Contains(foundTitle))
+        //     throw new Exception();
         
-        if (!_alternateTitles.Contains(foundTitle))
-            throw new Exception();
-        
-        _alternateTitles.Remove(foundTitle);
+        _alternateTitles.Remove(title);
     }
 
     public void Update(TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key)
@@ -76,14 +75,15 @@ public class Tune
     }
 }
 
-public class AlternateTitleInTune
-{
-    public TuneTitle Title { get; protected set; }
-    public Tune Tune { get; protected set; }
-
-    public AlternateTitleInTune(TuneTitle title, Tune tune)
-    {
-        Title = title;
-        Tune = tune;
-    }
-}
+// public class AlternateTitleInTune
+// {
+//     public TuneTitle Title { get; set; }
+//     public Tune Tune { get; set; }
+//
+//     public AlternateTitleInTune(TuneTitle title, Tune tune)
+//     {
+//         Title = title;
+//         Tune = tune;
+//     }
+//
+// }
