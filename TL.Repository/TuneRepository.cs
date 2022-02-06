@@ -11,6 +11,7 @@ public interface ITuneRepository : IGenericRepository<Tune>
     Task UpdateTune(int id, TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key);
     Task AddAlternateTitle(int id, TuneTitle title);
     Task RemoveAlternateTitle(int id, TuneTitle title);
+    Task<Tune> FindAsync(int id);
 }
 
 public class TuneRepository : GenericRepository<Tune>, ITuneRepository
@@ -39,10 +40,25 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
         var tune = await FindAsync(id);
         var toDelete = tune.AlternateTitles
             .First(x => x.Value == title.Value);
-        
         tune.RemoveAlternateTitle(toDelete);
         await SaveAsync();
     }
+
+    public override async Task<Tune> FindAsync(int id)
+    {
+        var result = await Context.Tunes
+            .Include(x => x.AlternateTitles)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        return result;
+    }
+
+    public async Task<IEnumerable<TuneTitle>> GetAltTitles(int id)
+    {
+        var tune = await Context.Tunes.FindAsync(id);
+        return tune.AlternateTitles.ToList();
+    }
+    
     
     // public async Task<List<Tune>> AnthonyExampleRegex(string query)
     // {
