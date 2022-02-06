@@ -37,7 +37,10 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     public async Task RemoveAlternateTitle(int id, TuneTitle title)
     {
         var tune = await FindAsync(id);
-        tune.RemoveAlternateTitle(title);
+        var toDelete = tune.AlternateTitles
+            .First(x => x.Value == title.Value);
+        
+        tune.RemoveAlternateTitle(toDelete);
         await SaveAsync();
     }
     

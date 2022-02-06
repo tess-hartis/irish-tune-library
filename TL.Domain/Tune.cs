@@ -6,19 +6,27 @@ namespace TL.Domain;
 
 public class Tune
 {
-    private Tune(){ }
-    
+    private Tune()
+    {
+    }
+
     public int Id { get; private set; }
-    public TuneTitle Title { get;  private set; }
-    private List<TuneTitle> _alternateTitles = new List<TuneTitle>();
-    public List<TuneTitle> AlternateTitles => _alternateTitles;
+    public TuneTitle Title { get; private set; }
+
+    private List<AlternateTitleInTune> _alternateTitles;
+
+    public IReadOnlyList<TuneTitle> AlternateTitles =>
+        _alternateTitles
+            .Select(x => x.Title)
+            .ToList();
+
     public TuneTypeEnum TuneType { get; private set; }
     public TuneKeyEnum TuneKey { get; private set; }
     public TuneComposer Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
     private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
     public IReadOnlyList<TrackTune> FeaturedOnTrack => _featuredOnTrack;
-    
+
     public static Tune CreateTune(TuneTitle title, TuneComposer composer, string type, string key)
     {
         var tune = new Tune
@@ -31,34 +39,34 @@ public class Tune
 
         if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
             throw new Exception();
-        
+
         tune.TuneType = tuneType;
 
         if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
             throw new Exception();
 
         tune.TuneKey = tuneKey;
-        
-        
-        
+
+
         return tune;
     }
 
     public void AddAlternateTitle(TuneTitle title)
     {
-
-        _alternateTitles.Add(title);
-        
+        _alternateTitles.Add(new AlternateTitleInTune(title, this));
     }
 
     public void RemoveAlternateTitle(TuneTitle title)
     {
-        if (!_alternateTitles.Contains(title))
-            throw new InvalidOperationException($"The title {title} was not found");
+        var titleValue = title.Value;
+        var foundTitle = _alternateTitles.Find(x => x.Title.Value == titleValue);
         
-        _alternateTitles.Remove(title);
+        if (!_alternateTitles.Contains(foundTitle))
+            throw new Exception();
+        
+        _alternateTitles.Remove(foundTitle);
     }
-    
+
     public void Update(TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key)
     {
         Title = title;
@@ -66,6 +74,16 @@ public class Tune
         TuneType = type;
         TuneKey = key;
     }
-    
-    
+}
+
+public class AlternateTitleInTune
+{
+    public TuneTitle Title { get; protected set; }
+    public Tune Tune { get; protected set; }
+
+    public AlternateTitleInTune(TuneTitle title, Tune tune)
+    {
+        Title = title;
+        Tune = tune;
+    }
 }

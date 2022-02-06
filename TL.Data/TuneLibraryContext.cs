@@ -49,8 +49,8 @@ public class TuneLibraryContext : DbContext
                 d => DateOnly.Parse(d));
         
         modelBuilder.Entity<Tune>()
-            .OwnsMany(t => t.AlternateTitles)
-            .Property(x => x.Value)
+            .OwnsMany<AlternateTitleInTune>("_alternateTitles")
+            .Property(x => x.Title.Value)
             .HasColumnName("Alternate Titles");
 
         modelBuilder.Entity<Tune>()
