@@ -47,12 +47,12 @@ public class TuneLibraryContext : DbContext
             .HasConversion(
                 d => d.ToString("MM/dd/yyyy"),
                 d => DateOnly.Parse(d));
-        
-        modelBuilder.Entity<Tune>()
-            .OwnsMany<AlternateTitleInTune>("_alternateTitles")
-            .Property(x => x.Title.Value)
-            .HasColumnName("Alternate Titles");
 
+        modelBuilder.Entity<Tune>()
+            .OwnsMany(x => x.AlternateTitles)
+            .Property(a => a.Value)
+            .HasColumnName("Title");
+        
         modelBuilder.Entity<Tune>()
             .HasMany(t => t.FeaturedOnTrack)
             .WithOne(t => t.Tune);
