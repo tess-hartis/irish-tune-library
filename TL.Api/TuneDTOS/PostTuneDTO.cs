@@ -14,7 +14,7 @@ public class PostTuneDTO
     {
         var title = TuneTitle.Create(dto.Title);
         var composer = TuneComposer.Create(dto.Composer);
-        var tune = Tune.CreateTune(title, composer, dto.Type, dto.Key);
+        var tune = Tune.Create(title, composer, dto.Type, dto.Key);
         return tune;
     }
 }
