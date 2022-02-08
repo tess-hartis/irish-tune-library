@@ -1,5 +1,3 @@
-using TL.Domain.Exceptions;
-using TL.Domain.Validators;
 using TL.Domain.ValueObjects.TuneValueObjects;
 
 namespace TL.Domain;
@@ -25,16 +23,17 @@ public class Tune
     private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
     public IReadOnlyList<TrackTune> FeaturedOnTrack => _featuredOnTrack;
 
-    public static Tune CreateTune(TuneTitle title, TuneComposer composer, string type, string key)
+    public static Tune Create(TuneTitle title, TuneComposer composer, string type, string key)
     {
+
         var tune = new Tune
         {
             Title = title,
             Composer = composer,
             DateAdded = DateOnly.FromDateTime(DateTime.Today)
         };
-
-
+        
+       
         if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
             throw new Exception();
 
@@ -45,8 +44,8 @@ public class Tune
 
         tune.TuneKey = tuneKey;
 
-
         return tune;
+
     }
 
     public void AddAlternateTitle(TuneTitle title)
