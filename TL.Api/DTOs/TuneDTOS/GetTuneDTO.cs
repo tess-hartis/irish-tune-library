@@ -1,7 +1,7 @@
 using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 
-namespace TL.Api.TuneDTOs;
+namespace TL.Api.DTOs.TuneDTOS;
 
 public class GetTuneDTO
 {

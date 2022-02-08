@@ -1,18 +1,18 @@
 using TL.Domain;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 
-namespace TL.Api.AlbumDTOs;
+namespace TL.Api.DTOs.AlbumDTOs;
 
-public class PutAlbumDTO
+public class PostAlbumDTO
 {
     public string Title { get; set; }
     public int Year { get; set; }
 
-    public static Album UpdatedAlbum(Album album, PutAlbumDTO dto)
+    public static Album ToAlbum(PostAlbumDTO dto)
     {
         var title = AlbumTitle.Create(dto.Title);
         var year = AlbumYear.Create(dto.Year);
-        album.Update(title, year);
+        var album = Album.CreateAlbum(title, year);
         return album;
     }
 }

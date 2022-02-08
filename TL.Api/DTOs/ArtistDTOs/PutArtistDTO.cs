@@ -1,7 +1,7 @@
 using TL.Domain;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 
-namespace TL.Api.ArtistDTOs;
+namespace TL.Api.DTOs.ArtistDTOs;
 
 public class PutArtistDTO
 {

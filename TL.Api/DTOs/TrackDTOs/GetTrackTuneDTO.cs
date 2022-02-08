@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.TrackDTOs;
+namespace TL.Api.DTOs.TrackDTOs;
 
 public class GetTrackTuneDTO
 {

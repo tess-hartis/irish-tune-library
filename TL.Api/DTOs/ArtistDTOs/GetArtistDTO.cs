@@ -1,6 +1,6 @@
 using TL.Domain;
 
-namespace TL.Api.ArtistDTOs;
+namespace TL.Api.DTOs.ArtistDTOs;
 
 public class GetArtistDTO
 {

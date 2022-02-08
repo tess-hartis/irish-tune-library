@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.AlbumDTOs;
-using TL.Api.ArtistDTOs;
-using TL.Api.TrackDTOs;
+using TL.Api.DTOs.AlbumDTOs;
+using TL.Api.DTOs.ArtistDTOs;
+using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Domain.ValueObjects.TrackValueObjects;

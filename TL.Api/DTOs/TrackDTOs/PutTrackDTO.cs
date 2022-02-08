@@ -1,7 +1,7 @@
 using TL.Domain;
 using TL.Domain.ValueObjects.TrackValueObjects;
 
-namespace TL.Api.TrackDTOs;
+namespace TL.Api.DTOs.TrackDTOs;
 
 public class PutTrackDTO
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.AlbumDTOs;
-using TL.Api.ArtistDTOs;
+using TL.Api.DTOs.AlbumDTOs;
+using TL.Api.DTOs.ArtistDTOs;
 using TL.Domain;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;

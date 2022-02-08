@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.TrackDTOs;
+using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;

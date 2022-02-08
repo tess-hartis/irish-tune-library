@@ -1,6 +1,4 @@
-using TL.Domain;
-
-namespace TL.Api.TuneDTOs;
+namespace TL.Api.DTOs.TuneDTOS;
 
 public class AltTitleDTO
 {
