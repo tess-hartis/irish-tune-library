@@ -34,9 +34,10 @@ public class AlbumTrackService : IAlbumTrackService
         var album = await _albumRepository.FindAsync(albumId);
         var track = Track.CreateTrack(title, trackNumber);
         track.SetAlbumId(album.Id);
-        await _trackRepository.AddAsync(track);
-        await SaveChangesAsync();
+        await _trackRepository.AddAsync(track); 
+        // await SaveChangesAsync();
     }
+    
 
     public async Task RemoveTrackFromAlbum(int albumId, int trackId)
     {
