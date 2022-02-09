@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.Track.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Domain.ValueObjects.TrackValueObjects;
@@ -13,28 +15,30 @@ public class TrackController : Controller
 {
     private readonly ITrackRepository _trackRepository;
     private readonly ITuneTrackService _tuneTrackService;
+    private readonly IMediator _mediator;
 
-    public TrackController(ITrackRepository trackRepository, ITuneTrackService tuneTrackService)
+    public TrackController(ITrackRepository trackRepository, ITuneTrackService tuneTrackService, IMediator mediator)
     {
         _trackRepository = trackRepository;
         _tuneTrackService = tuneTrackService;
+        _mediator = mediator;
     }
     
 
     [HttpGet("{id}")]
     public async Task<ActionResult<GetTrackDTO>> FindTrack(int id)
     {
-        var track = await _trackRepository.FindAsync(id);
-        var returned = GetTrackDTO.FromTrack(track);
-        return Ok(returned);
+        var query = new GetTrackByIdQuery(id);
+        var result = _mediator.Send(query);
+        return result == null ? NotFound() : Ok(result);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetTrackDTO>>> GetAllTracks()
+    public async Task<ActionResult> GetAllTracks()
     {
-        var tracks = await _trackRepository.GetEntities().ToListAsync();
-        var returned = tracks.Select(GetTrackDTO.FromTrack);
-        return Ok(returned);
+        var query = new GetAllTracksQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
@@ -72,9 +76,9 @@ public class TrackController : Controller
     [HttpGet("{trackId}/tunes")]
     public async Task<ActionResult<IEnumerable<GetTrackTuneDTO>>> GetTunesOnTrack(int trackId)
     {
-        var tunesOnTrack = await _tuneTrackService.GetTrackTunes(trackId);
-        var returned = tunesOnTrack.Select(GetTrackTuneDTO.FromTrackTune);
-        return Ok(returned);
+        var query = new GetTunesOnTrackQuery(trackId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
     
 }

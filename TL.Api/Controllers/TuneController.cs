@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.Tune.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
@@ -14,54 +16,53 @@ public class TuneController : Controller
 {
     private readonly ITuneRepository _tuneRepository;
     private readonly ITuneTrackService _tuneTrackService;
+    private readonly IMediator _mediator;
 
-    public TuneController(ITuneRepository tuneRepository, ITuneTrackService tuneTrackService)
+    public TuneController(ITuneRepository tuneRepository, ITuneTrackService tuneTrackService, IMediator mediator)
     {
         _tuneRepository = tuneRepository;
         _tuneTrackService = tuneTrackService;
+        _mediator = mediator;
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetTuneDTO>> FindTune(int id)
+    public async Task<ActionResult> FindTune(int id)
     {
-        var tune = await _tuneRepository.FindAsync(id);
-        var returned = GetTuneDTO.FromTune(tune);
-        return Ok(returned);
+        var query = new GetTuneByIdQuery(id);
+        var result = await _mediator.Send(query);
+        return result == null ? NotFound() : Ok(result);
     }
 
     [HttpGet("type/{type}")]
-    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> FindByType(TuneTypeEnum type)
+    public async Task<ActionResult> FindByType(TuneTypeEnum type)
     {
-        var tunes = await _tuneRepository
-            .GetByWhere(x => x.TuneType == type).ToListAsync();
-        var returned = tunes.Select(GetTuneDTO.FromTune);
-        return Ok();
+        var query = new GetTunesByTypeQuery(type);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpGet("key/{key}")]
-    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> FindByKey(TuneKeyEnum key)
+    public async Task<ActionResult> FindByKey(TuneKeyEnum key)
     {
-        var tunes = await _tuneRepository
-            .GetByWhere(x => x.TuneKey == key).ToListAsync();
-        var returned = tunes.Select(GetTuneDTO.FromTune);
-        return Ok(returned);
+        var query = new GetTunesByKeyQuery(key);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpGet("type/{type}/key/{key}")]
-    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
+    public async Task<ActionResult> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
-        var tunes = await _tuneRepository
-            .GetByWhere(x => x.TuneType == type & x.TuneKey == key).ToListAsync();
-        var returned = tunes.Select(GetTuneDTO.FromTune);
-        return Ok(returned);
+        var query = new GetTunesByTypeKeyQuery(type, key);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetTuneDTO>>> GetAllTunes()
+    public async Task<ActionResult> GetAllTunes()
     {
-        var tunes = await _tuneRepository.GetEntities().ToListAsync();
-        var returned = tunes.Select(GetTuneDTO.FromTune);
-        return Ok(returned);
+        var query = new GetAllTunesQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpPost]
@@ -107,11 +108,11 @@ public class TuneController : Controller
     }
     
     [HttpGet("{tuneId}/recordings")]
-    public async Task<ActionResult<IEnumerable<GetTrackDTO>>> FindTuneRecordings(int tuneId)
+    public async Task<ActionResult> FindTuneRecordings(int tuneId)
     {
-        var tracks = await _tuneTrackService.FindTracksByTune(tuneId);
-        var returned = tracks.Select(GetTrackDTO.FromTrack);
-        return Ok(returned);
+        var query = new GetTuneRecordingsQuery(tuneId);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
     
     
