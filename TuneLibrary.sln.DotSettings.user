@@ -1,7 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=515bc0a5_002D3d51_002D4ce7_002D94f0_002D5b762a6f2fea/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Can_Find_Artist_Albums #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=515bc0a5_002D3d51_002D4ce7_002D94f0_002D5b762a6f2fea/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Can_Find_Artist_Albums #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.TuneRepoTest.Can_Find_Alternate_Title_Of_Tune&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumTrackServiceTest.Can_Add_Track_To_Album_And_Set_TrackNumber&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bcb8132e_002D9b8d_002D45d3_002D8dca_002D7b33848c1013/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Can_Add_Tune_Using_Repository" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
@@ -16,8 +16,8 @@
     &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumArtistServiceTest.Can_Find_Artist_Albums&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=da007ac9_002D873c_002D4b0f_002Da441_002Dfa44e8a77057/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Can_Find_Artist_Albums" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=da007ac9_002D873c_002D4b0f_002Da441_002Dfa44e8a77057/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Can_Find_Artist_Albums" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
-    &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.TuneRepoTest.Can_Get_Alternate_Titles_Of_Tune&lt;/TestId&gt;
+    &lt;TestId&gt;NUnit3x::5DF4F95C-352E-432B-98E4-26042F588C3B::net6.0::TL.Tests.PgsqlTests.AlbumTrackServiceTest.Can_Add_Track_To_Album_And_Set_TrackNumber&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
