@@ -80,5 +80,14 @@ public class TrackController : Controller
         var result = await _mediator.Send(query);
         return Ok(result);
     }
-    
+
+    // [HttpPost]
+    // public async Task<ActionResult> AddTrack([FromBody] PostTrackDTO dto)
+    // {
+    //     var track = PostTrackDTO.ToTrack(dto);
+    //     track.SetAlbumId(1);
+    //     await _trackRepository.AddAsync(track);
+    //     return Ok();
+    // }
+
 }
