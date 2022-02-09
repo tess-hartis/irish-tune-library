@@ -11,7 +11,7 @@ public record TrackNumber
 
     public static TrackNumber Create(int value)
     {
-
+        
         return new TrackNumber(value);
     }
 }
