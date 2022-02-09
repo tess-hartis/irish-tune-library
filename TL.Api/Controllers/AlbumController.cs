@@ -91,9 +91,8 @@ public class AlbumController : Controller
   [HttpPost("{albumId}/track")]
   public async Task<ActionResult> AddTrackToAlbum(int albumId, [FromBody] PostTrackDTO dto)
   {
-    var title = TrackTitle.Create(dto.Title);
-    var trackNumber = TrackNumber.Create(dto.Number);
-    await _albumTrackService.AddNewTrackToAlbum(albumId, title, trackNumber);
+    var track = PostTrackDTO.ToTrack(dto);
+    await _albumTrackService.AddNewTrackToAlbum(albumId, track.Title, track.TrackNumber);
     return Ok("New track successfully added");
   }
 
