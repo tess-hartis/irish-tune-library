@@ -8,7 +8,7 @@ namespace TL.Repository;
 
 public interface ITuneRepository : IGenericRepository<Tune>
 {
-    Task UpdateTune(int id, TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key);
+    Task UpdateTune(int id, TuneTitle title, TuneComposer composer, string type, string key);
     Task AddAlternateTitle(int id, TuneTitle title);
     Task RemoveAlternateTitle(int id, TuneTitle title);
     Task<Tune> FindAsync(int id);
@@ -21,7 +21,7 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
        
     }
 
-    public async Task UpdateTune(int id, TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key)
+    public async Task UpdateTune(int id, TuneTitle title, TuneComposer composer, string type, string key)
     {
         var tune = await FindAsync(id);
         tune.Update(title, composer, type, key);

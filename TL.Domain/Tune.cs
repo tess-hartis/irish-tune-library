@@ -65,12 +65,20 @@ public class Tune
         _alternateTitles.Remove(title);
     }
 
-    public void Update(TuneTitle title, TuneComposer composer, TuneTypeEnum type, TuneKeyEnum key)
+    public void Update(TuneTitle title, TuneComposer composer, string type, string key)
     {
         Title = title;
         Composer = composer;
-        TuneType = type;
-        TuneKey = key;
+        
+        if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
+            throw new Exception();
+
+        this.TuneType = tuneType;
+
+        if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
+            throw new Exception();
+
+        this.TuneKey = tuneKey;
     }
 }
 

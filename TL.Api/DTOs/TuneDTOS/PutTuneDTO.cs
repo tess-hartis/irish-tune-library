@@ -6,11 +6,10 @@ namespace TL.Api.DTOs.TuneDTOS;
 public class PutTuneDTO
 {
     public string Title { get; set; }
-    public TuneTypeEnum Type { get; set; }
-    public TuneKeyEnum Key { get; set; }
     public string Composer { get; set; }
+    public string Type { get; set; }
+    public string Key { get; set; }
     
-
     public static Tune UpdatedTune(Tune tune, PutTuneDTO dto)
     {
         var title = TuneTitle.Create(dto.Title);
