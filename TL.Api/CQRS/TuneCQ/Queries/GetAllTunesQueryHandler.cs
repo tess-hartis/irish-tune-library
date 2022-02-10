@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.DTOs.TuneDTOS;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Tune.Queries;
+namespace TL.Api.CQRS.TuneCQ.Queries;
 
 public record GetAllTunesQuery : IRequest<IEnumerable<GetTuneDTO>>;
 

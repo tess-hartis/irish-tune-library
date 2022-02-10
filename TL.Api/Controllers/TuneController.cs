@@ -1,7 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.CQRS.Tune.Queries;
+using TL.Api.CQRS.TuneCQ.Commands;
+using TL.Api.CQRS.TuneCQ.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
@@ -68,11 +69,13 @@ public class TuneController : Controller
     [HttpPost]
     public async Task<ActionResult> AddTune([FromBody] PostTuneDTO dto)
     {
-        var tune = PostTuneDTO.Create(dto);
-        await _tuneRepository.AddAsync(tune);
-        var returned = GetTuneDTO.FromTune(tune);
-        return CreatedAtAction(nameof(FindTune),
-            new {id = tune.Id}, returned);
+        var title = TuneTitle.Create(dto.Title);
+        var composer = TuneComposer.Create(dto.Composer);
+        var type = dto.Type;
+        var key = dto.Key;
+        var command = new CreateTuneCommand(title, composer, type, key);
+        var result = await _mediator.Send(command);
+        return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
     }
 
     [HttpPut("{id}")]

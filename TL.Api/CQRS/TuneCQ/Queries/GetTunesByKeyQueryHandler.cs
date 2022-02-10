@@ -4,7 +4,7 @@ using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Tune.Queries;
+namespace TL.Api.CQRS.TuneCQ.Queries;
 
 public class GetTunesByKeyQuery : IRequest<IEnumerable<GetTuneDTO>>
 {

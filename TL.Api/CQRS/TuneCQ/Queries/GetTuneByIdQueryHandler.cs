@@ -2,7 +2,7 @@ using MediatR;
 using TL.Api.DTOs.TuneDTOS;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Tune.Queries;
+namespace TL.Api.CQRS.TuneCQ.Queries;
 
 public class GetTuneByIdQuery : IRequest<GetTuneDTO>
 {
