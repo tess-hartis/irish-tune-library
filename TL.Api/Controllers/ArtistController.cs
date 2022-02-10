@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.Artist.Queries;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.ArtistDTOs;
 using TL.Domain;
@@ -13,27 +15,30 @@ public class ArtistController : Controller
 {
    private readonly IArtistRepository _artistRepository;
    private readonly IAlbumArtistService _albumArtistService;
+   private readonly IMediator _mediator;
 
-   public ArtistController(IArtistRepository artistRepository, IAlbumArtistService albumArtistService)
+   public ArtistController(IArtistRepository artistRepository, IAlbumArtistService albumArtistService, IMediator mediator)
    {
       _artistRepository = artistRepository;
       _albumArtistService = albumArtistService;
+      _mediator = mediator;
    }
    
    [HttpGet]
    public async Task<ActionResult<IEnumerable<GetArtistDTO>>> FindAll()
    {
-      var artists = await _artistRepository.GetEntities().ToListAsync();
-      var returned = artists.Select(GetArtistDTO.FromArtist);
-      return Ok(returned);
+      var query = new GetAllArtistsQuery();
+      var result = await _mediator.Send(query);
+      return Ok(result);
    }
 
    [HttpGet("{id}")]
    public async Task<ActionResult<GetArtistDTO>> FindArtist(int id)
    {
-      var artist = await _artistRepository.FindAsync(id);
-      var returned = GetArtistDTO.FromArtist(artist);
-      return Ok(returned);
+      var query = new GetArtistByIdQuery(id);
+      var result = await _mediator.Send(query);
+      return Ok(result);
+
    }
 
    [HttpPost]
@@ -64,9 +69,9 @@ public class ArtistController : Controller
    [HttpGet("{artistId}/albums")]
    public async Task<ActionResult<IEnumerable<GetAlbumDTO>>> FindArtistAlbums(int artistId)
    {
-      var albums = await _albumArtistService.FindArtistAlbums(artistId);
-      var returned = albums.Select(GetAlbumDTO.FromAlbum);
-      return Ok(returned);
+      var query = new GetArtistAlbumsQuery(artistId);
+      var result = await _mediator.Send(query);
+      return Ok(result);
    }
    
 }
