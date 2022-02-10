@@ -19,8 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="CQRS\Album\Commands" />
       <Folder Include="CQRS\Track\Commands" />
-      <Folder Include="CQRS\Tune\Commands" />
       <Folder Include="DTOs" />
     </ItemGroup>
 
