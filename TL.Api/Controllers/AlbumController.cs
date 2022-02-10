@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.Album.Queries;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.ArtistDTOs;
 using TL.Api.DTOs.TrackDTOs;
@@ -16,29 +18,31 @@ public class AlbumController : Controller
   private readonly IAlbumRepository _albumRepository;
   private readonly IAlbumArtistService _albumArtistService;
   private readonly IAlbumTrackService _albumTrackService;
+  private readonly IMediator _mediator;
 
   public AlbumController(IAlbumRepository albumRepository, IAlbumArtistService albumArtistService,
-    IAlbumTrackService albumTrackService)
+    IAlbumTrackService albumTrackService, IMediator mediator)
   {
     _albumRepository = albumRepository;
     _albumArtistService = albumArtistService;
     _albumTrackService = albumTrackService;
+    _mediator = mediator;
   }
 
   [HttpGet("{id}")]
   public async Task<ActionResult<GetAlbumDTO>> FindAlbum(int id)
   {
-    var album = await _albumRepository.FindAsync(id);
-    var returned = GetAlbumDTO.FromAlbum(album);
-    return Ok(returned);
+    var query = new GetAlbumByIdQuery(id);
+    var result = await _mediator.Send(query);
+    return result == null ? NotFound() : Ok(result);
   }
   
   [HttpGet]
   public async Task<ActionResult<IEnumerable<GetAlbumDTO>>> FindAllAlbums()
   {
-    var albums = await _albumRepository.GetEntities().ToListAsync();
-    var returned = albums.Select(GetAlbumDTO.FromAlbum);
-    return Ok(returned);
+    var query = new GetAllAlbumsQuery();
+    var result = await _mediator.Send(query);
+    return Ok(result);
   }
   
   [HttpPost]
@@ -93,7 +97,7 @@ public class AlbumController : Controller
   {
     var track = PostTrackDTO.ToTrack(dto);
     await _albumTrackService.AddNewTrackToAlbum(albumId, track.Title, track.TrackNumber);
-    return Ok("New track successfully added");
+    return Ok($"New track with TRACK NUM {track.TrackNumber.Value} was successfully added");
   }
 
   [HttpDelete("{albumId}/track/{trackId}")]
@@ -106,17 +110,16 @@ public class AlbumController : Controller
   [HttpGet("{albumId}/tracks")]
   public async Task<ActionResult<IEnumerable<GetTrackDTO>>> GetAlbumTracks(int albumId)
   {
-    var tracks = await _albumTrackService.GetAlbumTracks(albumId);
-    var returned = tracks.Select(GetTrackDTO.FromTrack);
-    return Ok(returned);
-    
+    var query = new GetAlbumTracksQuery(albumId);
+    var result = await _mediator.Send(query);
+    return Ok(result);
   }
 
   [HttpGet("{albumId}/artists")]
   public async Task<ActionResult<IEnumerable<GetArtistDTO>>> GetAlbumArtists(int albumId)
   {
-    var artists = await _albumArtistService.FindAlbumArtists(albumId);
-    var returned = artists.Select(GetArtistDTO.FromArtist);
-    return Ok(returned);
+    var query = new GetAlbumArtistsQuery(albumId);
+    var result = await _mediator.Send(query);
+    return Ok(result);
   }
 }
