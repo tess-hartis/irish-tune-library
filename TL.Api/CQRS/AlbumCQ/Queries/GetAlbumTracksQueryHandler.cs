@@ -13,7 +13,7 @@ public class GetAlbumTracksQuery : IRequest<IEnumerable<GetTrackDTO>>
         AlbumId = albumId;
     }
 }
-public class GetAlbumTracksQueryHandler
+public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, IEnumerable<GetTrackDTO>>
 {
     private readonly IAlbumTrackService _albumTrackService;
 
