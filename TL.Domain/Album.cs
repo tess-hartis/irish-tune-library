@@ -18,7 +18,7 @@ public class Album
     public IReadOnlyList<Track> TrackListing => _tracks;
     
     
-    public static Album CreateAlbum(AlbumTitle title, AlbumYear year)
+    public static Album Create(AlbumTitle title, AlbumYear year)
     {
         var album = new Album()
         {
