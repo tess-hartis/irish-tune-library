@@ -106,8 +106,9 @@ public class TuneController : Controller
     public async Task<ActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var title = TuneTitle.Create(dto.AlternateTitle);
-        await _tuneRepository.RemoveAlternateTitle(id, title);
-        return Ok();
+        var command = new RemoveAlternateTitleCommand(id, title);
+        var result = _mediator.Send(command);
+        return Ok(result);
     }
     
     [HttpGet("{tuneId}/recordings")]
