@@ -1,13 +1,14 @@
 using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class UpdateTuneCommand : IRequest<Tune>
+public class UpdateTuneCommand : IRequest<GetTuneDTO>
 {
     public int Id { get; }
     public TuneTitle Title { get; }
@@ -25,7 +26,7 @@ public class UpdateTuneCommand : IRequest<Tune>
     }
 }
 
-public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Tune>
+public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, GetTuneDTO>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -34,12 +35,12 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Tune>
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Tune> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<GetTuneDTO> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);
         await _tuneRepository.UpdateTune
             (tune.Id, command.Title, command.Composer, command.Type, command.Key);
-        return tune;
+        return GetTuneDTO.FromTune(tune);
 
     }
 }

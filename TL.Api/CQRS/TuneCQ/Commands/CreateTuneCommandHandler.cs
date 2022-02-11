@@ -1,11 +1,13 @@
+using LanguageExt.Common;
 using MediatR;
+using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class CreateTuneCommand : IRequest<Tune>
+public class CreateTuneCommand : IRequest<GetTuneDTO>
 {
     public TuneTitle Title { get; }
     public TuneComposer Composer { get; }
@@ -21,7 +23,7 @@ public class CreateTuneCommand : IRequest<Tune>
     }
 }
 
-public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Tune>
+public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, GetTuneDTO>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -29,12 +31,13 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Tune>
     {
         _tuneRepository = tuneRepository;
     }
+    
 
-    public async Task<Tune> Handle(CreateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<GetTuneDTO> Handle(CreateTuneCommand command, CancellationToken cancellationToken)
     {
         var tune = Tune.Create(command.Title, command.Composer, command.Type, command.Key);
         await _tuneRepository.AddAsync(tune);
-        return tune;
+        return GetTuneDTO.FromTune(tune);
     }
     
 }
