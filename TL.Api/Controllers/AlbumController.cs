@@ -102,7 +102,7 @@ public class AlbumController : Controller
     var track = PostTrackDTO.ToTrack(dto);
     var command = new AddTrackToAlbumCommand(albumId, track.Title, track.TrackNumber);
     var result = await _mediator.Send(command);
-    return Ok($"Track added to album: {result}");
+    return Ok(result);
   }
 
   // [HttpDelete("{albumId}/track/{trackId}")]
