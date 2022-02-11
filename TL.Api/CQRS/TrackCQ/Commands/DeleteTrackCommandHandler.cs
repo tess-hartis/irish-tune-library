@@ -1,7 +1,7 @@
 using MediatR;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Track.Commands;
+namespace TL.Api.CQRS.TrackCQ.Commands;
 
 public class DeleteTrackCommand : IRequest<Unit>
 {

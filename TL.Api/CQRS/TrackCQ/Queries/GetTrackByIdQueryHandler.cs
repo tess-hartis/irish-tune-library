@@ -2,7 +2,7 @@ using MediatR;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Track.Queries;
+namespace TL.Api.CQRS.TrackCQ.Queries;
 
 public class GetTrackByIdQuery : IRequest<GetTrackDTO>
 {

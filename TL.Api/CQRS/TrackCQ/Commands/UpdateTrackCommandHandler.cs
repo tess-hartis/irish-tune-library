@@ -1,10 +1,9 @@
-using LanguageExt.TypeClasses;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Track.Commands;
+namespace TL.Api.CQRS.TrackCQ.Commands;
 
 public class UpdateTrackCommand : IRequest<GetTrackDTO>
 {

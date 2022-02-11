@@ -1,8 +1,7 @@
 using MediatR;
-using TL.Api.DTOs.TrackDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Track.Commands;
+namespace TL.Api.CQRS.TrackCQ.Commands;
 
 public class RemoveTrackTuneCommand : IRequest<Unit>
 {

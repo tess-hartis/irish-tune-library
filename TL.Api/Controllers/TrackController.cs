@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.CQRS.Track.Commands;
-using TL.Api.CQRS.Track.Queries;
+using TL.Api.CQRS.TrackCQ.Commands;
+using TL.Api.CQRS.TrackCQ.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Domain.ValueObjects.TrackValueObjects;

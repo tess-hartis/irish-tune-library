@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Track.Queries;
+namespace TL.Api.CQRS.TrackCQ.Queries;
 
 public record GetAllTracksQuery : IRequest<IEnumerable<GetTrackDTO>>;
 

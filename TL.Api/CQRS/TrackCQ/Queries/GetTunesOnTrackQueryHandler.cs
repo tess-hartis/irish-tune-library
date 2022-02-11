@@ -1,9 +1,8 @@
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
-using TL.Api.DTOs.TuneDTOS;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Track.Queries;
+namespace TL.Api.CQRS.TrackCQ.Queries;
 
 public class GetTunesOnTrackQuery : IRequest<IEnumerable<GetTrackTuneDTO>>
 {
