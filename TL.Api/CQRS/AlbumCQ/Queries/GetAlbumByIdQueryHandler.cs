@@ -2,7 +2,7 @@ using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Album.Queries;
+namespace TL.Api.CQRS.AlbumCQ.Queries;
 
 public class GetAlbumByIdQuery : IRequest<GetAlbumDTO>
 {

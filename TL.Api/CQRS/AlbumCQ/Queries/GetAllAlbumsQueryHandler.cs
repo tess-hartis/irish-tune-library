@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Album.Queries;
+namespace TL.Api.CQRS.AlbumCQ.Queries;
 
 public record GetAllAlbumsQuery : IRequest<IEnumerable<GetAlbumDTO>>;
 
