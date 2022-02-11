@@ -21,7 +21,6 @@
 
     <ItemGroup>
       <Folder Include="CQRS\Album\Commands" />
-      <Folder Include="CQRS\Track\Commands" />
       <Folder Include="DTOs" />
     </ItemGroup>
 

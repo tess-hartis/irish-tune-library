@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.Track.Commands;
 using TL.Api.CQRS.Track.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
@@ -46,14 +47,16 @@ public class TrackController : Controller
     {
         var title = TrackTitle.Create(dto.Title);
         var trackNumber = TrackNumber.Create(dto.Number);
-        await _trackRepository.UpdateTrack(id, title, trackNumber);
-        return Ok($"Track with ID '{id}' was updated");
+        var command = new UpdateTrackCommand(id, title, trackNumber);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTrack(int id)
     {
-        await _trackRepository.DeleteAsync(id);
+        var command = new DeleteTrackCommand(id);
+        await _mediator.Send(command);
         return Ok($"Track with ID '{id}' was deleted");
     }
     
@@ -69,8 +72,9 @@ public class TrackController : Controller
     public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] PostTuneToTrackDTO dto )
     {
         var order = TrackTuneOrder.Create(dto.Order);
-        await _tuneTrackService.AddExistingTuneToTrack(trackId, tuneId, order);
-        return Ok($"Tune with ID '{tuneId}' was added to track with ID '{trackId}'");
+        var command = new AddTrackTuneCommand(trackId, tuneId, order);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpGet("{trackId}/tunes")]
