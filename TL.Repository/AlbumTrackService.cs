@@ -7,8 +7,8 @@ namespace TL.Repository;
 
 public interface IAlbumTrackService
 {
-    Task AddNewTrackToAlbum(int albumId, TrackTitle title, TrackNumber trackNumber);
-    Task RemoveTrackFromAlbum(int albumId, int trackId);
+    Task<Track> AddNewTrackToAlbum(int albumId, TrackTitle title, TrackNumber trackNumber);
+    // Task RemoveTrackFromAlbum(int albumId, int trackId);
     Task<IEnumerable<Track>> GetAlbumTracks(int albumId);
 
 }
@@ -29,23 +29,24 @@ public class AlbumTrackService : IAlbumTrackService
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddNewTrackToAlbum(int albumId, TrackTitle title, TrackNumber trackNumber)
+    public async Task<Track> AddNewTrackToAlbum(int albumId, TrackTitle title, TrackNumber trackNumber)
     {
         var album = await _albumRepository.FindAsync(albumId);
         var track = Track.CreateTrack(title, trackNumber);
         track.SetAlbumId(album.Id);
-        await _trackRepository.AddAsync(track); 
+        await _trackRepository.AddAsync(track);
+        return track;
         // await SaveChangesAsync();
     }
     
 
-    public async Task RemoveTrackFromAlbum(int albumId, int trackId)
-    {
-        var album = await _albumRepository.FindAsync(albumId);
-        var track = await _trackRepository.FindAsync(trackId);
-        album.RemoveTrack(track);
-        await SaveChangesAsync();
-    }
+    // public async Task RemoveTrackFromAlbum(int albumId, int trackId)
+    // {
+    //     var album = await _albumRepository.FindAsync(albumId);
+    //     var track = await _trackRepository.FindAsync(trackId);
+    //     album.RemoveTrack(track);
+    //     await SaveChangesAsync();
+    // }
 
     public async Task<IEnumerable<Track>> GetAlbumTracks(int albumId)
     {

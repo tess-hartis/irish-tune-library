@@ -10,7 +10,7 @@ namespace TL.Repository;
 public interface IAlbumRepository : IGenericRepository<Album>
 {
     new Task<Album> FindAsync(int id);
-    Task UpdateAlbum(int id, AlbumTitle title, AlbumYear year);
+    Task<Album> UpdateAlbum(int id, AlbumTitle title, AlbumYear year);
     new Task DeleteAsync(int id);
 }
 
@@ -45,11 +45,12 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         await SaveAsync();
     }
 
-    public async Task UpdateAlbum(int id, AlbumTitle title, AlbumYear year)
+    public async Task<Album> UpdateAlbum(int id, AlbumTitle title, AlbumYear year)
     {
         var album = await FindAsync(id);
         album.Update(title, year);
         await SaveAsync();
+        return album;
     }
     
 }
