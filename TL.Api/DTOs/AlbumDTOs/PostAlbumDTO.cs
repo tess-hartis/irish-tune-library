@@ -12,7 +12,7 @@ public class PostAlbumDTO
     {
         var title = AlbumTitle.Create(dto.Title);
         var year = AlbumYear.Create(dto.Year);
-        var album = Album.CreateAlbum(title, year);
+        var album = Album.Create(title, year);
         return album;
     }
 }
