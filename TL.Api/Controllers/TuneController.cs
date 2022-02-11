@@ -75,7 +75,8 @@ public class TuneController : Controller
         var key = dto.Key;
         var command = new CreateTuneCommand(title, composer, type, key);
         var result = await _mediator.Send(command);
-        return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
+        // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
@@ -83,8 +84,11 @@ public class TuneController : Controller
     {
         var title = TuneTitle.Create(dto.Title);
         var composer = TuneComposer.Create(dto.Composer);
-        await _tuneRepository.UpdateTune(id, title, composer, dto.Type, dto.Key);
-        return Ok();
+        var command = new UpdateTuneCommand(id, title, composer, dto.Type, dto.Key);
+        var result = await _mediator.Send(command);
+        // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
+        return Ok(result);
+
     }
     
     [HttpDelete("{id}")]
