@@ -1,3 +1,5 @@
+using CSharpFunctionalExtensions;
+using LanguageExt;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -93,9 +95,10 @@ public class TuneController : Controller
     
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTune(int id)
-    { 
-        await _tuneRepository.DeleteAsync(id);
-        return Ok();
+    {
+        var command = new DeleteTuneCommand(id);
+        await _mediator.Send(command);
+        return Ok($"Tune with ID '{id}' was deleted");
     }
 
     [HttpPost("{id}/titles")]
