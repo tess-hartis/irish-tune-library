@@ -102,8 +102,9 @@ public class TuneController : Controller
     public async Task<ActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var title = TuneTitle.Create(dto.AlternateTitle);
-        await _tuneRepository.AddAlternateTitle(id, title);
-        return Ok();
+        var command = new AddAlternateTitleCommand(id, title);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
     
     [HttpDelete("{id}/titles")]
