@@ -2,7 +2,7 @@ using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Artist.Queries;
+namespace TL.Api.CQRS.ArtistCQ.Queries;
 
 public class GetArtistAlbumsQuery : IRequest<IEnumerable<GetAlbumDTO>>
 {

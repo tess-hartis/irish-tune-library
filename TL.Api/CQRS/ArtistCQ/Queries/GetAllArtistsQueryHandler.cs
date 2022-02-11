@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TL.Api.DTOs.ArtistDTOs;
 using TL.Repository;
 
-namespace TL.Api.CQRS.Artist.Queries;
+namespace TL.Api.CQRS.ArtistCQ.Queries;
 
 public record GetAllArtistsQuery : IRequest<IEnumerable<GetArtistDTO>>;
 

@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.CQRS.Artist.Queries;
+using TL.Api.CQRS.ArtistCQ.Queries;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.ArtistDTOs;
 using TL.Domain;
