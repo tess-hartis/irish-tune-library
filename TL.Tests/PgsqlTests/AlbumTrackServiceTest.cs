@@ -23,7 +23,7 @@ public class AlbumTrackServiceTest
          var albumTrackRepo = new AlbumTrackService(context, albumRepo, trackRepo);
          var title = AlbumTitle.Create("Making Time");
          var year = AlbumYear.Create(2000);
-         var album = Album.CreateAlbum(title, year);
+         var album = Album.Create(title, year);
          await albumRepo.AddAsync(album);
          
          //Act
