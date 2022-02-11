@@ -20,9 +20,9 @@ public class AddTrackToAlbumCommand : IRequest<GetTrackDTO>
 }
 public class AddTrackToAlbumCommandHandler : IRequestHandler<AddTrackToAlbumCommand, GetTrackDTO>
 {
-    private readonly AlbumTrackService _albumTrackService;
+    private readonly IAlbumTrackService _albumTrackService;
 
-    public AddTrackToAlbumCommandHandler(AlbumTrackService albumTrackService)
+    public AddTrackToAlbumCommandHandler(IAlbumTrackService albumTrackService)
     {
         _albumTrackService = albumTrackService;
     }
