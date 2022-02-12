@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
@@ -7,7 +8,7 @@ namespace TL.Repository;
 
 public interface IAlbumTrackService
 {
-    Task<Track> AddNewTrackToAlbum(int albumId, TrackTitle title, TrackNumber trackNumber);
+    Task<Track> AddNewTrackToAlbum(int albumId, Track track);
     // Task RemoveTrackFromAlbum(int albumId, int trackId);
     Task<IEnumerable<Track>> GetAlbumTracks(int albumId);
 
@@ -29,12 +30,12 @@ public class AlbumTrackService : IAlbumTrackService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Track> AddNewTrackToAlbum(int albumId, TrackTitle title, TrackNumber trackNumber)
+    public async Task<Track> AddNewTrackToAlbum(int albumId, Track track)
     {
         var album = await _albumRepository.FindAsync(albumId);
-        var track = Track.CreateTrack(title, trackNumber);
         track.SetAlbumId(album.Id);
         await _trackRepository.AddAsync(track);
+        await SaveChangesAsync();
         return track;
         // await SaveChangesAsync();
     }
