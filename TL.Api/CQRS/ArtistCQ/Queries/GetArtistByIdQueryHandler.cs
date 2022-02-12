@@ -1,10 +1,11 @@
 using MediatR;
 using TL.Api.DTOs.ArtistDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.ArtistCQ.Queries;
 
-public class GetArtistByIdQuery : IRequest<GetArtistDTO>
+public class GetArtistByIdQuery : IRequest<Artist>
 {
     public int Id { get; }
 
@@ -13,7 +14,7 @@ public class GetArtistByIdQuery : IRequest<GetArtistDTO>
         Id = id;
     }
 }
-public class GetArtistByIdQueryHandler : IRequestHandler<GetArtistByIdQuery, GetArtistDTO>
+public class GetArtistByIdQueryHandler : IRequestHandler<GetArtistByIdQuery, Artist>
 {
     private readonly IArtistRepository _artistRepository;
 
@@ -22,11 +23,11 @@ public class GetArtistByIdQueryHandler : IRequestHandler<GetArtistByIdQuery, Get
         _artistRepository = artistRepository;
     }
 
-    public async Task<GetArtistDTO> Handle
+    public async Task<Artist> Handle
         (GetArtistByIdQuery request, CancellationToken cancellationToken)
     {
         var artist = await _artistRepository.FindAsync(request.Id);
-        return GetArtistDTO.FromArtist(artist);
-        
+        return artist;
+
     }
 }

@@ -1,10 +1,11 @@
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.TrackCQ.Queries;
 
-public class GetTrackByIdQuery : IRequest<GetTrackDTO>
+public class GetTrackByIdQuery : IRequest<Track>
 {
     public int Id { get; }
     
@@ -14,7 +15,7 @@ public class GetTrackByIdQuery : IRequest<GetTrackDTO>
     }
     
 }
-public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, GetTrackDTO>
+public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, Track>
 {
     private readonly ITrackRepository _trackRepository;
 
@@ -23,10 +24,10 @@ public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, GetTr
         _trackRepository = trackRepository;
     }
 
-    public async Task<GetTrackDTO> Handle(GetTrackByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Track> Handle(GetTrackByIdQuery request, CancellationToken cancellationToken)
     {
         var track = await _trackRepository.FindAsync(request.Id);
-        return GetTrackDTO.FromTrack(track);
-        
+        return track;
+
     }
 }

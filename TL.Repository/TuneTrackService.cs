@@ -8,8 +8,8 @@ namespace TL.Repository;
 
 public interface ITuneTrackService
 {
-    Task<TrackTune> AddExistingTuneToTrack(int trackId, int tuneId, TrackTuneOrder order);
-    Task RemoveTuneFromTrack(int trackId, int tuneId);
+    Task<Track> AddExistingTuneToTrack(int trackId, int tuneId, TrackTuneOrder order);
+    Task<Track> RemoveTuneFromTrack(int trackId, int tuneId);
     Task<IEnumerable<Track>> FindTracksByTune(int tuneId);
     Task<IEnumerable<TrackTune>> GetTrackTunes(int trackId);
 }
@@ -38,7 +38,7 @@ public class TuneTrackService : ITuneTrackService
     }
     
     
-    public async Task<TrackTune> AddExistingTuneToTrack(int trackId, int tuneId, TrackTuneOrder order)
+    public async Task<Track> AddExistingTuneToTrack(int trackId, int tuneId, TrackTuneOrder order)
     {
         var track = await _trackRepository.FindAsync(trackId);
         var tune = await _tuneRepository.FindAsync(tuneId);
@@ -52,15 +52,16 @@ public class TuneTrackService : ITuneTrackService
         trackTune.SetTitle(tune.Title.Value);
         
         await SaveChangesAsync();
-        return trackTune;
+        return track;
     }
 
-    public async Task RemoveTuneFromTrack(int trackId, int tuneId)
+    public async Task<Track> RemoveTuneFromTrack(int trackId, int tuneId)
     {
         var track = await _trackRepository.FindAsync(trackId);
         var trackTune = await FindTrackTune(track, tuneId);
         track.RemoveTune(trackTune);
         await SaveChangesAsync();
+        return track;
     }
 
     private Task<TrackTune> FindTrackTune(Track track, int tuneId)

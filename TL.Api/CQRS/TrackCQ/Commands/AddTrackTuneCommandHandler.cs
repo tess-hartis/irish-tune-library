@@ -1,11 +1,12 @@
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Domain;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Repository;
 
 namespace TL.Api.CQRS.TrackCQ.Commands;
 
-public class AddTrackTuneCommand : IRequest<GetTrackTuneDTO>
+public class AddTrackTuneCommand : IRequest<Track>
 {
     public int TrackId { get; }
     public int TuneId { get; }
@@ -18,7 +19,7 @@ public class AddTrackTuneCommand : IRequest<GetTrackTuneDTO>
         Order = order;
     }
 }
-public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, GetTrackTuneDTO>
+public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, Track>
 {
     private readonly ITuneTrackService _tuneTrackService;
 
@@ -27,9 +28,9 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, G
         _tuneTrackService = tuneTrackService;
     }
 
-    public async Task<GetTrackTuneDTO> Handle(AddTrackTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Track> Handle(AddTrackTuneCommand command, CancellationToken cancellationToken)
     {
-        var trackTune = await _tuneTrackService.AddExistingTuneToTrack(command.TrackId, command.TuneId, command.Order);
-        return GetTrackTuneDTO.FromTrackTune(trackTune);
+        var track = await _tuneTrackService.AddExistingTuneToTrack(command.TrackId, command.TuneId, command.Order);
+        return track;
     }
 }

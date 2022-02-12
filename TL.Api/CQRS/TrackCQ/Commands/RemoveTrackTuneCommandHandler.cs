@@ -1,9 +1,10 @@
 using MediatR;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.TrackCQ.Commands;
 
-public class RemoveTrackTuneCommand : IRequest<Unit>
+public class RemoveTrackTuneCommand : IRequest<Track>
 {
     public int TrackId { get; }
     public int TuneId { get; }
@@ -14,7 +15,7 @@ public class RemoveTrackTuneCommand : IRequest<Unit>
         TuneId = tuneId;
     }
 }
-public class RemoveTrackTuneCommandHandler : IRequestHandler<RemoveTrackTuneCommand, Unit>
+public class RemoveTrackTuneCommandHandler : IRequestHandler<RemoveTrackTuneCommand, Track>
 {
     private readonly ITuneTrackService _tuneTrackService;
 
@@ -23,9 +24,11 @@ public class RemoveTrackTuneCommandHandler : IRequestHandler<RemoveTrackTuneComm
         _tuneTrackService = tuneTrackService;
     }
 
-    public async Task<Unit> Handle(RemoveTrackTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Track> Handle(RemoveTrackTuneCommand command, CancellationToken cancellationToken)
     {
-        await _tuneTrackService.RemoveTuneFromTrack(command.TrackId, command.TuneId);
-        return Unit.Value;
+        var track = await _tuneTrackService.RemoveTuneFromTrack(command.TrackId, command.TuneId);
+        return track;
+        
+        //update DTO to also show tunes on track
     }
 }

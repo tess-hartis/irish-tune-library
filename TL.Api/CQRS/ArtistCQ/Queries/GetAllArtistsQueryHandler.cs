@@ -1,13 +1,14 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TL.Api.DTOs.ArtistDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.ArtistCQ.Queries;
 
-public record GetAllArtistsQuery : IRequest<IEnumerable<GetArtistDTO>>;
+public record GetAllArtistsQuery : IRequest<IEnumerable<Artist>>;
 
-public class GetAllArtistsQueryHandler : IRequestHandler<GetAllArtistsQuery, IEnumerable<GetArtistDTO>>
+public class GetAllArtistsQueryHandler : IRequestHandler<GetAllArtistsQuery, IEnumerable<Artist>>
 { 
     private readonly IArtistRepository _artistRepository;
 
@@ -16,12 +17,12 @@ public class GetAllArtistsQueryHandler : IRequestHandler<GetAllArtistsQuery, IEn
         _artistRepository = artistRepository;
     }
 
-    public async Task<IEnumerable<GetArtistDTO>> Handle
+    public async Task<IEnumerable<Artist>> Handle
         (GetAllArtistsQuery request, CancellationToken cancellationToken)
     {
         var artists = await _artistRepository.GetEntities().ToListAsync();
-        return artists.Select(GetArtistDTO.FromArtist);
-        
+        return artists;
+
     }
 
 }

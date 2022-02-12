@@ -1,12 +1,13 @@
 using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.TuneDTOS;
+using TL.Domain;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class UpdateAlbumCommand : IRequest<GetAlbumDTO>
+public class UpdateAlbumCommand : IRequest<Album>
 {
     public int AlbumId { get; }
     public AlbumTitle Title { get; }
@@ -20,7 +21,7 @@ public class UpdateAlbumCommand : IRequest<GetAlbumDTO>
     }
 }
 
-public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, GetAlbumDTO>
+public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Album>
 {
     private readonly IAlbumRepository _albumRepository;
 
@@ -29,9 +30,9 @@ public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Get
         _albumRepository = albumRepository;
     }
 
-    public async Task<GetAlbumDTO> Handle(UpdateAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Album> Handle(UpdateAlbumCommand command, CancellationToken cancellationToken)
     {
         var album = await _albumRepository.UpdateAlbum(command.AlbumId, command.Title, command.Year);
-        return GetAlbumDTO.FromAlbum(album);
+        return album;
     }
 }
