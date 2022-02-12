@@ -49,19 +49,11 @@ public class Album
         _artists.Remove(artist);
     }
 
-    public void RemoveTrack(Track track)
-    {
-        if (!_tracks.Contains(track))
-            throw new InvalidOperationException
-                ("The specified track was not found on the album");
-        
-        _tracks.Remove(track);
-    }
-
-    public void Update(AlbumTitle title, AlbumYear year)
+    public Album Update(AlbumTitle title, AlbumYear year)
     {
         Title = title;
         Year = year;
+        return this;
     }
 
 
