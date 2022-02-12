@@ -12,6 +12,7 @@ public interface IGenericRepository<T> where T : class
     Task AddAsync(T entity);
     Task DeleteAsync(int id);
     Task<T> FindAsync(int id);
+    Task<T> UpdateAsync(int id);
     Task<int> SaveAsync();
 }
 
@@ -59,6 +60,15 @@ public abstract class GenericRepository<T>
         if (result == null)
             throw new EntityNotFoundException($"No entity with ID '{id}' was found");
         return result;
+    }
+    
+    public virtual async Task<T> UpdateAsync(int id)
+    {
+        var entity = await Context.Set<T>().FindAsync(id);
+        Context.Set<T>().Update(entity);
+        await Context.SaveChangesAsync();
+        return entity;
+
     }
 
     public virtual async Task<int> SaveAsync()
