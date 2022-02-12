@@ -39,13 +39,17 @@ public class TrackController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
+    public async Task<IActionResult> PutTrack(int id, [FromBody] UpdateTrackCommand request)
     {
-        var title = TrackTitle.Create(dto.Title);
-        var trackNumber = TrackNumber.Create(dto.Number);
-        var command = new UpdateTrackCommand(id, title, trackNumber);
-        var result = await _mediator.Send(command);
-        return Ok(GetTrackDTO.FromTrack(result));
+        request.Id = id;
+        var track = await _mediator.Send(request);
+        return track.Match<IActionResult>(
+            t => Ok(GetTrackDTO.FromTrack(t)),
+            e =>
+            {
+                var errorList = e.Select(e => e.Message).ToList();
+                return UnprocessableEntity(new {code = 422, errors = errorList});
+            });
     }
 
     [HttpDelete("{id}")]
