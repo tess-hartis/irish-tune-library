@@ -1,15 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TL.Api.CQRS.AlbumCQ.Queries;
 using TL.Api.CQRS.AlbumCQ.Commands;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.ArtistDTOs;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain.ValueObjects.AlbumValueObjects;
-using TL.Domain.ValueObjects.ArtistValueObjects;
-using TL.Domain.ValueObjects.TrackValueObjects;
-using TL.Repository;
+
 
 namespace TL.Api.Controllers;
 
