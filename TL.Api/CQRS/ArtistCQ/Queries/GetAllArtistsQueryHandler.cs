@@ -20,7 +20,7 @@ public class GetAllArtistsQueryHandler : IRequestHandler<GetAllArtistsQuery, IEn
     public async Task<IEnumerable<Artist>> Handle
         (GetAllArtistsQuery request, CancellationToken cancellationToken)
     {
-        var artists = await _artistRepository.GetEntities().ToListAsync();
+        var artists = await _artistRepository.GetAllArtists();
         return artists;
 
     }
