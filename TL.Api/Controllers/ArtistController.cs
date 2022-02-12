@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.ArtistCQ.Commands;
 using TL.Api.CQRS.ArtistCQ.Queries;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.ArtistDTOs;
@@ -29,7 +30,7 @@ public class ArtistController : Controller
    {
       var query = new GetAllArtistsQuery();
       var result = await _mediator.Send(query);
-      return Ok(result);
+      return Ok(result.Select(GetArtistDTO.FromArtist));
    }
 
    [HttpGet("{id}")]
@@ -37,7 +38,7 @@ public class ArtistController : Controller
    {
       var query = new GetArtistByIdQuery(id);
       var result = await _mediator.Send(query);
-      return Ok(result);
+      return Ok(GetArtistDTO.FromArtist(result));
 
    }
 
@@ -45,23 +46,25 @@ public class ArtistController : Controller
    public async Task<IActionResult> AddArtist([FromBody] PostArtistDTO dto)
    {
       var artist = PostArtistDTO.ToArtist(dto);
-      await _artistRepository.AddAsync(artist);
-      var returned = GetArtistDTO.FromArtist(artist);
-      return CreatedAtAction(nameof(FindArtist), new {id = artist.Id}, returned);
+      var command = new CreateArtistCommand(artist.Name);
+      var result = await _mediator.Send(command);
+      return Ok(GetArtistDTO.FromArtist(result));
    }
 
    [HttpPut("{id}")]
    public async Task<IActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
    {
       var name = ArtistName.Create(dto.Name);
-      await _artistRepository.UpdateArtist(id, name);
-      return Ok($"Artist with ID '{id}' was updated");
+      var command = new UpdateArtistCommand(id, name);
+      var result = await _mediator.Send(command);
+      return Ok(GetArtistDTO.FromArtist(result));
    }
    
    [HttpDelete("{id}")]
    public async Task<IActionResult> DeleteArtist(int id)
    {
-      await _artistRepository.DeleteAsync(id);
+      var command = new DeleteArtistCommand(id);
+      await _mediator.Send(command);
       return Ok($"Artist with ID '{id}' was deleted");
 
    }
@@ -71,7 +74,7 @@ public class ArtistController : Controller
    {
       var query = new GetArtistAlbumsQuery(artistId);
       var result = await _mediator.Send(query);
-      return Ok(result);
+      return Ok(result.Select(GetAlbumDTO.FromAlbum));
    }
    
 }
