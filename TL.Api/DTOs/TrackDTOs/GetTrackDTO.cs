@@ -8,7 +8,7 @@ public class GetTrackDTO
     public int AlbumId { get; set; }
     public string Title { get; set; }
     public int TrackNumber { get; set; }
-    public IEnumerable<GetTrackTuneDTO> Tunes { get; set; }= new List<GetTrackTuneDTO>();
+    public IEnumerable<GetTrackTuneDTO> Tunes { get; set; } = new List<GetTrackTuneDTO>();
 
     public static GetTrackDTO FromTrack(Track track)
     {
