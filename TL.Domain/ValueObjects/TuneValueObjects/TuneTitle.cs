@@ -13,12 +13,12 @@ public record TuneTitle
         Value = value;
     }
 
-    public static TuneTitle Create(string value)
+    public static Validation<Error, TuneTitle> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new Exception();
+            return Fail<Error, TuneTitle>("coo itb");
 
-        return new TuneTitle(value);
+        return Success<Error, TuneTitle>(new TuneTitle(value));
     }
 }
 
