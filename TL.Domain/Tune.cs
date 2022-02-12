@@ -48,24 +48,19 @@ public class Tune
 
     }
 
-    public void AddAlternateTitle(TuneTitle title)
+    public Tune AddAlternateTitle(TuneTitle title)
     {
-        // var altTitle = new AlternateTitleInTune(title, this);
         _alternateTitles.Add(title);
+        return this;
     }
 
-    public void RemoveAlternateTitle(TuneTitle title)
+    public Tune RemoveAlternateTitle(TuneTitle title)
     {
-        // var titleValue = title.Value;
-        // var foundTitle = _alternateTitles.Find(x => x.Title.Value == titleValue);
-        //
-        // if (!_alternateTitles.Contains(foundTitle))
-        //     throw new Exception();
-        
         _alternateTitles.Remove(title);
+        return this;
     }
 
-    public void Update(TuneTitle title, TuneComposer composer, string type, string key)
+    public Tune Update(TuneTitle title, TuneComposer composer, string type, string key)
     {
         Title = title;
         Composer = composer;
@@ -79,18 +74,7 @@ public class Tune
             throw new Exception();
 
         this.TuneKey = tuneKey;
+
+        return this;
     }
 }
-
-// public class AlternateTitleInTune
-// {
-//     public TuneTitle Title { get; set; }
-//     public Tune Tune { get; set; }
-//
-//     public AlternateTitleInTune(TuneTitle title, Tune tune)
-//     {
-//         Title = title;
-//         Tune = tune;
-//     }
-//
-// }
