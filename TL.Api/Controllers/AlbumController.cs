@@ -37,24 +37,30 @@ public class AlbumController : Controller
   }
   
   [HttpPost]
-  public async Task<IActionResult> AddAlbum([FromBody] PostAlbumDTO dto)
+  public async Task<IActionResult> AddAlbum([FromBody] CreateAlbumCommand request)
   {
-    var album = PostAlbumDTO.ToAlbum(dto);
-    var command = new CreateAlbumCommand(album.Title, album.Year);
-    var result = await _mediator.Send(command);
-    return Ok(GetAlbumDTO.FromAlbum(result));
-    
-    // return CreatedAtAction(nameof(FindAlbum), new {id = album.Id}, returned);
+    var album = await _mediator.Send(request);
+    return album.Match<IActionResult>(
+      a => Ok(GetAlbumDTO.FromAlbum(a)),
+      e =>
+      {
+        var errorList = e.Select(e => e.Message).ToList();
+        return UnprocessableEntity(new {code = 422, errors = errorList});
+      });
   }
   
   [HttpPut("{id}")]
-  public async Task<IActionResult> PutAlbum(int id, [FromBody] PutAlbumDTO dto)
+  public async Task<IActionResult> PutAlbum(int id, [FromBody] UpdateAlbumCommand request)
   {
-    var title = AlbumTitle.Create(dto.Title);
-    var year = AlbumYear.Create(dto.Year);
-    var command = new UpdateAlbumCommand(id, title, year);
-    var result = await _mediator.Send(command);
-    return Ok(GetAlbumDTO.FromAlbum(result));
+    request.AlbumId = id;
+    var album = await _mediator.Send(request);
+    return album.Match<IActionResult>(
+      a => Ok(GetAlbumDTO.FromAlbum(a)),
+      e =>
+      {
+        var errorList = e.Select(e => e.Message).ToList();
+        return UnprocessableEntity(new {code = 422, errors = errorList});
+      });
   }
   
   [HttpDelete("{id}")]
@@ -76,12 +82,16 @@ public class AlbumController : Controller
   }
 
   [HttpPost("{albumId}/artist")]
-  public async Task<IActionResult> AddNewArtistToAlbum(int albumId, [FromBody] PostArtistDTO dto)
+  public async Task<IActionResult> AddNewArtistToAlbum(int albumId, [FromBody] AddNewArtistToAlbumCommand request)
   {
-    var artist = PostArtistDTO.ToArtist(dto);
-    var command = new AddNewArtistToAlbumCommand(albumId, artist.Name);
-    var result = await _mediator.Send(command);
-    return Ok(GetAlbumDTO.FromAlbum(result));
+    var artist = await _mediator.Send(request);
+    return artist.Match<IActionResult>(
+      a => Ok(GetArtistDTO.FromArtist(a)),
+      e =>
+      {
+        var errorList = e.Select(e => e.Message).ToList();
+        return UnprocessableEntity(new {code = 422, errors = errorList});
+      });
   }
 
   [HttpDelete("{albumId}/artist/{artistId}")]
