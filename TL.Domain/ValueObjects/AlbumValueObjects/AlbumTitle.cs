@@ -1,3 +1,7 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
+using LanguageExt.Common;
+
 namespace TL.Domain.ValueObjects.AlbumValueObjects;
 
 public record AlbumTitle
@@ -9,11 +13,11 @@ public record AlbumTitle
         Value = value;
     }
 
-    public static AlbumTitle Create(string value)
+    public static Validation<Error, AlbumTitle> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new Exception();
+            return Fail<Error, AlbumTitle>("Album title cannot be empty");
 
-        return new AlbumTitle(value);
+        return Success<Error, AlbumTitle>(new AlbumTitle(value));
     }
 }

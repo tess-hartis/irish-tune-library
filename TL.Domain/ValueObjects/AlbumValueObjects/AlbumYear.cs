@@ -1,3 +1,7 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
+using LanguageExt.Common;
+
 namespace TL.Domain.ValueObjects.AlbumValueObjects;
 
 public record AlbumYear
@@ -9,11 +13,11 @@ public record AlbumYear
         Value = value;
     }
 
-    public static AlbumYear Create(int value)
+    public static Validation<Error, AlbumYear> Create(int value)
     {
         if (value > DateTime.Now.Year)
-            throw new Exception();
+            return Fail<Error, AlbumYear>("Invalid year");
 
-        return new AlbumYear(value);
+        return Success<Error, AlbumYear>(new AlbumYear(value));
     }
 }
