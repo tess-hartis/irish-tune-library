@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.Common;
 using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Domain;
@@ -6,18 +8,18 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class CreateAlbumCommand : IRequest<Album>
+public class CreateAlbumCommand : IRequest<Validation<Error, Album>>
 {
-    public AlbumTitle Title { get; }
-    public AlbumYear Year { get; }
+    public string Title { get; }
+    public int Year { get; }
 
-    public CreateAlbumCommand(AlbumTitle title, AlbumYear year)
+    public CreateAlbumCommand(string title, int year)
     {
         Title = title;
         Year = year;
     }
 }
-public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, Album>
+public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, Validation<Error, Album>>
 {
     private readonly IAlbumRepository _albumRepository;
 
@@ -26,10 +28,21 @@ public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, Alb
         _albumRepository = albumRepository;
     }
 
-    public async Task<Album> Handle(CreateAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Validation<Error, Album>> Handle(CreateAlbumCommand command, CancellationToken cancellationToken)
     {
-        var album = Album.Create(command.Title, command.Year);
-        await _albumRepository.AddAsync(album);
+        var title = AlbumTitle.Create(command.Title);
+        var year = AlbumYear.Create(command.Year);
+
+        var album = (title, year)
+            .Apply((t, y) => Album.Create(t, y));
+
+        await album
+            .Succ(async a =>
+            {
+                await _albumRepository.AddAsync(a);
+            })
+            .Fail(e => e.AsTask());
+
         return album;
     }
 }
