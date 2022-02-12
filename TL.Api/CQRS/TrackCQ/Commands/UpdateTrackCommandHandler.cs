@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.Common;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
@@ -6,20 +8,21 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TrackCQ.Commands;
 
-public class UpdateTrackCommand : IRequest<Track>
+public class UpdateTrackCommand : IRequest<Validation<Error, Track>>
 {
-    public int Id { get; }
-    public TrackTitle Title { get; }
-    public TrackNumber Number { get; }
+    public int Id { get; set; }
+    public string Title { get; }
+    public int Number { get; }
 
-    public UpdateTrackCommand(int id, TrackTitle title, TrackNumber number)
+    public UpdateTrackCommand(int id, string title, int number)
     {
         Id = id;
         Title = title;
         Number = number;
     }
 }
-public class UpdateTrackCommandHandler : IRequestHandler<UpdateTrackCommand, Track>
+public class UpdateTrackCommandHandler : 
+    IRequestHandler<UpdateTrackCommand, Validation<Error, Track>>
 {
     private readonly ITrackRepository _trackRepository;
 
@@ -28,10 +31,24 @@ public class UpdateTrackCommandHandler : IRequestHandler<UpdateTrackCommand, Tra
         _trackRepository = trackRepository;
     }
 
-    public async Task<Track> Handle(UpdateTrackCommand command, CancellationToken cancellationToken)
+    public async Task<Validation<Error, Track>> Handle
+        (UpdateTrackCommand command, CancellationToken cancellationToken)
     {
         var track = await _trackRepository.FindAsync(command.Id);
-        await _trackRepository.UpdateTrack(track.Id, command.Title, command.Number);
-        return track;
+
+        var title = TrackTitle.Create(command.Title);
+        var number = TrackNumber.Create(command.Number);
+
+        var updatedTrack = (title, number)
+            .Apply((t, n) => track.Update(t, n));
+
+        await updatedTrack
+            .Succ(async t =>
+            {
+                await _trackRepository.UpdateAsync(track.Id);
+            })
+            .Fail(e => e.AsTask());
+
+        return updatedTrack;
     }
 }
