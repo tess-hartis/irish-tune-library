@@ -9,7 +9,7 @@ public interface IGenericRepository<T> where T : class
 {
     IQueryable<T> GetEntities();
     IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate);
-    Task AddAsync(T entity);
+    Task<T> AddAsync(T entity);
     Task DeleteAsync(int id);
     Task<T> FindAsync(int id);
     Task<T> UpdateAsync(int id);
@@ -38,10 +38,13 @@ public abstract class GenericRepository<T>
         return result;
     }
 
-    public virtual async Task AddAsync(T entity)
+    public virtual async Task<T> AddAsync(T entity)
     {
-        await Context.Set<T>().AddAsync(entity);
+        var result = await Context.Set<T>().AddAsync(entity);
         await Context.SaveChangesAsync();
+        return result.Entity;
+        
+        //may need to remove result variable and change back to original
     }
 
     public virtual async Task DeleteAsync(int id)
