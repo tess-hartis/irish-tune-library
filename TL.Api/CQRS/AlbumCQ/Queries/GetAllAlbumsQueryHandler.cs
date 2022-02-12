@@ -20,7 +20,7 @@ public class GetAllAlbumsQueryHandler : IRequestHandler<GetAllAlbumsQuery, IEnum
     public async Task<IEnumerable<Album>> Handle
         (GetAllAlbumsQuery request, CancellationToken cancellationToken)
     {
-        var albums = await _albumRepository.GetEntities().ToListAsync();
+        var albums = await _albumRepository.GetAll();
         return albums;
 
     }
