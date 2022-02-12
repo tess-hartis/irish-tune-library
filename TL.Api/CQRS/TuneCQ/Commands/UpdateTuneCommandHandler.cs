@@ -49,15 +49,12 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Valid
             .Apply((t, c) => tune.Update(t,
                 c, command.Type, command.Key));
 
-        updatedTune
+        await updatedTune
             .Succ(async t =>
             {
-                await _tuneRepository.UpdateAsync(command.Id);
+                await _tuneRepository.UpdateAsync(tune.Id);
             })
-            .Fail(e =>
-            {
-                return e.AsTask();
-            });
+            .Fail(e => e.AsTask());
 
         return updatedTune;
 
