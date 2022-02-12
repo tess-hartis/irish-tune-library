@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.Common;
 using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Domain;
@@ -6,18 +8,18 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class AddNewArtistToAlbumCommand : IRequest<Album>
+public class AddNewArtistToAlbumCommand : IRequest<Validation<Error, Artist>>
 {
     public int AlbumId { get; }
-    public ArtistName Name { get; }
+    public string Name { get; }
 
-    public AddNewArtistToAlbumCommand(int albumId, ArtistName name)
+    public AddNewArtistToAlbumCommand(int albumId, string name)
     {
         AlbumId = albumId;
         Name = name;
     }
 }
-public class AddNewArtistToAlbumCommandHandler : IRequestHandler<AddNewArtistToAlbumCommand, Album>
+public class AddNewArtistToAlbumCommandHandler : IRequestHandler<AddNewArtistToAlbumCommand, Validation<Error, Artist>>
 {
     private readonly IAlbumArtistService _albumArtistService;
 
@@ -26,11 +28,18 @@ public class AddNewArtistToAlbumCommandHandler : IRequestHandler<AddNewArtistToA
         _albumArtistService = albumArtistService;
     }
 
-    public async Task<Album> Handle(AddNewArtistToAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Validation<Error, Artist>> Handle(AddNewArtistToAlbumCommand command, CancellationToken cancellationToken)
     {
-        var album = await _albumArtistService.AddNewArtistToAlbum(command.AlbumId, command.Name);
-        return album;
+        var name = ArtistName.Create(command.Name);
+        var artist = name.Map(n => Artist.CreateArtist(n));
 
-        //need to edit GetAlbumDTO to also include Album Artists
+        await artist
+            .Succ(async a =>
+            {
+                await _albumArtistService.AddNewArtistToAlbum(command.AlbumId, a);
+            })
+            .Fail(e => e.AsTask());
+
+        return artist;
     }
 }
