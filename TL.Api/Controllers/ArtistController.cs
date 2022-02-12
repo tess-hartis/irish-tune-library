@@ -25,7 +25,7 @@ public class ArtistController : Controller
    }
    
    [HttpGet]
-   public async Task<ActionResult<IEnumerable<GetArtistDTO>>> FindAll()
+   public async Task<IActionResult> FindAll()
    {
       var query = new GetAllArtistsQuery();
       var result = await _mediator.Send(query);
@@ -33,7 +33,7 @@ public class ArtistController : Controller
    }
 
    [HttpGet("{id}")]
-   public async Task<ActionResult<GetArtistDTO>> FindArtist(int id)
+   public async Task<IActionResult> FindArtist(int id)
    {
       var query = new GetArtistByIdQuery(id);
       var result = await _mediator.Send(query);
@@ -42,7 +42,7 @@ public class ArtistController : Controller
    }
 
    [HttpPost]
-   public async Task<ActionResult> AddArtist([FromBody] PostArtistDTO dto)
+   public async Task<IActionResult> AddArtist([FromBody] PostArtistDTO dto)
    {
       var artist = PostArtistDTO.ToArtist(dto);
       await _artistRepository.AddAsync(artist);
@@ -51,7 +51,7 @@ public class ArtistController : Controller
    }
 
    [HttpPut("{id}")]
-   public async Task<ActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
+   public async Task<IActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
    {
       var name = ArtistName.Create(dto.Name);
       await _artistRepository.UpdateArtist(id, name);
@@ -59,7 +59,7 @@ public class ArtistController : Controller
    }
    
    [HttpDelete("{id}")]
-   public async Task<ActionResult> DeleteArtist(int id)
+   public async Task<IActionResult> DeleteArtist(int id)
    {
       await _artistRepository.DeleteAsync(id);
       return Ok($"Artist with ID '{id}' was deleted");
@@ -67,7 +67,7 @@ public class ArtistController : Controller
    }
 
    [HttpGet("{artistId}/albums")]
-   public async Task<ActionResult<IEnumerable<GetAlbumDTO>>> FindArtistAlbums(int artistId)
+   public async Task<IActionResult> FindArtistAlbums(int artistId)
    {
       var query = new GetArtistAlbumsQuery(artistId);
       var result = await _mediator.Send(query);

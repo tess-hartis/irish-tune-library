@@ -27,7 +27,7 @@ public class TrackController : Controller
     
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetTrackDTO>> FindTrack(int id)
+    public async Task<IActionResult> FindTrack(int id)
     {
         var query = new GetTrackByIdQuery(id);
         var result = _mediator.Send(query);
@@ -35,7 +35,7 @@ public class TrackController : Controller
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllTracks()
+    public async Task<IActionResult> GetAllTracks()
     {
         var query = new GetAllTracksQuery();
         var result = await _mediator.Send(query);
@@ -43,7 +43,7 @@ public class TrackController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
+    public async Task<IActionResult> PutTrack(int id, [FromBody] PutTrackDTO dto)
     {
         var title = TrackTitle.Create(dto.Title);
         var trackNumber = TrackNumber.Create(dto.Number);
@@ -53,7 +53,7 @@ public class TrackController : Controller
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteTrack(int id)
+    public async Task<IActionResult> DeleteTrack(int id)
     {
         var command = new DeleteTrackCommand(id);
         await _mediator.Send(command);
@@ -62,14 +62,14 @@ public class TrackController : Controller
     
 
     [HttpDelete("{trackId}/tune/{tuneId}")]
-    public async Task<ActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
+    public async Task<IActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
     {
         await _tuneTrackService.RemoveTuneFromTrack(trackId, tuneId);
         return Ok($"Tune with ID '{tuneId}' was removed from track with ID '{trackId}'");
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
-    public async Task<ActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] PostTuneToTrackDTO dto )
+    public async Task<IActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] PostTuneToTrackDTO dto )
     {
         var order = TrackTuneOrder.Create(dto.Order);
         var command = new AddTrackTuneCommand(trackId, tuneId, order);
@@ -78,7 +78,7 @@ public class TrackController : Controller
     }
 
     [HttpGet("{trackId}/tunes")]
-    public async Task<ActionResult<IEnumerable<GetTrackTuneDTO>>> GetTunesOnTrack(int trackId)
+    public async Task<IActionResult> GetTunesOnTrack(int trackId)
     {
         var query = new GetTunesOnTrackQuery(trackId);
         var result = await _mediator.Send(query);
