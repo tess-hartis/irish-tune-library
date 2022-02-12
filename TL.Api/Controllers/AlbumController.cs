@@ -93,12 +93,18 @@ public class AlbumController : Controller
   }
 
   [HttpPost("{albumId}/track")]
-  public async Task<IActionResult> AddTrackToAlbum(int albumId, [FromBody] PostTrackDTO dto)
+  public async Task<IActionResult> AddTrackToAlbum(int albumId, [FromBody] AddTrackToAlbumCommand request)
   {
-    var track = PostTrackDTO.ToTrack(dto);
-    var command = new AddTrackToAlbumCommand(albumId, track.Title, track.TrackNumber);
-    var result = await _mediator.Send(command);
-    return Ok(GetTrackDTO.FromTrack(result));
+    request.AlbumId = albumId;
+    var track = await _mediator.Send(request);
+    return track.Match<IActionResult>(
+      t => Ok(GetTrackDTO.FromTrack(t)),
+      e =>
+      {
+        var errorList = e.Select(e => e.Message).ToList();
+        return UnprocessableEntity(new {code = 422, errors = errorList});
+      });
+
   }
 
   // [HttpDelete("{albumId}/track/{trackId}")]
