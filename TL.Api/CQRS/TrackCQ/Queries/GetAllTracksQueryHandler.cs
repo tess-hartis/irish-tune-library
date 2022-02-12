@@ -20,7 +20,7 @@ public class GetAllTracksQueryHandler : IRequestHandler<GetAllTracksQuery, IEnum
     public async Task<IEnumerable<Track>> Handle
         (GetAllTracksQuery request, CancellationToken cancellationToken)
     {
-        var tracks = await _trackRepository.GetEntities().ToListAsync();
+        var tracks = await _trackRepository.GetAll();
         return tracks;
 
     }
