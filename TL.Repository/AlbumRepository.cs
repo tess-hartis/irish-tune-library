@@ -12,6 +12,7 @@ public interface IAlbumRepository : IGenericRepository<Album>
     new Task<Album> FindAsync(int id);
     Task<Album> UpdateAlbum(int id, AlbumTitle title, AlbumYear year);
     new Task DeleteAsync(int id);
+    Task<IEnumerable<Album>> GetAll();
 }
 
 public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
@@ -23,7 +24,7 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
 
     public override async Task<Album> FindAsync(int id)
     {
-        var album = await Context.Albums
+        var album = await Context.Albums.Include(a => a.Artists)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (album == null)
@@ -52,5 +53,11 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         await SaveAsync();
         return album;
     }
-    
+
+    public async Task<IEnumerable<Album>> GetAll()
+    {
+        return await Context.Albums.Include(a => a.Artists).ToListAsync();
+    }
+
+
 }
