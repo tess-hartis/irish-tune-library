@@ -1,3 +1,7 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
+using LanguageExt.Common;
+
 namespace TL.Domain.ValueObjects.TrackValueObjects;
 
 public record TrackNumber
@@ -9,9 +13,13 @@ public record TrackNumber
         Value = value;
     }
 
-    public static TrackNumber Create(int value)
+    public static Validation<Error, TrackNumber> Create(int value)
     {
-        
-        return new TrackNumber(value);
+        if (value < 1)
+        {
+            return Fail<Error, TrackNumber>("Track number cannot be zero");
+        }
+
+        return Success<Error, TrackNumber>(new TrackNumber(value));
     }
 }
