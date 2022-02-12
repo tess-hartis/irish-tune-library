@@ -14,14 +14,10 @@ namespace TL.Api.Controllers;
 
 public class TrackController : Controller
 {
-    private readonly ITrackRepository _trackRepository;
-    private readonly ITuneTrackService _tuneTrackService;
     private readonly IMediator _mediator;
 
-    public TrackController(ITrackRepository trackRepository, ITuneTrackService tuneTrackService, IMediator mediator)
+    public TrackController(IMediator mediator)
     {
-        _trackRepository = trackRepository;
-        _tuneTrackService = tuneTrackService;
         _mediator = mediator;
     }
     
