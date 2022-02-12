@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.Common;
 using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Api.DTOs.TuneDTOS;
@@ -7,13 +9,13 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class UpdateAlbumCommand : IRequest<Album>
+public class UpdateAlbumCommand : IRequest<Validation<Error, Album>>
 {
-    public int AlbumId { get; }
-    public AlbumTitle Title { get; }
-    public AlbumYear Year { get; }
+    public int AlbumId { get; set; }
+    public string Title { get; }
+    public int Year { get; }
 
-    public UpdateAlbumCommand(int albumId, AlbumTitle title, AlbumYear year)
+    public UpdateAlbumCommand(int albumId, string title, int year)
     {
         AlbumId = albumId;
         Title = title;
@@ -21,7 +23,7 @@ public class UpdateAlbumCommand : IRequest<Album>
     }
 }
 
-public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Album>
+public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Validation<Error, Album>>
 {
     private readonly IAlbumRepository _albumRepository;
 
@@ -30,9 +32,19 @@ public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Alb
         _albumRepository = albumRepository;
     }
 
-    public async Task<Album> Handle(UpdateAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Validation<Error, Album>> Handle(UpdateAlbumCommand command, CancellationToken cancellationToken)
     {
-        var album = await _albumRepository.UpdateAlbum(command.AlbumId, command.Title, command.Year);
-        return album;
+        var album = await _albumRepository.FindAsync(command.AlbumId);
+        var title = AlbumTitle.Create(command.Title);
+        var year = AlbumYear.Create(command.Year);
+
+        var updatedAlbum = (title, year)
+            .Apply((t, y) => album.Update(t, y));
+
+        await updatedAlbum
+            .Succ(async a => { await _albumRepository.UpdateAsync(album.Id); })
+            .Fail(e => e.AsTask());
+
+        return updatedAlbum;
     }
 }
