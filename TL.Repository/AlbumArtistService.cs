@@ -12,7 +12,7 @@ public interface IAlbumArtistService
     Task<IEnumerable<Artist>> FindAlbumArtists(int albumId);
     Task<Album> AddExistingArtistToAlbum(int albumId, int artistId);
     Task<Album> AddNewArtistToAlbum(int albumId, ArtistName name);
-    Task RemoveArtistFromAlbum(int albumId, int artistId);
+    Task<Album> RemoveArtistFromAlbum(int albumId, int artistId);
     
 }
 
@@ -75,7 +75,7 @@ public class AlbumArtistService : IAlbumArtistService
         return album;
     }
 
-    public async Task RemoveArtistFromAlbum(int albumId, int artistId)
+    public async Task<Album> RemoveArtistFromAlbum(int albumId, int artistId)
     {
         var album = await _context.Albums
             .Include(a => a.Artists)
@@ -87,5 +87,6 @@ public class AlbumArtistService : IAlbumArtistService
         var artist = await _artistRepository.FindAsync(artistId);
         album.RemoveArtist(artist);
         await SaveChangesAsync();
+        return album;
     }
 }

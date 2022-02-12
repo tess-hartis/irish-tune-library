@@ -1,10 +1,11 @@
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Queries;
 
-public class GetAlbumTracksQuery : IRequest<IEnumerable<GetTrackDTO>>
+public class GetAlbumTracksQuery : IRequest<IEnumerable<Track>>
 {
     public int AlbumId { get; }
 
@@ -13,7 +14,7 @@ public class GetAlbumTracksQuery : IRequest<IEnumerable<GetTrackDTO>>
         AlbumId = albumId;
     }
 }
-public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, IEnumerable<GetTrackDTO>>
+public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, IEnumerable<Track>>
 {
     private readonly IAlbumTrackService _albumTrackService;
 
@@ -22,11 +23,11 @@ public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, I
         _albumTrackService = albumTrackService;
     }
 
-    public async Task<IEnumerable<GetTrackDTO>> Handle
+    public async Task<IEnumerable<Track>> Handle
         (GetAlbumTracksQuery request, CancellationToken cancellationToken)
     {
         var tracks = await _albumTrackService.GetAlbumTracks(request.AlbumId);
-        return tracks.Select(GetTrackDTO.FromTrack);
-        
+        return tracks;
+
     }
 }

@@ -1,10 +1,11 @@
 using MediatR;
 using TL.Api.DTOs.ArtistDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Queries;
 
-public class GetAlbumArtistsQuery : IRequest<IEnumerable<GetArtistDTO>>
+public class GetAlbumArtistsQuery : IRequest<IEnumerable<Artist>>
 {
     public int AlbumId { get; }
 
@@ -14,7 +15,7 @@ public class GetAlbumArtistsQuery : IRequest<IEnumerable<GetArtistDTO>>
     }
 }
 
-public class GetAlbumArtistsQueryHandler : IRequestHandler<GetAlbumArtistsQuery, IEnumerable<GetArtistDTO>>
+public class GetAlbumArtistsQueryHandler : IRequestHandler<GetAlbumArtistsQuery, IEnumerable<Artist>>
 {
     private readonly IAlbumArtistService _albumArtistService;
 
@@ -23,11 +24,11 @@ public class GetAlbumArtistsQueryHandler : IRequestHandler<GetAlbumArtistsQuery,
         _albumArtistService = albumArtistService;
     }
 
-    public async Task<IEnumerable<GetArtistDTO>> Handle
+    public async Task<IEnumerable<Artist>> Handle
         (GetAlbumArtistsQuery request, CancellationToken cancellationToken)
     {
         var artists = await _albumArtistService.FindAlbumArtists(request.AlbumId);
-        return artists.Select(GetArtistDTO.FromArtist);
-        
+        return artists;
+
     }
 }

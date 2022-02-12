@@ -6,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class CreateAlbumCommand : IRequest<GetAlbumDTO>
+public class CreateAlbumCommand : IRequest<Album>
 {
     public AlbumTitle Title { get; }
     public AlbumYear Year { get; }
@@ -17,7 +17,7 @@ public class CreateAlbumCommand : IRequest<GetAlbumDTO>
         Year = year;
     }
 }
-public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, GetAlbumDTO>
+public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, Album>
 {
     private readonly IAlbumRepository _albumRepository;
 
@@ -26,10 +26,10 @@ public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, Get
         _albumRepository = albumRepository;
     }
 
-    public async Task<GetAlbumDTO> Handle(CreateAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Album> Handle(CreateAlbumCommand command, CancellationToken cancellationToken)
     {
         var album = Album.Create(command.Title, command.Year);
         await _albumRepository.AddAsync(album);
-        return GetAlbumDTO.FromAlbum(album);
+        return album;
     }
 }

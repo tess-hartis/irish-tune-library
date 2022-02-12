@@ -1,11 +1,12 @@
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Domain;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class AddTrackToAlbumCommand : IRequest<GetTrackDTO>
+public class AddTrackToAlbumCommand : IRequest<Track>
 {
     public int AlbumId { get; }
     public TrackTitle Title { get; }
@@ -18,7 +19,7 @@ public class AddTrackToAlbumCommand : IRequest<GetTrackDTO>
         TrackNumber = trackNumber;
     }
 }
-public class AddTrackToAlbumCommandHandler : IRequestHandler<AddTrackToAlbumCommand, GetTrackDTO>
+public class AddTrackToAlbumCommandHandler : IRequestHandler<AddTrackToAlbumCommand, Track>
 {
     private readonly IAlbumTrackService _albumTrackService;
 
@@ -27,10 +28,10 @@ public class AddTrackToAlbumCommandHandler : IRequestHandler<AddTrackToAlbumComm
         _albumTrackService = albumTrackService;
     }
 
-    public async Task<GetTrackDTO> Handle(AddTrackToAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Track> Handle(AddTrackToAlbumCommand command, CancellationToken cancellationToken)
     {
         
         var track = await _albumTrackService.AddNewTrackToAlbum(command.AlbumId, command.Title, command.TrackNumber);
-        return GetTrackDTO.FromTrack(track);
+        return track;
     }
 }

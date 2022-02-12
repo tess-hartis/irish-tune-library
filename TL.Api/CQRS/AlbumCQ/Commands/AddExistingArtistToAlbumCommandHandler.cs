@@ -1,10 +1,11 @@
 using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class AddExistingArtistToAlbumCommand : IRequest<GetAlbumDTO>
+public class AddExistingArtistToAlbumCommand : IRequest<Album>
 {
     public int AlbumId { get; }
     public int ArtistId { get; }
@@ -15,7 +16,7 @@ public class AddExistingArtistToAlbumCommand : IRequest<GetAlbumDTO>
         ArtistId = artistId;
     }
 }
-public class AddExistingArtistToAlbumCommandHandler : IRequestHandler<AddExistingArtistToAlbumCommand, GetAlbumDTO>
+public class AddExistingArtistToAlbumCommandHandler : IRequestHandler<AddExistingArtistToAlbumCommand, Album>
 {
     private readonly IAlbumArtistService _albumArtistService;
     private readonly IAlbumRepository _albumRepository;
@@ -26,9 +27,9 @@ public class AddExistingArtistToAlbumCommandHandler : IRequestHandler<AddExistin
         _albumRepository = albumRepository;
     }
 
-    public async Task<GetAlbumDTO> Handle(AddExistingArtistToAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Album> Handle(AddExistingArtistToAlbumCommand command, CancellationToken cancellationToken)
     {
         var album = await _albumArtistService.AddExistingArtistToAlbum(command.AlbumId, command.ArtistId);
-        return GetAlbumDTO.FromAlbum(album);
+        return album;
     }
 }
