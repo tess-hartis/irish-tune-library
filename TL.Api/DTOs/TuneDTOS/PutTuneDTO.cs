@@ -10,12 +10,4 @@ public class PutTuneDTO
     public string Type { get; set; }
     public string Key { get; set; }
     
-    public static Tune UpdatedTune(Tune tune, PutTuneDTO dto)
-    {
-        var title = TuneTitle.Create(dto.Title);
-        var composer = TuneComposer.Create(dto.Composer);
-        tune.Update(title, composer, dto.Type, dto.Key);
-        
-        return tune;
-    }
 }
