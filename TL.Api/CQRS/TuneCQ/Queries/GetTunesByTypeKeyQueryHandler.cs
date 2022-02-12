@@ -6,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Queries;
 
-public class GetTunesByTypeKeyQuery : IRequest<IEnumerable<GetTuneDTO>>
+public class GetTunesByTypeKeyQuery : IRequest<IEnumerable<Tune>>
 {
     public TuneTypeEnum Type { get; }
     public TuneKeyEnum Key { get; }
@@ -18,7 +18,7 @@ public class GetTunesByTypeKeyQuery : IRequest<IEnumerable<GetTuneDTO>>
     }
 }
 
-public class GetTunesByTypeKeyQueryHandler : IRequestHandler<GetTunesByTypeKeyQuery, IEnumerable<GetTuneDTO>>
+public class GetTunesByTypeKeyQueryHandler : IRequestHandler<GetTunesByTypeKeyQuery, IEnumerable<Tune>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -27,12 +27,12 @@ public class GetTunesByTypeKeyQueryHandler : IRequestHandler<GetTunesByTypeKeyQu
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<IEnumerable<GetTuneDTO>> Handle
+    public async Task<IEnumerable<Tune>> Handle
         (GetTunesByTypeKeyQuery request, CancellationToken cancellationToken)
     {
         var tunes = await _tuneRepository
             .GetByWhere(x => x.TuneType == request.Type & x.TuneKey == request.Key)
             .ToListAsync();
-        return tunes.Select(GetTuneDTO.FromTune);
+        return tunes;
     }
 }

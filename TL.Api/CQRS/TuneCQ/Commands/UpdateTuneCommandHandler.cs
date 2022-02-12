@@ -8,7 +8,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class UpdateTuneCommand : IRequest<GetTuneDTO>
+public class UpdateTuneCommand : IRequest<Tune>
 {
     public int Id { get; }
     public TuneTitle Title { get; }
@@ -26,7 +26,7 @@ public class UpdateTuneCommand : IRequest<GetTuneDTO>
     }
 }
 
-public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, GetTuneDTO>
+public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Tune>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -35,12 +35,12 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, GetTu
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<GetTuneDTO> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Tune> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);
         await _tuneRepository.UpdateTune
             (tune.Id, command.Title, command.Composer, command.Type, command.Key);
-        return GetTuneDTO.FromTune(tune);
+        return tune;
 
     }
 }

@@ -7,7 +7,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class CreateTuneCommand : IRequest<GetTuneDTO>
+public class CreateTuneCommand : IRequest<Tune>
 {
     public TuneTitle Title { get; }
     public TuneComposer Composer { get; }
@@ -23,7 +23,7 @@ public class CreateTuneCommand : IRequest<GetTuneDTO>
     }
 }
 
-public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, GetTuneDTO>
+public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Tune>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -33,11 +33,11 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, GetTu
     }
     
 
-    public async Task<GetTuneDTO> Handle(CreateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Tune> Handle(CreateTuneCommand command, CancellationToken cancellationToken)
     {
         var tune = Tune.Create(command.Title, command.Composer, command.Type, command.Key);
         await _tuneRepository.AddAsync(tune);
-        return GetTuneDTO.FromTune(tune);
+        return tune;
     }
     
 }

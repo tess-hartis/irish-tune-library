@@ -1,10 +1,11 @@
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Domain;
 using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Queries;
 
-public class GetTuneRecordingsQuery : IRequest<IEnumerable<GetTrackDTO>>
+public class GetTuneRecordingsQuery : IRequest<IEnumerable<Track>>
 {
     public int TuneId { get; }
 
@@ -13,7 +14,7 @@ public class GetTuneRecordingsQuery : IRequest<IEnumerable<GetTrackDTO>>
         TuneId = tuneId;
     }
 }
-public class GetTuneRecordingsQueryHandler : IRequestHandler<GetTuneRecordingsQuery, IEnumerable<GetTrackDTO>>
+public class GetTuneRecordingsQueryHandler : IRequestHandler<GetTuneRecordingsQuery, IEnumerable<Track>>
 {
     private readonly ITuneTrackService _tuneTrackService;
 
@@ -22,10 +23,10 @@ public class GetTuneRecordingsQueryHandler : IRequestHandler<GetTuneRecordingsQu
         _tuneTrackService = tuneTrackService;
     }
 
-    public async Task<IEnumerable<GetTrackDTO>> Handle
+    public async Task<IEnumerable<Track>> Handle
         (GetTuneRecordingsQuery request, CancellationToken cancellationToken)
     {
         var tracks = await _tuneTrackService.FindTracksByTune(request.TuneId);
-        return tracks.Select(GetTrackDTO.FromTrack);
+        return tracks;
     }
 }

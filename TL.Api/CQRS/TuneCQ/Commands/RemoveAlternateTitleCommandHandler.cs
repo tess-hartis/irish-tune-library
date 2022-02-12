@@ -6,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class RemoveAlternateTitleCommand : IRequest<GetTuneDTO>
+public class RemoveAlternateTitleCommand : IRequest<Tune>
 {
     public int Id { get; }
     public TuneTitle AlternateTitle { get; }
@@ -17,7 +17,7 @@ public class RemoveAlternateTitleCommand : IRequest<GetTuneDTO>
         AlternateTitle = alternateTitle;
     }
 }
-public class RemoveAlternateTitleCommandHandler : IRequestHandler<RemoveAlternateTitleCommand, GetTuneDTO>
+public class RemoveAlternateTitleCommandHandler : IRequestHandler<RemoveAlternateTitleCommand, Tune>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -26,10 +26,10 @@ public class RemoveAlternateTitleCommandHandler : IRequestHandler<RemoveAlternat
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<GetTuneDTO> Handle(RemoveAlternateTitleCommand command, CancellationToken cancellationToken)
+    public async Task<Tune> Handle(RemoveAlternateTitleCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);
         await _tuneRepository.RemoveAlternateTitle(tune.Id, command.AlternateTitle);
-        return GetTuneDTO.FromTune(tune);
+        return tune;
     }
 }

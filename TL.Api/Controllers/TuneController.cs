@@ -17,59 +17,55 @@ namespace TL.Api.Controllers;
 
 public class TuneController : Controller
 {
-    private readonly ITuneRepository _tuneRepository;
-    private readonly ITuneTrackService _tuneTrackService;
     private readonly IMediator _mediator;
 
-    public TuneController(ITuneRepository tuneRepository, ITuneTrackService tuneTrackService, IMediator mediator)
+    public TuneController(IMediator mediator)
     {
-        _tuneRepository = tuneRepository;
-        _tuneTrackService = tuneTrackService;
         _mediator = mediator;
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> FindTune(int id)
+    public async Task<IActionResult> FindTune(int id)
     {
         var query = new GetTuneByIdQuery(id);
         var result = await _mediator.Send(query);
-        return result == null ? NotFound() : Ok(result);
+        return result == null ? NotFound() : Ok(GetTuneDTO.FromTune(result));
     }
 
     [HttpGet("type/{type}")]
-    public async Task<ActionResult> FindByType(TuneTypeEnum type)
+    public async Task<IActionResult> FindByType(TuneTypeEnum type)
     {
         var query = new GetTunesByTypeQuery(type);
         var result = await _mediator.Send(query);
-        return Ok(result);
+        return Ok(result.Select(GetTuneDTO.FromTune));
     }
 
     [HttpGet("key/{key}")]
-    public async Task<ActionResult> FindByKey(TuneKeyEnum key)
+    public async Task<IActionResult> FindByKey(TuneKeyEnum key)
     {
         var query = new GetTunesByKeyQuery(key);
         var result = await _mediator.Send(query);
-        return Ok(result);
+        return Ok(result.Select(GetTuneDTO.FromTune));
     }
 
     [HttpGet("type/{type}/key/{key}")]
-    public async Task<ActionResult> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
+    public async Task<IActionResult> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
     {
         var query = new GetTunesByTypeKeyQuery(type, key);
         var result = await _mediator.Send(query);
-        return Ok(result);
+        return Ok(result.Select(GetTuneDTO.FromTune));
     }
     
     [HttpGet]
-    public async Task<ActionResult> GetAllTunes()
+    public async Task<IActionResult> GetAllTunes()
     {
         var query = new GetAllTunesQuery();
         var result = await _mediator.Send(query);
-        return Ok(result);
+        return Ok(result.Select(GetTuneDTO.FromTune));
     }
 
     [HttpPost]
-    public async Task<ActionResult> AddTune([FromBody] PostTuneDTO dto)
+    public async Task<IActionResult> AddTune([FromBody] PostTuneDTO dto)
     {
         var title = TuneTitle.Create(dto.Title);
         var composer = TuneComposer.Create(dto.Composer);
@@ -78,23 +74,23 @@ public class TuneController : Controller
         var command = new CreateTuneCommand(title, composer, type, key);
         var result = await _mediator.Send(command);
         // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
-        return Ok(result);
+        return Ok(GetTuneDTO.FromTune(result));
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
+    public async Task<IActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
     {
         var title = TuneTitle.Create(dto.Title);
         var composer = TuneComposer.Create(dto.Composer);
         var command = new UpdateTuneCommand(id, title, composer, dto.Type, dto.Key);
         var result = await _mediator.Send(command);
         // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
-        return Ok(result);
+        return Ok(GetTuneDTO.FromTune(result));
 
     }
     
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteTune(int id)
+    public async Task<IActionResult> DeleteTune(int id)
     {
         var command = new DeleteTuneCommand(id);
         await _mediator.Send(command);
@@ -102,29 +98,29 @@ public class TuneController : Controller
     }
 
     [HttpPost("{id}/titles")]
-    public async Task<ActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
+    public async Task<IActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var title = TuneTitle.Create(dto.AlternateTitle);
         var command = new AddAlternateTitleCommand(id, title);
         var result = await _mediator.Send(command);
-        return Ok(result);
+        return Ok(GetTuneDTO.FromTune(result));
     }
     
     [HttpDelete("{id}/titles")]
-    public async Task<ActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
+    public async Task<IActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
     {
         var title = TuneTitle.Create(dto.AlternateTitle);
         var command = new RemoveAlternateTitleCommand(id, title);
-        var result = _mediator.Send(command);
-        return Ok(result);
+        var result = await _mediator.Send(command);
+        return Ok(GetTuneDTO.FromTune(result));
     }
     
     [HttpGet("{tuneId}/recordings")]
-    public async Task<ActionResult> FindTuneRecordings(int tuneId)
+    public async Task<IActionResult> FindTuneRecordings(int tuneId)
     {
         var query = new GetTuneRecordingsQuery(tuneId);
         var result = await _mediator.Send(query);
-        return Ok(result);
+        return Ok(result.Select(GetTrackDTO.FromTrack));
     }
     
     
