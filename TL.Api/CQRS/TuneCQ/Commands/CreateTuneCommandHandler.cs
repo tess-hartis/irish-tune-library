@@ -1,3 +1,4 @@
+using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
 using TL.Api.DTOs.TuneDTOS;
@@ -7,14 +8,14 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class CreateTuneCommand : IRequest<Tune>
+public class CreateTuneCommand : IRequest<Validation<Error, Tune>>
 {
-    public TuneTitle Title { get; }
-    public TuneComposer Composer { get; }
+    public string Title { get; }
+    public string Composer { get; }
     public string Type { get; }
     public string Key { get; }
 
-    public CreateTuneCommand(TuneTitle title, TuneComposer composer, string type, string key)
+    public CreateTuneCommand(string title, string composer, string type, string key)
     {
         Title = title;
         Composer = composer;
@@ -23,7 +24,7 @@ public class CreateTuneCommand : IRequest<Tune>
     }
 }
 
-public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Tune>
+public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Validation<Error, Tune>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -33,11 +34,28 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Tune>
     }
     
 
-    public async Task<Tune> Handle(CreateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Validation<Error, Tune>> Handle(CreateTuneCommand command, CancellationToken cancellationToken)
     {
-        var tune = Tune.Create(command.Title, command.Composer, command.Type, command.Key);
-        await _tuneRepository.AddAsync(tune);
-        return tune;
+        var title = TuneTitle.Create(command.Title);
+        var composer = TuneComposer.Create(command.Composer);
+
+        var newTune = (title, composer)
+            .Apply((t, c) =>
+                Tune.Create(t, c, command.Type, command.Key));
+
+        await newTune
+            .Succ(async toon =>
+            {
+                await _tuneRepository.AddAsync(toon);
+                
+            })
+            .Fail(e =>
+            {
+                return e.AsTask();
+            });
+
+        return newTune;
+
     }
     
 }
