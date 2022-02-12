@@ -16,7 +16,7 @@ public class Track
     public int AlbumId { get; set; }
     public Album Album { get; set; }
 
-    public static Track CreateTrack(TrackTitle title, TrackNumber trackNumber)
+    public static Track Create(TrackTitle title, TrackNumber trackNumber)
     {
         var track = new Track()
         {
@@ -30,26 +30,29 @@ public class Track
         return track;
     }
     
-    public void AddTune(TrackTune trackTune)
+    public Track AddTune(TrackTune trackTune)
     {
         if (_trackTunes.Contains(trackTune))
             throw new InvalidOperationException("The specified tune already exists on the track");
         
         _trackTunes.Add(trackTune);
+        return this;
     }
     
-    public void RemoveTune(TrackTune trackTune)
+    public Track RemoveTune(TrackTune trackTune)
     {
         if (!_trackTunes.Contains(trackTune))
             throw new InvalidOperationException("The specified tune was not found on the track");
         
         _trackTunes.Remove(trackTune);
+        return this;
     }
 
-    public void Update(TrackTitle title, TrackNumber trackNumber)
+    public Track Update(TrackTitle title, TrackNumber trackNumber)
     {
         Title = title;
         TrackNumber = trackNumber;
+        return this;
     }
 
     public void SetAlbumId(int id)
