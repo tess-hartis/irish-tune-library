@@ -1,3 +1,8 @@
+using LanguageExt;
+using LanguageExt.Common;
+using static LanguageExt.Prelude;
+using TL.Domain.ValueObjects.TuneValueObjects;
+
 namespace TL.Domain.ValueObjects.TrackValueObjects;
 
 public record TrackTitle
@@ -9,11 +14,11 @@ public record TrackTitle
         Value = value;
     }
 
-    public static TrackTitle Create(string value)
+    public static Validation<Error, TrackTitle> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new Exception();
+            return Fail<Error, TrackTitle>("Track title cannot be empty");
 
-        return new TrackTitle(value);
+        return Success<Error, TrackTitle>(new TrackTitle(value));
     }
 }
