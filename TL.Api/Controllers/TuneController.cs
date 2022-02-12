@@ -63,29 +63,50 @@ public class TuneController : Controller
         var result = await _mediator.Send(query);
         return Ok(result.Select(GetTuneDTO.FromTune));
     }
-
+    
     [HttpPost]
-    public async Task<IActionResult> AddTune([FromBody] PostTuneDTO dto)
+    public async Task<IActionResult> AddTune([FromBody] CreateTuneCommand request)
     {
-        var title = TuneTitle.Create(dto.Title);
-        var composer = TuneComposer.Create(dto.Composer);
-        var type = dto.Type;
-        var key = dto.Key;
-        var command = new CreateTuneCommand(title, composer, type, key);
-        var result = await _mediator.Send(command);
-        // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
-        return Ok(GetTuneDTO.FromTune(result));
+        var tune = await _mediator.Send(request);
+        return tune.Match<IActionResult>(
+            t => Ok(GetTuneDTO.FromTune(t)),
+            e =>
+            {
+                var errorList = e.Select(e => e.Message).ToList();
+                return UnprocessableEntity(new {code = 422, errors = errorList});
+            });
+
+        // var title = TuneTitle.Create(dto.Title);
+        // var composer = TuneComposer.Create(dto.Composer);
+        // var type = dto.Type;
+        // var key = dto.Key;
+        //
+        // var command = (title, composer)
+        //     .Apply((unwrappedTitle, unwrappedComposer) => 
+        //         new CreateTuneCommand(unwrappedTitle, unwrappedComposer, type, key));
+        //
+        // command
+        //     .Succ(async x => await _mediator.Send(x))
+        //     .Fail(e => e);
+        //
+        // var result = await _mediator.Send(command);
+        //
+        // // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
+        // return Ok(GetTuneDTO.FromTune(result));
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTune(int id, [FromBody] PutTuneDTO dto)
+    public async Task<IActionResult> PutTune(int id, [FromBody] UpdateTuneCommand request)
     {
-        var title = TuneTitle.Create(dto.Title);
-        var composer = TuneComposer.Create(dto.Composer);
-        var command = new UpdateTuneCommand(id, title, composer, dto.Type, dto.Key);
-        var result = await _mediator.Send(command);
-        // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
-        return Ok(GetTuneDTO.FromTune(result));
+        request.Id = id;
+        var tune = await _mediator.Send(request);
+        return tune.Match<IActionResult>(
+            t => Ok(GetTuneDTO.FromTune(t)),
+            e =>
+            {
+                var errorList = e.Select(e => e.Message).ToList();
+                return UnprocessableEntity(new {code = 422, errors = errorList});
+            });
 
     }
     
@@ -97,22 +118,32 @@ public class TuneController : Controller
         return Ok($"Tune with ID '{id}' was deleted");
     }
 
-    [HttpPost("{id}/titles")]
-    public async Task<IActionResult> AddAlternateTitle(int id, [FromBody] AltTitleDTO dto)
+    [HttpPost("{id:int}/titles")]
+    public async Task<IActionResult> AddAlternateTitle(int id, [FromBody] AddAlternateTitleCommand request)
     {
-        var title = TuneTitle.Create(dto.AlternateTitle);
-        var command = new AddAlternateTitleCommand(id, title);
-        var result = await _mediator.Send(command);
-        return Ok(GetTuneDTO.FromTune(result));
+        request.Id = id;
+        var tune = await _mediator.Send(request);
+        return tune.Match<IActionResult>(
+            t => Ok(GetTuneDTO.FromTune(t)),
+            e =>
+            {
+                var errorList = e.Select(e => e.Message).ToList();
+                return UnprocessableEntity(new {code = 422, errors = errorList});
+            });
     }
     
     [HttpDelete("{id}/titles")]
-    public async Task<IActionResult> RemoveAlternateTitle(int id, [FromBody] AltTitleDTO dto)
+    public async Task<IActionResult> RemoveAlternateTitle(int id, [FromBody] RemoveAlternateTitleCommand request )
     {
-        var title = TuneTitle.Create(dto.AlternateTitle);
-        var command = new RemoveAlternateTitleCommand(id, title);
-        var result = await _mediator.Send(command);
-        return Ok(GetTuneDTO.FromTune(result));
+        request.Id = id;
+        var tune = await _mediator.Send(request);
+        return tune.Match<IActionResult>(
+            t => Ok(GetTuneDTO.FromTune(t)),
+            e =>
+            {
+                var errorList = e.Select(e => e.Message).ToList();
+                return BadRequest(new {code = 400, errors = errorList});
+            });
     }
     
     [HttpGet("{tuneId}/recordings")]
