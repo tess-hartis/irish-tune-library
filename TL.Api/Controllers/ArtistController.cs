@@ -14,14 +14,10 @@ namespace TL.Api.Controllers;
 [Route("api/[controller]")]
 public class ArtistController : Controller
 {
-   private readonly IArtistRepository _artistRepository;
-   private readonly IAlbumArtistService _albumArtistService;
    private readonly IMediator _mediator;
 
-   public ArtistController(IArtistRepository artistRepository, IAlbumArtistService albumArtistService, IMediator mediator)
+   public ArtistController(IMediator mediator)
    {
-      _artistRepository = artistRepository;
-      _albumArtistService = albumArtistService;
       _mediator = mediator;
    }
    
