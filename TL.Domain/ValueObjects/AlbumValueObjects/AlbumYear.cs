@@ -18,6 +18,9 @@ public record AlbumYear
         if (value > DateTime.Now.Year)
             return Fail<Error, AlbumYear>("Invalid year");
 
+        if (value < 1900)
+            return Fail<Error, AlbumYear>("Invalid year");
+
         return Success<Error, AlbumYear>(new AlbumYear(value));
     }
 }

@@ -1,3 +1,7 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
+using LanguageExt.Common;
+
 namespace TL.Domain.ValueObjects.TrackTuneValueObjects;
 
 public record TrackTuneOrder
@@ -9,11 +13,11 @@ public record TrackTuneOrder
         Value = value;
     }
 
-    public static TrackTuneOrder Create(int value)
+    public static Validation<Error, TrackTuneOrder> Create(int value)
     {
         if (value < 1 || value > 25)
-            throw new Exception();
+            return Fail<Error, TrackTuneOrder>("Invalid order");
 
-        return new TrackTuneOrder(value);
+        return Success<Error, TrackTuneOrder>(new TrackTuneOrder(value));
     }
 }

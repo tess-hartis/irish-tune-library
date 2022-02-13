@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using LanguageExt;
 using static LanguageExt.Prelude;
 using LanguageExt.Common;
@@ -15,9 +16,22 @@ public record AlbumTitle
 
     public static Validation<Error, AlbumTitle> Create(string value)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        var trimmed = value.Trim();
+        
+        if (string.IsNullOrWhiteSpace(trimmed))
             return Fail<Error, AlbumTitle>("Album title cannot be empty");
 
-        return Success<Error, AlbumTitle>(new AlbumTitle(value));
+        if (trimmed.Length < 5 && trimmed.Length > 0)
+            return Fail<Error, AlbumTitle>("Title is too short");
+
+        if (trimmed.Length > 100)
+            return Fail<Error, AlbumTitle>("Title is too long");
+
+        var pattern = @"^[a-zA-Z0-9\s]+$";
+        
+        if (!Regex.IsMatch(trimmed, pattern))
+            return Fail<Error, AlbumTitle>("Title contains invalid characters");
+        
+        return Success<Error, AlbumTitle>(new AlbumTitle(trimmed));
     }
 }

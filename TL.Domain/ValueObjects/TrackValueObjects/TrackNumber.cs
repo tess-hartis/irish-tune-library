@@ -16,9 +16,11 @@ public record TrackNumber
     public static Validation<Error, TrackNumber> Create(int value)
     {
         if (value < 1)
-        {
-            return Fail<Error, TrackNumber>("Track number cannot be zero");
-        }
+            return Fail<Error, TrackNumber>("Invalid track number");
+
+        if (value > 50)
+            return Fail<Error, TrackNumber>("Invalid track number");
+        
 
         return Success<Error, TrackNumber>(new TrackNumber(value));
     }
