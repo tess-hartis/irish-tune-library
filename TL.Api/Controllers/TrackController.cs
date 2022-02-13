@@ -1,3 +1,4 @@
+using LanguageExt.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,13 +47,16 @@ public class TrackController : Controller
     {
         request.Id = id;
         var track = await _mediator.Send(request);
-        return track.Match<IActionResult>(
-            t => Ok(GetTrackDTO.FromTrack(t)),
-            e =>
-            {
-                var errorList = e.Select(e => e.Message).ToList();
-                return UnprocessableEntity(new {code = 422, errors = errorList});
-            });
+        return track
+            .Some(x =>
+                x.Succ<IActionResult>(t => Ok(GetTrackDTO.FromTrack(t)))
+                    .Fail(e =>
+                    {
+                        var errors = e.Select(x => x.Message).ToList();
+                        return UnprocessableEntity(new {errors});
+                    }))
+            .None(NotFound);
+
     }
 
     [HttpDelete("{id}")]

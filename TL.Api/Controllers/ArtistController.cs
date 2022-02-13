@@ -50,8 +50,8 @@ public class ArtistController : Controller
          a => Ok(GetArtistDTO.FromArtist(a)),
          e =>
          {
-            var errorList = e.Select(e => e.Message).ToList();
-            return UnprocessableEntity(new {code = 422, errors = errorList});
+            var errors = e.Select(e => e.Message).ToList();
+            return UnprocessableEntity(new {errors});
          });
    }
 
@@ -60,13 +60,15 @@ public class ArtistController : Controller
    {
       request.Id = id;
       var artist = await _mediator.Send(request);
-      return artist.Match<IActionResult>(
-         a => Ok(GetArtistDTO.FromArtist(a)),
-         e =>
-         {
-            var errorList = e.Select(e => e.Message).ToList();
-            return UnprocessableEntity(new {code = 422, errors = errorList});
-         });
+      return artist
+         .Some(x =>
+            x.Succ<IActionResult>(a => Ok(GetArtistDTO.FromArtist(a)))
+               .Fail(e =>
+               {
+                  var errors = e.Select(x => x.Message).ToList();
+                  return UnprocessableEntity(new {errors});
+               }))
+         .None(NotFound);
    }
    
    [HttpDelete("{id}")]

@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using LanguageExt;
+using static LanguageExt.Prelude;
 using LanguageExt.ClassInstances.Pred;
 using LanguageExt.Common;
 using MediatR;
@@ -11,7 +12,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class UpdateTuneCommand : IRequest<Validation<Error, Tune>>
+public class UpdateTuneCommand : IRequest<Option<Validation<Error, Tune>>>
 {
     public int Id { get; set; }
     public string Title { get; }
@@ -29,7 +30,7 @@ public class UpdateTuneCommand : IRequest<Validation<Error, Tune>>
     }
 }
 
-public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Validation<Error, Tune>>
+public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Option<Validation<Error, Tune>>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -38,25 +39,23 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Valid
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Validation<Error, Tune>> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Option<Validation<Error, Tune>>> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);
-        
+
         var title = TuneTitle.Create(command.Title);
         var composer = TuneComposer.Create(command.Composer);
-        
-        var updatedTune = (title, composer)
-            .Apply((t, c) => tune.Update(t,
-                c, command.Type, command.Key));
 
-        await updatedTune
-            .Succ(async t =>
-            {
-                await _tuneRepository.UpdateAsync(tune.Id);
-            })
-            .Fail(e => e.AsTask());
+        var updatedTune = tune
+            .Map(t => (title, composer)
+                .Apply((x, y) =>
+                    t.Update(x, y, command.Type, command.Key)));
+
+        ignore(updatedTune
+            .Map(t =>
+                t.Map(async x => await _tuneRepository.UpdateAsync(x))));
 
         return updatedTune;
-
+        
     }
 }

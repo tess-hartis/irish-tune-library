@@ -47,8 +47,8 @@ public class AlbumController : Controller
       a => Ok(GetAlbumDTO.FromAlbum(a)),
       e =>
       {
-        var errorList = e.Select(e => e.Message).ToList();
-        return UnprocessableEntity(new {code = 422, errors = errorList});
+        var errors = e.Select(e => e.Message).ToList();
+        return UnprocessableEntity(new {errors});
       });
   }
   
@@ -57,13 +57,16 @@ public class AlbumController : Controller
   {
     request.AlbumId = id;
     var album = await _mediator.Send(request);
-    return album.Match<IActionResult>(
-      a => Ok(GetAlbumDTO.FromAlbum(a)),
-      e =>
-      {
-        var errorList = e.Select(e => e.Message).ToList();
-        return UnprocessableEntity(new {code = 422, errors = errorList});
-      });
+    return album
+      .Some(x =>
+        x.Succ<IActionResult>(a => Ok(GetAlbumDTO.FromAlbum(a)))
+          .Fail(e =>
+          {
+            var errors = e.Select(x => x.Message).ToList();
+            return UnprocessableEntity(new {errors});
+
+          }))
+      .None(NotFound);
   }
   
   [HttpDelete("{id}")]

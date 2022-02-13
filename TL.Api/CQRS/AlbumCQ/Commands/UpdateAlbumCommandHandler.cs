@@ -1,15 +1,14 @@
 using LanguageExt;
 using LanguageExt.Common;
+using static LanguageExt.Prelude;
 using MediatR;
-using TL.Api.DTOs.AlbumDTOs;
-using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class UpdateAlbumCommand : IRequest<Validation<Error, Album>>
+public class UpdateAlbumCommand : IRequest<Option<Validation<Error, Album>>>
 {
     public int AlbumId { get; set; }
     public string Title { get; }
@@ -23,7 +22,7 @@ public class UpdateAlbumCommand : IRequest<Validation<Error, Album>>
     }
 }
 
-public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Validation<Error, Album>>
+public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Option<Validation<Error, Album>>>
 {
     private readonly IAlbumRepository _albumRepository;
 
@@ -32,19 +31,22 @@ public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Val
         _albumRepository = albumRepository;
     }
 
-    public async Task<Validation<Error, Album>> Handle(UpdateAlbumCommand command, CancellationToken cancellationToken)
+    public async Task<Option<Validation<Error, Album>>> Handle
+        (UpdateAlbumCommand command, CancellationToken cancellationToken)
     {
         var album = await _albumRepository.FindAsync(command.AlbumId);
         var title = AlbumTitle.Create(command.Title);
         var year = AlbumYear.Create(command.Year);
 
-        var updatedAlbum = (title, year)
-            .Apply((t, y) => album.Update(t, y));
+        var updatedAlbum = album
+            .Map(a => (title, year)
+                .Apply((t, y) => a.Update(t, y)));
 
-        await updatedAlbum
-            .Succ(async a => { await _albumRepository.UpdateAsync(album.Id); })
-            .Fail(e => e.AsTask());
+        ignore(updatedAlbum
+            .Map(a =>
+                a.Map(async x => await _albumRepository.UpdateAsync(x))));
 
         return updatedAlbum;
+        
     }
 }

@@ -75,27 +75,9 @@ public class TuneController : Controller
             t => Ok(GetTuneDTO.FromTune(t)),
             e =>
             {
-                var errorList = e.Select(e => e.Message).ToList();
-                return UnprocessableEntity(new {code = 422, errors = errorList});
+                var errors = e.Select(e => e.Message).ToList();
+                return UnprocessableEntity(new {errors});
             });
-
-        // var title = TuneTitle.Create(dto.Title);
-        // var composer = TuneComposer.Create(dto.Composer);
-        // var type = dto.Type;
-        // var key = dto.Key;
-        //
-        // var command = (title, composer)
-        //     .Apply((unwrappedTitle, unwrappedComposer) => 
-        //         new CreateTuneCommand(unwrappedTitle, unwrappedComposer, type, key));
-        //
-        // command
-        //     .Succ(async x => await _mediator.Send(x))
-        //     .Fail(e => e);
-        //
-        // var result = await _mediator.Send(command);
-        //
-        // // return CreatedAtAction(nameof(FindTune), new {id = result.Id}, result);
-        // return Ok(GetTuneDTO.FromTune(result));
     }
 
     [HttpPut("{id}")]
@@ -103,13 +85,15 @@ public class TuneController : Controller
     {
         request.Id = id;
         var tune = await _mediator.Send(request);
-        return tune.Match<IActionResult>(
-            t => Ok(GetTuneDTO.FromTune(t)),
-            e =>
-            {
-                var errorList = e.Select(e => e.Message).ToList();
-                return UnprocessableEntity(new {code = 422, errors = errorList});
-            });
+        return tune
+            .Some(x =>
+                x.Succ<IActionResult>(t => Ok(GetTuneDTO.FromTune(t)))
+                    .Fail(e =>
+                    {
+                        var errors = e.Select(x => x.Message).ToList();
+                        return UnprocessableEntity(new {errors});
+                    }))
+            .None(NotFound);
 
     }
     

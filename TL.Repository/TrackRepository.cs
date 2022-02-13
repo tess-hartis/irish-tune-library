@@ -11,7 +11,6 @@ namespace TL.Repository;
 public interface ITrackRepository : IGenericRepository<Track>
 {
     new Task<Option<Track>> FindAsync(int id);
-    Task UpdateTrack(Track track, TrackTitle title, TrackNumber trackNumber);
     Task<IEnumerable<Track>> GetAll();
 }
 
@@ -32,12 +31,6 @@ public class TrackRepository : GenericRepository<Track>, ITrackRepository
             return Option<Track>.None;
 
         return track.ToSome();
-    }
-
-    public async Task UpdateTrack(Track track, TrackTitle title, TrackNumber trackNumber)
-    {
-        track.Update(title, trackNumber);
-        await SaveAsync();
     }
 
     public async Task<IEnumerable<Track>> GetAll()
