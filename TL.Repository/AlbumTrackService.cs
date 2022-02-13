@@ -8,21 +8,19 @@ namespace TL.Repository;
 
 public interface IAlbumTrackService
 {
-    Task<Track> AddNewTrackToAlbum(int albumId, Track track);
+    Task<Track> AddNewTrackToAlbum(Album album, Track track);
     // Task RemoveTrackFromAlbum(int albumId, int trackId);
-    Task<IEnumerable<Track>> GetAlbumTracks(int albumId);
+    Task<IEnumerable<Track>> GetAlbumTracks(Album album);
 
 }
 public class AlbumTrackService : IAlbumTrackService
 {
     private readonly TuneLibraryContext _context;
-    private readonly IAlbumRepository _albumRepository;
     private readonly ITrackRepository _trackRepository;
 
-    public AlbumTrackService(TuneLibraryContext context, IAlbumRepository albumRepository, ITrackRepository trackRepository)
+    public AlbumTrackService(TuneLibraryContext context, ITrackRepository trackRepository)
     {
         _context = context;
-        _albumRepository = albumRepository;
         _trackRepository = trackRepository;
     }
     private async Task SaveChangesAsync()
@@ -30,14 +28,12 @@ public class AlbumTrackService : IAlbumTrackService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Track> AddNewTrackToAlbum(int albumId, Track track)
+    public async Task<Track> AddNewTrackToAlbum(Album album, Track track)
     {
-        var album = await _albumRepository.FindAsync(albumId);
         track.SetAlbumId(album.Id);
         await _trackRepository.AddAsync(track);
         await SaveChangesAsync();
         return track;
-        // await SaveChangesAsync();
     }
     
 
@@ -49,10 +45,10 @@ public class AlbumTrackService : IAlbumTrackService
     //     await SaveChangesAsync();
     // }
 
-    public async Task<IEnumerable<Track>> GetAlbumTracks(int albumId)
+    public async Task<IEnumerable<Track>> GetAlbumTracks(Album album)
     {
         return await _trackRepository
-            .GetByWhere(x => x.AlbumId == albumId)
+            .GetByWhere(x => x.AlbumId == album.Id)
             .Include(x => x.Album)
             .OrderBy(x => x.TrackNumber.Value)
             .ToListAsync();

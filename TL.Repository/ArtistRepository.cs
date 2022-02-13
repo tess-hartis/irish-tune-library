@@ -7,7 +7,6 @@ namespace TL.Repository;
 
 public interface IArtistRepository : IGenericRepository<Artist>
 {
-    Task<Artist> UpdateArtist(int id, ArtistName name);
     Task<IEnumerable<Artist>> GetAllArtists();
 }
 
@@ -16,14 +15,6 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
     public ArtistRepository(TuneLibraryContext context) : base(context)
     {
        
-    }
-
-    public async Task<Artist> UpdateArtist(int id, ArtistName name)
-    {
-        var artist = await FindAsync(id);
-        artist.Update(name);
-        await SaveAsync();
-        return artist;
     }
 
     public async Task<IEnumerable<Artist>> GetAllArtists()

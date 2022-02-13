@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.SomeHelp;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
@@ -8,8 +10,7 @@ namespace TL.Repository;
 
 public interface IAlbumRepository : IGenericRepository<Album>
 {
-    new Task<Album> FindAsync(int id);
-    Task<Album> UpdateAlbum(int id, AlbumTitle title, AlbumYear year);
+    new Task<Option<Album>> FindAsync(int id);
     new Task DeleteAsync(int id);
     Task<IEnumerable<Album>> GetAll();
 }
@@ -21,15 +22,15 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         
     }
 
-    public override async Task<Album> FindAsync(int id)
+    public override async Task<Option<Album>> FindAsync(int id)
     {
         var album = await Context.Albums.Include(a => a.Artists)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (album == null)
-            throw new EntityNotFoundException($"Album with ID '{id}' was not found");
-        
-        return album;
+            return Option<Album>.None;
+
+        return album.ToSome();
     }
     
     public override async Task DeleteAsync(int id)
@@ -44,14 +45,7 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
         Context.Remove(album);
         await SaveAsync();
     }
-
-    public async Task<Album> UpdateAlbum(int id, AlbumTitle title, AlbumYear year)
-    {
-        var album = await FindAsync(id);
-        album.Update(title, year);
-        await SaveAsync();
-        return album;
-    }
+    
 
     public async Task<IEnumerable<Album>> GetAll()
     {

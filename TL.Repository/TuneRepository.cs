@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.SomeHelp;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
@@ -7,9 +9,9 @@ namespace TL.Repository;
 
 public interface ITuneRepository : IGenericRepository<Tune>
 {
-    Task AddAlternateTitle(int id, TuneTitle title);
-    Task RemoveAlternateTitle(int id, TuneTitle title);
-    Task<Tune> FindAsync(int id);
+    Task AddAlternateTitle(Tune tune, TuneTitle title);
+    Task RemoveAlternateTitle(Tune tune, TuneTitle title);
+    Task<Option<Tune>> FindAsync(int id);
 }
 
 public class TuneRepository : GenericRepository<Tune>, ITuneRepository
@@ -20,29 +22,30 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
     }
     
 
-    public async Task AddAlternateTitle(int id, TuneTitle title)
+    public async Task AddAlternateTitle(Tune tune, TuneTitle title)
     {
-        var tune = await FindAsync(id);
         tune.AddAlternateTitle(title);
         await SaveAsync();
     }
 
-    public async Task RemoveAlternateTitle(int id, TuneTitle title)
-    {
-        var tune = await FindAsync(id);
+    public async Task RemoveAlternateTitle(Tune tune, TuneTitle title)
+    { 
         var toDelete = tune.AlternateTitles
             .First(x => x.Value == title.Value);
         tune.RemoveAlternateTitle(toDelete);
         await SaveAsync();
     }
 
-    public override async Task<Tune> FindAsync(int id)
+    public override async Task<Option<Tune>> FindAsync(int id)
     {
         var result = await Context.Tunes
             .Include(x => x.AlternateTitles)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        return result;
+        if (result == null)
+            return Option<Tune>.None;
+
+        return result.ToSome();
     }
 
     public async Task<IEnumerable<TuneTitle>> GetAltTitles(int id)

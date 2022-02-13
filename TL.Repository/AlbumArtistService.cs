@@ -8,11 +8,11 @@ namespace TL.Repository;
 
 public interface IAlbumArtistService
 {
-    Task<IEnumerable<Album>> FindArtistAlbums(int artistId);
-    Task<IEnumerable<Artist>> FindAlbumArtists(int albumId);
-    Task<Album> AddExistingArtistToAlbum(int albumId, int artistId);
-    Task<Album> AddNewArtistToAlbum(int albumId, Artist artist);
-    Task<Album> RemoveArtistFromAlbum(int albumId, int artistId);
+    Task<IEnumerable<Album>> FindArtistAlbums(Artist artist);
+    Task<IEnumerable<Artist>> FindAlbumArtists(Album album);
+    Task<Album> AddExistingArtistToAlbum(Album album, Artist artist);
+    Task<Album> AddNewArtistToAlbum(Album album, Artist artist);
+    Task<Album> RemoveArtistFromAlbum(Album album, Artist artist);
     
 }
 
@@ -34,54 +34,37 @@ public class AlbumArtistService : IAlbumArtistService
         await _context.SaveChangesAsync();
     }
     
-    public async Task<IEnumerable<Album>> FindArtistAlbums(int artistId)
+    public async Task<IEnumerable<Album>> FindArtistAlbums(Artist artist)
     {
-        var artist = await _artistRepository.FindAsync(artistId);
         var albums = await _albumRepository
             .GetByWhere(a => a.Artists.Contains(artist)).ToListAsync();
         return albums;
     }
 
-    public async Task<IEnumerable<Artist>> FindAlbumArtists(int albumId)
+    public async Task<IEnumerable<Artist>> FindAlbumArtists(Album album)
     {
-        var album = await _albumRepository.FindAsync(albumId);
         var artists = await _artistRepository
             .GetByWhere(a => a.Albums.Contains(album)).ToListAsync();
         return artists;
     }
     
-    public async Task<Album> AddExistingArtistToAlbum(int albumId, int artistId)
+    public async Task<Album> AddExistingArtistToAlbum(Album album, Artist artist)
     {
-        var album = await _albumRepository.FindAsync(albumId);
-
-        if (album == null)
-            throw new EntityNotFoundException($"Album with ID '{albumId}' was not found");
-        
-        var artist = await _artistRepository.FindAsync(artistId);
         album.AddArtist(artist);
         await SaveChangesAsync();
         return album;
     }
 
-    public async Task<Album> AddNewArtistToAlbum(int albumId, Artist artist)
+    public async Task<Album> AddNewArtistToAlbum(Album album, Artist artist)
     {
-        var album = await _albumRepository.FindAsync(albumId);
         await _artistRepository.AddAsync(artist);
         album.AddArtist(artist);
         await SaveChangesAsync();
         return album;
     }
 
-    public async Task<Album> RemoveArtistFromAlbum(int albumId, int artistId)
+    public async Task<Album> RemoveArtistFromAlbum(Album album, Artist artist)
     {
-        var album = await _context.Albums
-            .Include(a => a.Artists)
-            .FirstOrDefaultAsync(a => a.Id == albumId);
-        
-        if (album == null)
-            throw new EntityNotFoundException($"Album with ID '{albumId}' was not found");
-        
-        var artist = await _artistRepository.FindAsync(artistId);
         album.RemoveArtist(artist);
         await SaveChangesAsync();
         return album;

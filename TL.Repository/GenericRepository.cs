@@ -1,4 +1,7 @@
 using System.Linq.Expressions;
+using LanguageExt;
+using LanguageExt.SomeHelp;
+using static LanguageExt.Prelude;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain.Exceptions;
@@ -11,7 +14,7 @@ public interface IGenericRepository<T> where T : class
     IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate);
     Task<T> AddAsync(T entity);
     Task DeleteAsync(int id);
-    Task<T> FindAsync(int id);
+    Task<Option<T>> FindAsync(int id);
     Task<T> UpdateAsync(int id);
     Task<int> SaveAsync();
 }
@@ -57,12 +60,13 @@ public abstract class GenericRepository<T>
         await Context.SaveChangesAsync();
     }
 
-    public virtual async Task<T> FindAsync(int id)
+    public virtual async Task<Option<T>> FindAsync(int id)
     {
         var result = await Context.Set<T>().FindAsync(id);
         if (result == null)
-            throw new EntityNotFoundException($"No entity with ID '{id}' was found");
-        return result;
+            return Option<T>.None;
+
+        return result.ToSome();
     }
     
     public virtual async Task<T> UpdateAsync(int id)
