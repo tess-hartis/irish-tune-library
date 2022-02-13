@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
-using TL.Domain.Validators;
 using TL.Domain.ValueObjects.TuneValueObjects;
 
 namespace TL.Repository;

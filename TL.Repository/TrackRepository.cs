@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
 using TL.Domain.Exceptions;
-using TL.Domain.Validators;
 using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Repository;

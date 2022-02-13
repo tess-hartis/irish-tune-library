@@ -1,5 +1,4 @@
 using TL.Domain.Exceptions;
-using TL.Domain.Validators;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 
 namespace TL.Domain;
