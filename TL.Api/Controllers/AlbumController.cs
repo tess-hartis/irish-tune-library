@@ -24,8 +24,11 @@ public class AlbumController : Controller
   public async Task<IActionResult> FindAlbum(int id)
   {
     var query = new GetAlbumByIdQuery(id);
-    var result = await _mediator.Send(query);
-    return result == null ? NotFound() : Ok(GetAlbumDTO.FromAlbum(result));
+    var album = await _mediator.Send(query);
+    return album
+      .Map(GetAlbumDTO.FromAlbum)
+      .Some<IActionResult>(Ok)
+      .None(NotFound);
   }
   
   [HttpGet]

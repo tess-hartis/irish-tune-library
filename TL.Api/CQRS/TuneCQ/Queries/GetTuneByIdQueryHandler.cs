@@ -1,3 +1,4 @@
+using LanguageExt;
 using MediatR;
 using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
@@ -5,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Queries;
 
-public class GetTuneByIdQuery : IRequest<Tune>
+public class GetTuneByIdQuery : IRequest<Option<Tune>>
 {
     public int Id { get; }
 
@@ -15,7 +16,7 @@ public class GetTuneByIdQuery : IRequest<Tune>
     }
 }
 
-public class GetTuneByIdQueryHandler : IRequestHandler<GetTuneByIdQuery, Tune>
+public class GetTuneByIdQueryHandler : IRequestHandler<GetTuneByIdQuery, Option<Tune>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -24,11 +25,9 @@ public class GetTuneByIdQueryHandler : IRequestHandler<GetTuneByIdQuery, Tune>
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Tune> Handle
+    public async Task<Option<Tune>> Handle
         (GetTuneByIdQuery request, CancellationToken cancellationToken)
     {
-        var tune = await _tuneRepository.FindAsync(request.Id);
-        return tune;
-
+        return await _tuneRepository.FindAsync(request.Id);
     }
 }

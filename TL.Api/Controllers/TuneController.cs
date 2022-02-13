@@ -28,8 +28,11 @@ public class TuneController : Controller
     public async Task<IActionResult> FindTune(int id)
     {
         var query = new GetTuneByIdQuery(id);
-        var result = await _mediator.Send(query);
-        return result == null ? NotFound() : Ok(GetTuneDTO.FromTune(result));
+        var tune = await _mediator.Send(query);
+        return tune
+            .Map(GetTuneDTO.FromTune)
+            .Some<IActionResult>(Ok)
+            .None(NotFound);
     }
 
     [HttpGet("type/{type}")]

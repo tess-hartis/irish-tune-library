@@ -1,3 +1,4 @@
+using LanguageExt;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
@@ -5,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TrackCQ.Queries;
 
-public class GetTrackByIdQuery : IRequest<Track>
+public class GetTrackByIdQuery : IRequest<Option<Track>>
 {
     public int Id { get; }
     
@@ -15,7 +16,7 @@ public class GetTrackByIdQuery : IRequest<Track>
     }
     
 }
-public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, Track>
+public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, Option<Track>>
 {
     private readonly ITrackRepository _trackRepository;
 
@@ -24,10 +25,9 @@ public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, Track
         _trackRepository = trackRepository;
     }
 
-    public async Task<Track> Handle(GetTrackByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Option<Track>> Handle(GetTrackByIdQuery request, CancellationToken cancellationToken)
     {
-        var track = await _trackRepository.FindAsync(request.Id);
-        return track;
-
+        return await _trackRepository.FindAsync(request.Id);
+        
     }
 }

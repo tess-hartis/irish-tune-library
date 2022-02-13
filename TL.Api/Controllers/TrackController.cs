@@ -26,8 +26,11 @@ public class TrackController : Controller
     public async Task<IActionResult> FindTrack(int id)
     {
         var query = new GetTrackByIdQuery(id);
-        var result = await _mediator.Send(query);
-        return result == null ? NotFound() : Ok(GetTrackDTO.FromTrack(result));
+        var track = await _mediator.Send(query);
+        return track
+            .Map(GetTrackDTO.FromTrack)
+            .Some<IActionResult>(Ok)
+            .None(NotFound);
     }
 
     [HttpGet]

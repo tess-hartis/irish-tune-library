@@ -1,3 +1,4 @@
+using LanguageExt;
 using MediatR;
 using TL.Api.DTOs.AlbumDTOs;
 using TL.Domain;
@@ -5,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Queries;
 
-public class GetAlbumByIdQuery : IRequest<Album>
+public class GetAlbumByIdQuery : IRequest<Option<Album>>
 {
     public int Id { get; }
 
@@ -15,7 +16,7 @@ public class GetAlbumByIdQuery : IRequest<Album>
     }
 }
 
-public class GetAlbumByIdQueryHandler : IRequestHandler<GetAlbumByIdQuery, Album>
+public class GetAlbumByIdQueryHandler : IRequestHandler<GetAlbumByIdQuery, Option<Album>>
 {
     private readonly IAlbumRepository _albumRepository;
 
@@ -24,11 +25,9 @@ public class GetAlbumByIdQueryHandler : IRequestHandler<GetAlbumByIdQuery, Album
         _albumRepository = albumRepository;
     }
 
-    public async Task<Album> Handle
+    public async Task<Option<Album>> Handle
         (GetAlbumByIdQuery request, CancellationToken cancellationToken)
     {
-        var album = await _albumRepository.FindAsync(request.Id);
-        return album;
-
+        return await _albumRepository.FindAsync(request.Id);
     }
 }

@@ -34,8 +34,11 @@ public class ArtistController : Controller
    public async Task<IActionResult> FindArtist(int id)
    {
       var query = new GetArtistByIdQuery(id);
-      var result = await _mediator.Send(query);
-      return Ok(GetArtistDTO.FromArtist(result));
+      var artist = await _mediator.Send(query);
+      return artist
+         .Map(GetArtistDTO.FromArtist)
+         .Some<IActionResult>(Ok)
+         .None(NotFound);
 
    }
 
