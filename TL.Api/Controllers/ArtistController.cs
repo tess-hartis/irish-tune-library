@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TL.Api.CQRS.AlbumCQ.Commands;
 using TL.Api.CQRS.ArtistCQ.Commands;
 using TL.Api.CQRS.ArtistCQ.Queries;
 using TL.Api.DTOs.AlbumDTOs;
@@ -39,21 +40,30 @@ public class ArtistController : Controller
    }
 
    [HttpPost]
-   public async Task<IActionResult> AddArtist([FromBody] PostArtistDTO dto)
+   public async Task<IActionResult> AddArtist([FromBody] CreateArtistCommand request)
    {
-      var artist = PostArtistDTO.ToArtist(dto);
-      var command = new CreateArtistCommand(artist.Name);
-      var result = await _mediator.Send(command);
-      return Ok(GetArtistDTO.FromArtist(result));
+      var artist = await _mediator.Send(request);
+      return artist.Match<IActionResult>(
+         a => Ok(GetArtistDTO.FromArtist(a)),
+         e =>
+         {
+            var errorList = e.Select(e => e.Message).ToList();
+            return UnprocessableEntity(new {code = 422, errors = errorList});
+         });
    }
 
    [HttpPut("{id}")]
-   public async Task<IActionResult> PutArtist(int id, [FromBody] PutArtistDTO dto)
+   public async Task<IActionResult> PutArtist(int id, [FromBody] UpdateArtistCommand request)
    {
-      var name = ArtistName.Create(dto.Name);
-      var command = new UpdateArtistCommand(id, name);
-      var result = await _mediator.Send(command);
-      return Ok(GetArtistDTO.FromArtist(result));
+      request.Id = id;
+      var artist = await _mediator.Send(request);
+      return artist.Match<IActionResult>(
+         a => Ok(GetArtistDTO.FromArtist(a)),
+         e =>
+         {
+            var errorList = e.Select(e => e.Message).ToList();
+            return UnprocessableEntity(new {code = 422, errors = errorList});
+         });
    }
    
    [HttpDelete("{id}")]
