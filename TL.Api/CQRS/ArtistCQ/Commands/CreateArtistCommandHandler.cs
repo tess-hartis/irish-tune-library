@@ -1,3 +1,5 @@
+using LanguageExt;
+using LanguageExt.Common;
 using MediatR;
 using TL.Domain;
 using TL.Domain.ValueObjects.ArtistValueObjects;
@@ -5,16 +7,16 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.ArtistCQ.Commands;
 
-public class CreateArtistCommand : IRequest<Artist>
+public class CreateArtistCommand : IRequest<Validation<Error, Artist>>
 {
-    public ArtistName Name { get; }
+    public string Name { get; }
 
-    public CreateArtistCommand(ArtistName name)
+    public CreateArtistCommand(string name)
     {
         Name = name;
     }
 }
-public class CreateArtistCommandHandler : IRequestHandler<CreateArtistCommand, Artist>
+public class CreateArtistCommandHandler : IRequestHandler<CreateArtistCommand, Validation<Error, Artist>>
 {
     private readonly IArtistRepository _artistRepository;
 
@@ -23,10 +25,17 @@ public class CreateArtistCommandHandler : IRequestHandler<CreateArtistCommand, A
         _artistRepository = artistRepository;
     }
 
-    public async Task<Artist> Handle(CreateArtistCommand command, CancellationToken cancellationToken)
+    public async Task<Validation<Error, Artist>> Handle(CreateArtistCommand command, CancellationToken cancellationToken)
     {
-        var artist = Artist.CreateArtist(command.Name);
-        await _artistRepository.AddAsync(artist);
+        var name = ArtistName.Create(command.Name);
+        var artist = name.Map(n => Artist.CreateArtist(n));
+        await artist
+            .Succ(async a =>
+            {
+                await _artistRepository.AddAsync(a);
+            })
+            .Fail(e => e.AsTask());
+
         return artist;
     }
 }
