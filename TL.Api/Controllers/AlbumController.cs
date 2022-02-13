@@ -84,6 +84,7 @@ public class AlbumController : Controller
   [HttpPost("{albumId}/artist")]
   public async Task<IActionResult> AddNewArtistToAlbum(int albumId, [FromBody] AddNewArtistToAlbumCommand request)
   {
+    request.AlbumId = albumId;
     var artist = await _mediator.Send(request);
     return artist.Match<IActionResult>(
       a => Ok(GetArtistDTO.FromArtist(a)),
