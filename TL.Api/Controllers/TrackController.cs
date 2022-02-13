@@ -72,12 +72,16 @@ public class TrackController : Controller
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
-    public async Task<IActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] PostTuneToTrackDTO dto )
+    public async Task<IActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] AddTrackTuneCommand request)
     {
-        var order = TrackTuneOrder.Create(dto.Order);
-        var command = new AddTrackTuneCommand(trackId, tuneId, order);
-        var result = await _mediator.Send(command);
-        return Ok(GetTrackDTO.FromTrack(result));
+        var trackTune = await _mediator.Send(request);
+        return trackTune.Match<IActionResult>(
+            t => Ok(GetTrackTuneDTO.FromTrackTune(t)),
+            e =>
+            {
+                var errorList = e.Select(e => e.Message).ToList();
+                return BadRequest(new {code = 400, errors = errorList});
+            });
     }
 
     [HttpGet("{trackId}/tunes")]
