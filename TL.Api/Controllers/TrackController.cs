@@ -74,6 +74,8 @@ public class TrackController : Controller
     [HttpPost("{trackId}/tune/{tuneId}")]
     public async Task<IActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] AddTrackTuneCommand request)
     {
+        request.TrackId = trackId;
+        request.TuneId = tuneId;
         var trackTune = await _mediator.Send(request);
         return trackTune.Match<IActionResult>(
             t => Ok(GetTrackTuneDTO.FromTrackTune(t)),
