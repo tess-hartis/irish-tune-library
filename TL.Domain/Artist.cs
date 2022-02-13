@@ -25,9 +25,10 @@ public class Artist
         return artist;
     }
     
-    public void UpdateName(ArtistName name)
+    public Artist Update(ArtistName name)
     {
         Name = name;
+        return this;
     }
     
 }

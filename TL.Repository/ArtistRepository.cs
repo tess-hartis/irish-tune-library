@@ -21,7 +21,7 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
     public async Task<Artist> UpdateArtist(int id, ArtistName name)
     {
         var artist = await FindAsync(id);
-        artist.UpdateName(name);
+        artist.Update(name);
         await SaveAsync();
         return artist;
     }
