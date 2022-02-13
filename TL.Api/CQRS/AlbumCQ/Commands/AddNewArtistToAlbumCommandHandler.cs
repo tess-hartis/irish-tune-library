@@ -10,7 +10,7 @@ namespace TL.Api.CQRS.AlbumCQ.Commands;
 
 public class AddNewArtistToAlbumCommand : IRequest<Validation<Error, Artist>>
 {
-    public int AlbumId { get; }
+    public int AlbumId { get; set; }
     public string Name { get; }
 
     public AddNewArtistToAlbumCommand(int albumId, string name)
