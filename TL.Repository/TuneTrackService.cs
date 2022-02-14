@@ -50,15 +50,7 @@ public class TuneTrackService : ITuneTrackService
         await SaveChangesAsync();
         return track;
     }
-
-    private Task<TrackTune> FindTrackTune(Track track, int tuneId)
-    {
-        var trackTune = track.TrackTunes.FirstOrDefault(x => x.TuneId == tuneId);
-        if (trackTune == null)
-            throw new InvalidEntityException("The specified tune was not found on the track");
-        
-        return Task.FromResult(trackTune);
-    }
+    
 
     public async Task<IEnumerable<Track>> FindTracksByTune(Tune tune)
     {
