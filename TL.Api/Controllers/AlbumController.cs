@@ -73,8 +73,11 @@ public class AlbumController : Controller
   public async Task<IActionResult> DeleteAlbum(int id)
   {
     var command = new DeleteAlbumCommand(id);
-    await _mediator.Send(command);
-    return Ok($"Album with ID '{id}' was deleted");
+    var result = await _mediator.Send(command);
+    return result
+      .Some<IActionResult>(_ => NoContent())
+      .None(NotFound);
+    
   }
 
   [HttpPost("{albumId}/artist/{artistId}")]

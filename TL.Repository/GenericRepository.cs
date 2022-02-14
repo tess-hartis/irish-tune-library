@@ -13,7 +13,7 @@ public interface IGenericRepository<T> where T : class
     IQueryable<T> GetEntities();
     IQueryable<T> GetByWhere(Expression<Func<T, bool>> predicate);
     Task<T> AddAsync(T entity);
-    Task DeleteAsync(int id);
+    Task<Unit> DeleteAsync(T entity);
     Task<Option<T>> FindAsync(int id);
     Task<T> UpdateAsync(T entity);
     Task<int> SaveAsync();
@@ -50,14 +50,11 @@ public abstract class GenericRepository<T>
         //may need to remove result variable and change back to original
     }
 
-    public virtual async Task DeleteAsync(int id)
+    public virtual async Task<Unit> DeleteAsync(T entity)
     {
-        var entity = await Context.Set<T>().FindAsync(id);
-        if (entity == null)
-            throw new EntityNotFoundException($"No entity with ID '{id}' was found");
-        
         Context.Set<T>().Remove(entity);
         await Context.SaveChangesAsync();
+        return Unit.Default;
     }
 
     public virtual async Task<Option<T>> FindAsync(int id)

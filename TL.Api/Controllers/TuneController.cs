@@ -101,8 +101,10 @@ public class TuneController : Controller
     public async Task<IActionResult> DeleteTune(int id)
     {
         var command = new DeleteTuneCommand(id);
-        await _mediator.Send(command);
-        return Ok($"Tune with ID '{id}' was deleted");
+        var result = await _mediator.Send(command);
+        return result
+            .Some<IActionResult>(_ => NoContent())
+            .None(NotFound);
     }
 
     [HttpPost("{id:int}/titles")]

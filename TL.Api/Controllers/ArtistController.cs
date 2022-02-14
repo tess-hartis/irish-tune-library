@@ -75,8 +75,11 @@ public class ArtistController : Controller
    public async Task<IActionResult> DeleteArtist(int id)
    {
       var command = new DeleteArtistCommand(id);
-      await _mediator.Send(command);
-      return Ok($"Artist with ID '{id}' was deleted");
+      var result = await _mediator.Send(command);
+      return result
+         .Some<IActionResult>(_ => NoContent())
+         .None(NotFound);
+      
 
    }
 

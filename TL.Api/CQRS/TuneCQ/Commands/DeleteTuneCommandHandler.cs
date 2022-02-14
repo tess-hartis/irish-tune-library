@@ -1,10 +1,13 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
 using MediatR;
 using TL.Domain;
 using TL.Repository;
+using Unit = LanguageExt.Unit;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class DeleteTuneCommand : IRequest<Unit>
+public class DeleteTuneCommand : IRequest<Option<Unit>>
 {
     public int Id;
 
@@ -13,7 +16,7 @@ public class DeleteTuneCommand : IRequest<Unit>
         Id = id;
     }
 }
-public class DeleteTuneCommandHandler : IRequestHandler<DeleteTuneCommand, Unit>
+public class DeleteTuneCommandHandler : IRequestHandler<DeleteTuneCommand, Option<Unit>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -22,9 +25,11 @@ public class DeleteTuneCommandHandler : IRequestHandler<DeleteTuneCommand, Unit>
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Unit> Handle(DeleteTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Option<Unit>> Handle(DeleteTuneCommand command, CancellationToken cancellationToken)
     {
-        await _tuneRepository.DeleteAsync(command.Id);
-        return Unit.Value;
+        var tune = await _tuneRepository.FindAsync(command.Id);
+        ignore(tune.Map(async t => await _tuneRepository.DeleteAsync(t)));
+        return tune.Map(t => unit);
+        
     }
 }

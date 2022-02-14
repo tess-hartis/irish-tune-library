@@ -1,9 +1,13 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
 using MediatR;
 using TL.Repository;
+using Unit = LanguageExt.Unit;
+
 
 namespace TL.Api.CQRS.ArtistCQ.Commands;
 
-public class DeleteArtistCommand : IRequest<Unit>
+public class DeleteArtistCommand : IRequest<Option<Unit>>
 {
     public int Id { get; }
 
@@ -12,7 +16,7 @@ public class DeleteArtistCommand : IRequest<Unit>
         Id = id;
     }
 }
-public class DeleteArtistCommandHandler : IRequestHandler<DeleteArtistCommand, Unit>
+public class DeleteArtistCommandHandler : IRequestHandler<DeleteArtistCommand, Option<Unit>>
 {
     private readonly IArtistRepository _artistRepository;
 
@@ -21,9 +25,10 @@ public class DeleteArtistCommandHandler : IRequestHandler<DeleteArtistCommand, U
         _artistRepository = artistRepository;
     }
 
-    public async Task<Unit> Handle(DeleteArtistCommand command, CancellationToken cancellationToken)
+    public async Task<Option<Unit>> Handle(DeleteArtistCommand command, CancellationToken cancellationToken)
     {
-        await _artistRepository.DeleteAsync(command.Id);
-        return Unit.Value;
+        var artist = await _artistRepository.FindAsync(command.Id);
+        ignore(artist.Map(async a => await _artistRepository.DeleteAsync(a)));
+        return artist.Map(a => unit);
     }
 }

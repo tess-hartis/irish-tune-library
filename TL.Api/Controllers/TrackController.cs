@@ -63,8 +63,10 @@ public class TrackController : Controller
     public async Task<IActionResult> DeleteTrack(int id)
     {
         var command = new DeleteTrackCommand(id);
-        await _mediator.Send(command);
-        return Ok($"Track with ID '{id}' was deleted");
+        var result = await _mediator.Send(command);
+        return result
+            .Some<IActionResult>(_ => NoContent())
+            .None(NotFound);
     }
     
 
