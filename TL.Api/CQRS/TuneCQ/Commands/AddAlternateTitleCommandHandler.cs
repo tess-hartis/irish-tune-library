@@ -1,5 +1,6 @@
 using LanguageExt;
 using LanguageExt.Common;
+using static LanguageExt.Prelude;
 using MediatR;
 using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
@@ -8,7 +9,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class AddAlternateTitleCommand : IRequest<Validation<Error, Tune>>
+public class AddAlternateTitleCommand : IRequest<Option<Validation<Error, Tune>>>
 {
     public int Id { get; set; }
     public string AlternateTitle { get; }
@@ -19,7 +20,7 @@ public class AddAlternateTitleCommand : IRequest<Validation<Error, Tune>>
         AlternateTitle = alternateTitle;
     }
 }
-public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitleCommand, Validation<Error, Tune>>
+public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitleCommand, Option<Validation<Error, Tune>>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -28,24 +29,22 @@ public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitle
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Validation<Error, Tune>> Handle(AddAlternateTitleCommand command, CancellationToken cancellationToken)
+    public async Task<Option<Validation<Error, Tune>>> Handle
+        (AddAlternateTitleCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);
         var alternateTitle = TuneTitle.Create(command.AlternateTitle);
 
-        var updatedTune = alternateTitle
-            .Map(t => tune.AddAlternateTitle(t));
+        var updatedTune = tune
+            .Map(t => alternateTitle
+                .Map(a => t.AddAlternateTitle(a)));
 
-        updatedTune
-            .Succ(async t =>
-            {
-                await _tuneRepository.UpdateAsync(tune.Id);
-            })
-            .Fail(e =>
-            {
-                return e.AsTask();
-            });
+        ignore(updatedTune
+            .Map(t =>
+                t.Map(async x => await _tuneRepository.UpdateAsync(x))));
 
         return updatedTune;
+
+
     }
 }
