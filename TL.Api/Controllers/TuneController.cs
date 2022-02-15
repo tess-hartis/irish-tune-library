@@ -112,13 +112,15 @@ public class TuneController : Controller
     {
         request.Id = id;
         var tune = await _mediator.Send(request);
-        return tune.Match<IActionResult>(
-            t => Ok(GetTuneDTO.FromTune(t)),
-            e =>
-            {
-                var errorList = e.Select(e => e.Message).ToList();
-                return UnprocessableEntity(new {code = 422, errors = errorList});
-            });
+        return tune
+            .Some(x =>
+                x.Succ<IActionResult>(t => Ok(GetTuneDTO.FromTune(t)))
+                    .Fail(e =>
+                    {
+                        var errors = e.Select(x => x.Message).ToList();
+                        return UnprocessableEntity(new {errors});
+                    }))
+            .None(NotFound);
     }
     
     [HttpDelete("{id}/titles")]
@@ -126,21 +128,31 @@ public class TuneController : Controller
     {
         request.Id = id;
         var tune = await _mediator.Send(request);
-        return tune.Match<IActionResult>(
-            t => Ok(GetTuneDTO.FromTune(t)),
-            e =>
-            {
-                var errorList = e.Select(e => e.Message).ToList();
-                return BadRequest(new {code = 400, errors = errorList});
-            });
+        return tune
+            .Some(x =>
+                x.Succ<IActionResult>(t => Ok(GetTuneDTO.FromTune(t)))
+                    .Fail(e =>
+                    {
+                        var errors = e.Select(x => x.Message).ToList();
+                        return UnprocessableEntity(new {errors});
+                    }))
+            .None(NotFound);
     }
     
     [HttpGet("{tuneId}/recordings")]
     public async Task<IActionResult> FindTuneRecordings(int tuneId)
     {
         var query = new GetTuneRecordingsQuery(tuneId);
-        var result = await _mediator.Send(query);
-        return Ok(result.Select(GetTrackDTO.FromTrack));
+        var tracks = await _mediator.Send(query);
+        return tracks
+            .Some<IActionResult>(t => 
+                Ok(t.Select(GetTrackDTO.FromTrack)))
+            .None(NotFound);
+        
+        
+        // var query = new GetTuneRecordingsQuery(tuneId);
+        // var result = await _mediator.Send(query);
+        // return Ok(result.Select(GetTrackDTO.FromTrack));
     }
     
     
