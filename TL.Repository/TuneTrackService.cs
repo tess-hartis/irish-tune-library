@@ -11,7 +11,6 @@ public interface ITuneTrackService
     Task<TrackTune> AddExistingTuneToTrack(Track track, Tune tune, TrackTune trackTune);
     Task<Track> RemoveTuneFromTrack(Track track, TrackTune trackTune);
     Task<IEnumerable<Track>> FindTracksByTune(Tune tune);
-    Task<IEnumerable<TrackTune>> GetTrackTunes(Track track);
 }
 
 public class TuneTrackService : ITuneTrackService
@@ -61,9 +60,5 @@ public class TuneTrackService : ITuneTrackService
 
         return tracks;
     }
-
-    public async Task<IEnumerable<TrackTune>> GetTrackTunes(Track track)
-    {
-        return track.TrackTunes;
-    }
+    
 }
