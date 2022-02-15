@@ -53,9 +53,9 @@ public class TuneLibraryContext : DbContext
             .Property(a => a.Value)
             .HasColumnName("Title");
         
-        modelBuilder.Entity<Tune>()
-            .HasMany(t => t.FeaturedOnTrack)
-            .WithOne(t => t.Tune);
+        // modelBuilder.Entity<Tune>()
+        //     .HasMany(t => t.FeaturedOnTrack)
+        //     .WithOne(t => t.);
 
         modelBuilder.Entity<Track>()
             .HasMany(t => t.TrackTunes)
