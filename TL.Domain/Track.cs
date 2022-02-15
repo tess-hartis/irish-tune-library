@@ -12,7 +12,7 @@ public class Track
     
     private List<TrackTune> _trackTunes = new List<TrackTune>();
     public IReadOnlyList<TrackTune> TrackTunes => _trackTunes;
-    
+
     public int AlbumId { get; set; }
     public Album Album { get; set; }
 
@@ -41,9 +41,6 @@ public class Track
     
     public Track RemoveTune(TrackTune trackTune)
     {
-        if (!_trackTunes.Contains(trackTune))
-            throw new InvalidOperationException("The specified tune was not found on the track");
-        
         _trackTunes.Remove(trackTune);
         return this;
     }
