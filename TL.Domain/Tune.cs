@@ -20,8 +20,10 @@ public class Tune
     public TuneKeyEnum TuneKey { get; private set; }
     public TuneComposer Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
+    
     private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
-    public IReadOnlyList<TrackTune> FeaturedOnTrack => _featuredOnTrack;
+    public IEnumerable<Track> FeaturedOnTrack => 
+        _featuredOnTrack.Select(x => x.Track).ToList();
 
     public static Tune Create(TuneTitle title, TuneComposer composer, string type, string key)
     {
@@ -54,9 +56,10 @@ public class Tune
         return this;
     }
 
-    public Tune RemoveAlternateTitle(TuneTitle title)
+    public Tune RemoveAlternateTitle(string title)
     {
-        _alternateTitles.Remove(title);
+        var deleteMe = _alternateTitles.Find(x => x.Value == title);
+        _alternateTitles.Remove(deleteMe);
         return this;
     }
 
