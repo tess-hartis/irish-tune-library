@@ -34,8 +34,8 @@ public class GetTuneRecordingsQueryHandler :
         (GetTuneRecordingsQuery request, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(request.TuneId);
-        var track = tune.Select(t => t.FeaturedOnTrack);
-        return track;
+        var tracks = tune.Select(t => t.FeaturedOnTrack);
+        return tracks;
 
 
         // var tracks = tune.Map(async t => await _tuneTrackService.FindTracksByTune(t));
