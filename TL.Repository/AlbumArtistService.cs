@@ -1,3 +1,5 @@
+using LanguageExt;
+using static LanguageExt.Prelude;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
@@ -10,9 +12,9 @@ public interface IAlbumArtistService
 {
     Task<IEnumerable<Album>> FindArtistAlbums(Artist artist);
     Task<IEnumerable<Artist>> FindAlbumArtists(Album album);
-    Task<Album> AddExistingArtistToAlbum(Album album, Artist artist);
+    Task<Option<Album>> AddExistingArtistToAlbum(int albumId, int artistId);
     Task<Album> AddNewArtistToAlbum(Album album, Artist artist);
-    Task<Album> RemoveArtistFromAlbum(Album album, Artist artist);
+    Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId);
     
 }
 
@@ -47,12 +49,19 @@ public class AlbumArtistService : IAlbumArtistService
             .GetByWhere(a => a.Albums.Contains(album)).ToListAsync();
         return artists;
     }
-    
-    public async Task<Album> AddExistingArtistToAlbum(Album album, Artist artist)
+
+    public async Task<Option<Album>> AddExistingArtistToAlbum(int albumId, int artistId)
     {
-        album.AddArtist(artist);
-        await SaveChangesAsync();
-        return album;
+        var album = await _albumRepository.FindAsync(albumId);
+        var artist = await _artistRepository.FindAsync(artistId);
+
+        var result = from al in album from ar in artist select al.AddArtist(ar);
+
+        var result1 = artist.Bind(a => album.Map(x => x.AddArtist(a)));
+
+        ignore(result.Map(async _ => await _context.SaveChangesAsync()));
+
+        return result;
     }
 
     public async Task<Album> AddNewArtistToAlbum(Album album, Artist artist)
@@ -63,10 +72,15 @@ public class AlbumArtistService : IAlbumArtistService
         return album;
     }
 
-    public async Task<Album> RemoveArtistFromAlbum(Album album, Artist artist)
+    public async Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId)
     {
-        album.RemoveArtist(artist);
-        await SaveChangesAsync();
-        return album;
+        var album = await _albumRepository.FindAsync(albumId);
+        var artist = await _artistRepository.FindAsync(artistId);
+
+        var result = artist.Bind(a => album.Map(x => x.RemoveArtist(a)));
+
+        ignore(result.Map(async _ => await _context.SaveChangesAsync()));
+
+        return result;
     }
 }

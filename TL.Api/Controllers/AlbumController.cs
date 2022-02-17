@@ -84,9 +84,11 @@ public class AlbumController : Controller
   public async Task<IActionResult> AddExistingArtistToAlbum(int albumId, int artistId)
   {
     var command = new AddExistingArtistToAlbumCommand(albumId, artistId);
-    var result = await _mediator.Send(command);
-    return Ok(GetAlbumDTO.FromAlbum(result));
-    
+    var album = await _mediator.Send(command);
+    return album
+      .Some<IActionResult>(a => Ok(GetAlbumDTO.FromAlbum(a)))
+      .None(NotFound);
+
     //need to edit DTO to include album artists
   }
 
@@ -108,8 +110,10 @@ public class AlbumController : Controller
   public async Task<IActionResult> RemoveArtistFromAlbum(int albumId, int artistId)
   {
     var command = new RemoveArtistFromAlbumCommand(albumId, artistId);
-    var result = await _mediator.Send(command);
-    return Ok(GetAlbumDTO.FromAlbum(result));
+    var album = await _mediator.Send(command);
+    return album
+      .Some<IActionResult>(a => Ok(GetAlbumDTO.FromAlbum(a)))
+      .None(NotFound);
   }
 
   [HttpPost("{albumId}/track")]
@@ -138,15 +142,21 @@ public class AlbumController : Controller
   public async Task<IActionResult> GetAlbumTracks(int albumId)
   {
     var query = new GetAlbumTracksQuery(albumId);
-    var result = await _mediator.Send(query);
-    return Ok(result.Select(GetTrackDTO.FromTrack));
+    var tracks = await _mediator.Send(query);
+    return tracks
+      .Some<IActionResult>(t =>
+        Ok(t.Select(GetTrackDTO.FromTrack)))
+      .None(NotFound);
   }
 
   [HttpGet("{albumId}/artists")]
   public async Task<IActionResult> GetAlbumArtists(int albumId)
   {
     var query = new GetAlbumArtistsQuery(albumId);
-    var result = await _mediator.Send(query);
-    return Ok(result.Select(GetArtistDTO.FromArtist));
+    var artists = await _mediator.Send(query);
+    return artists
+      .Some<IActionResult>(a =>
+        Ok(a.Select(GetArtistDTO.FromArtist)))
+      .None(NotFound);
   }
 }
