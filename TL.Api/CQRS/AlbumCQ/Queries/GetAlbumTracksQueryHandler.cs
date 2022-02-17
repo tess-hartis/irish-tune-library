@@ -1,3 +1,4 @@
+using LanguageExt;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
@@ -5,7 +6,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Queries;
 
-public class GetAlbumTracksQuery : IRequest<IEnumerable<Track>>
+public class GetAlbumTracksQuery : IRequest<Option<IEnumerable<Track>>>
 {
     public int AlbumId { get; }
 
@@ -14,19 +15,20 @@ public class GetAlbumTracksQuery : IRequest<IEnumerable<Track>>
         AlbumId = albumId;
     }
 }
-public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, IEnumerable<Track>>
+public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, Option<IEnumerable<Track>>>
 {
-    private readonly IAlbumTrackService _albumTrackService;
+    private readonly IAlbumRepository _albumRepository;
 
-    public GetAlbumTracksQueryHandler(IAlbumTrackService albumTrackService)
+    public GetAlbumTracksQueryHandler(IAlbumRepository albumRepository)
     {
-        _albumTrackService = albumTrackService;
+        _albumRepository = albumRepository;
     }
 
-    public async Task<IEnumerable<Track>> Handle
+    public async Task<Option<IEnumerable<Track>>> Handle
         (GetAlbumTracksQuery request, CancellationToken cancellationToken)
     {
-        var tracks = await _albumTrackService.GetAlbumTracks(request.AlbumId);
+        var album = await _albumRepository.FindAsync(request.AlbumId);
+        var tracks = album.Select(a => a.TrackListing);
         return tracks;
 
     }
