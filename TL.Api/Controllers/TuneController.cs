@@ -129,13 +129,7 @@ public class TuneController : Controller
         request.Id = id;
         var tune = await _mediator.Send(request);
         return tune
-            .Some(x =>
-                x.Succ<IActionResult>(t => Ok(GetTuneDTO.FromTune(t)))
-                    .Fail(e =>
-                    {
-                        var errors = e.Select(x => x.Message).ToList();
-                        return UnprocessableEntity(new {errors});
-                    }))
+            .Some<IActionResult>(x => Ok(GetTuneDTO.FromTune(x)))
             .None(NotFound);
     }
     
