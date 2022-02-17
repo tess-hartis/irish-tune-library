@@ -34,17 +34,14 @@ public class Track
     
     public Track AddTune(TrackTune trackTune)
     {
-        if (_trackTunes.Contains(trackTune))
-            throw new InvalidOperationException("The specified tune already exists on the track");
-        
         _trackTunes.Add(trackTune);
         return this;
     }
     
-    public Track RemoveTune(TrackTune trackTune)
+    public Unit RemoveTune(TrackTune trackTune)
     {
         _trackTunes.Remove(trackTune);
-        return this;
+        return Unit.Default;
     }
 
     public Track Update(TrackTitle title, TrackNumber trackNumber)
@@ -53,10 +50,6 @@ public class Track
         TrackNumber = trackNumber;
         return this;
     }
-
-    public void SetAlbumId(int id)
-    {
-        AlbumId = id;
-    }
+    
     
 }
