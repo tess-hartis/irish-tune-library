@@ -15,12 +15,14 @@ public class TrackTune
     public Tune Tune { get; set; }
     
     
-    public static TrackTune Create(int trackId, int tuneId, TrackTuneOrder order)
+    public static TrackTune Create(Track track, Tune tune, TrackTuneOrder order)
     {
         var trackTune = new TrackTune
         {
-            TrackId = trackId,
-            TuneId = tuneId,
+            Track = track,
+            TrackId = track.Id,
+            Tune = tune,
+            TuneId = tune.Id,
             Order = order
             
         };
