@@ -107,13 +107,16 @@ public class AlbumController : Controller
   {
     request.AlbumId = albumId;
     var track = await _mediator.Send(request);
-    return track.Match<IActionResult>(
-      t => Ok(GetTrackDTO.FromTrack(t)),
-      e =>
-      {
-        var errorList = e.Select(e => e.Message).ToList();
-        return UnprocessableEntity(new {code = 422, errors = errorList});
-      });
+    return track
+      .Some<IActionResult>(x =>
+        x.Succ<IActionResult>(t => Ok())
+          .Fail(e =>
+          {
+            var errors = e.Select(x => x.Message).ToList();
+            return UnprocessableEntity(new {errors});
+
+          }))
+      .None(NotFound);
 
   }
 
