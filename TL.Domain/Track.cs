@@ -1,3 +1,4 @@
+using LanguageExt;
 using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Domain;
@@ -16,12 +17,13 @@ public class Track
     public int AlbumId { get; set; }
     public Album Album { get; set; }
 
-    public static Track Create(TrackTitle title, TrackNumber trackNumber)
+    public static Track Create(TrackTitle title, TrackNumber trackNumber, Album album)
     {
         var track = new Track()
         {
             Title = title,
-            TrackNumber = trackNumber
+            TrackNumber = trackNumber,
+            AlbumId = album.Id
         };
 
         //add validation to prevent tracks with the same track number from being added
