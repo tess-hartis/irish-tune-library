@@ -55,7 +55,10 @@ public class AlbumArtistService : IAlbumArtistService
         var album = await _albumRepository.FindAsync(albumId);
         var artist = await _artistRepository.FindAsync(artistId);
 
-        var result = from al in album from ar in artist select al.AddArtist(ar);
+        var result = 
+            from al in album 
+            from ar in artist 
+            select al.AddArtist(ar);
 
         var result1 = artist.Bind(a => album.Map(x => x.AddArtist(a)));
 
