@@ -24,7 +24,9 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
 
     public override async Task<Option<Album>> FindAsync(int id)
     {
-        var album = await Context.Albums.Include(a => a.Artists)
+        var album = await Context.Albums
+            .Include(a => a.Artists)
+            .Include(a => a.TrackListing)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (album == null)
@@ -49,7 +51,10 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
 
     public async Task<IEnumerable<Album>> GetAll()
     {
-        return await Context.Albums.Include(a => a.Artists).ToListAsync();
+        return await Context.Albums
+            .Include(a => a.Artists)
+            .Include(a => a.TrackListing)
+            .ToListAsync();
     }
 
 
