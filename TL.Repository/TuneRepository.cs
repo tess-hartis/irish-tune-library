@@ -1,5 +1,6 @@
 using LanguageExt;
 using LanguageExt.SomeHelp;
+using static LanguageExt.Prelude;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
@@ -10,8 +11,8 @@ namespace TL.Repository;
 public interface ITuneRepository : IGenericRepository<Tune>
 {
     Task AddAlternateTitle(Tune tune, TuneTitle title);
-    Task RemoveAlternateTitle(Tune tune, TuneTitle title);
-    Task<Option<Tune>> FindAsync(int id);
+    Task<Option<Tune>> RemoveAlternateTitle(Tune tune, string title);
+    new Task<Option<Tune>> FindAsync(int id);
 }
 
 public class TuneRepository : GenericRepository<Tune>, ITuneRepository
