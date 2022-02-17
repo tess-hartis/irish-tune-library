@@ -64,11 +64,6 @@ public class AlbumArtistService : IAlbumArtistService
         return result;
     }
 
-    // public async Task<Album> AddNewArtistToAlbum(int albumId, Artist artist)
-    // {
-    //     var album = await _albumRepository.FindAsync(albumId);
-    // }
-
     public async Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId)
     {
         var album = await _albumRepository.FindAsync(albumId);
