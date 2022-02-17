@@ -92,20 +92,6 @@ public class AlbumController : Controller
     //need to edit DTO to include album artists
   }
 
-  [HttpPost("{albumId}/artist")]
-  public async Task<IActionResult> AddNewArtistToAlbum(int albumId, [FromBody] AddNewArtistToAlbumCommand request)
-  {
-    request.AlbumId = albumId;
-    var artist = await _mediator.Send(request);
-    return artist.Match<IActionResult>(
-      a => Ok(GetArtistDTO.FromArtist(a)),
-      e =>
-      {
-        var errorList = e.Select(e => e.Message).ToList();
-        return UnprocessableEntity(new {code = 422, errors = errorList});
-      });
-  }
-
   [HttpDelete("{albumId}/artist/{artistId}")]
   public async Task<IActionResult> RemoveArtistFromAlbum(int albumId, int artistId)
   {
