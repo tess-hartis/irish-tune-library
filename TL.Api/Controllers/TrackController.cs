@@ -81,19 +81,20 @@ public class TrackController : Controller
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
-    public async Task<IActionResult> AddExistingTuneToTrack(int trackId, int tuneId, [FromBody] AddTrackTuneCommand request)
+    public async Task<IActionResult> CreateTrackTune(int trackId, int tuneId, [FromBody] AddTrackTuneCommand request)
     {
         request.TrackId = trackId;
         request.TuneId = tuneId;
         var trackTune = await _mediator.Send(request);
-        return trackTune.Match<IActionResult>(
-            t => Ok(GetTrackTuneDTO.FromTrackTune(t)),
-            e =>
-            {
-                var errorList = e.Select(e => e.Message).ToList();
-                return BadRequest(new {code = 400, errors = errorList});
-            });
-    }
+        return trackTune
+            .Some(x =>
+                x.Succ<IActionResult>(t => Ok())
+                    .Fail(e =>
+                    {
+                        var errors = e.Select(x => x.Message).ToList();
+                        return UnprocessableEntity(new {errors});
+                    }))
+            .None(NotFound);
 
     [HttpGet("{trackId}/tunes")]
     public async Task<IActionResult> GetTunesOnTrack(int trackId)
