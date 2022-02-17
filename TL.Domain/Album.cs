@@ -31,22 +31,16 @@ public class Album
 
     private Album(){ }
     
-    public void AddArtist(Artist artist)
+    public Album AddArtist(Artist artist)
     {
-        if (_artists.Contains(artist))
-            throw new InvalidOperationException
-                ("The specified artist already exists on the album");
-        
         _artists.Add(artist);
+        return this;
     }
 
-    public void RemoveArtist(Artist artist)
+    public Album RemoveArtist(Artist artist)
     {
-        if (!_artists.Contains(artist))
-            throw new InvalidOperationException
-                ("The specified artist was not found on the album");
-        
         _artists.Remove(artist);
+        return this;
     }
 
     public Album Update(AlbumTitle title, AlbumYear year)
