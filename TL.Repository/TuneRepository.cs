@@ -28,12 +28,18 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
         await SaveAsync();
     }
 
-    public async Task RemoveAlternateTitle(Tune tune, TuneTitle title)
+    public async Task<Option<Tune>> RemoveAlternateTitle(Tune tune, string title)
     { 
-        var toDelete = tune.AlternateTitles
-            .First(x => x.Value == title.Value);
-        tune.RemoveAlternateTitle(toDelete);
-        await SaveAsync();
+        var toDelete = Some(tune.AlternateTitles
+            .First(x => x.Value == title));
+
+        var result = toDelete
+            .Map(t => tune.RemoveAlternateTitle(t));
+
+        ignore(result.Map(async _ => await SaveAsync()));
+
+        return result;
+        
     }
 
     public override async Task<Option<Tune>> FindAsync(int id)
