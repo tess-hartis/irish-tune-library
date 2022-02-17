@@ -96,12 +96,6 @@ public class TrackController : Controller
                     }))
             .None(NotFound);
 
-    [HttpGet("{trackId}/tunes")]
-    public async Task<IActionResult> GetTunesOnTrack(int trackId)
-    {
-        var query = new GetTunesOnTrackQuery(trackId);
-        var result = await _mediator.Send(query);
-        return Ok(result.Select(GetTrackTuneDTO.FromTrackTune));
     }
     
 }
