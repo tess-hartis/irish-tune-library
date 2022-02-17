@@ -1,3 +1,4 @@
+using LanguageExt;
 using TL.Domain.Exceptions;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 
@@ -11,10 +12,10 @@ public class Album
    
     
     private List<Artist> _artists = new List<Artist>();
-    public IReadOnlyList<Artist> Artists => _artists;
+    public IEnumerable<Artist> Artists => _artists;
     
     private List<Track> _tracks = new List<Track>();
-    public IReadOnlyList<Track> TrackListing => _tracks;
+    public IEnumerable<Track> TrackListing => _tracks;
     
     
     public static Album Create(AlbumTitle title, AlbumYear year)
