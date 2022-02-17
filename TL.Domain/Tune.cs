@@ -56,11 +56,17 @@ public class Tune
         return this;
     }
 
-    public Tune RemoveAlternateTitle(string title)
+    public Tune RemoveAlternateTitle(TuneTitle title)
     {
-        var deleteMe = _alternateTitles.Find(x => x.Value == title);
-        _alternateTitles.Remove(deleteMe);
+        _alternateTitles.Remove(title);
         return this;
+        
+        
+        //may need to change parameter back to string??
+
+        // var deleteMe = _alternateTitles.Find(x => x.Value == title);
+        // _alternateTitles.Remove(deleteMe);
+        // return this;
     }
 
     public Tune Update(TuneTitle title, TuneComposer composer, string type, string key)
