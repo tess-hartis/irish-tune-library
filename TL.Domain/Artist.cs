@@ -12,7 +12,7 @@ public class Artist
     public ArtistName Name { get; private set; }
     
     private List<Album> _albums = new List<Album>();
-    public IReadOnlyList<Album> Albums => _albums;
+    public IEnumerable<Album> Albums => _albums;
 
     public static Artist CreateArtist(ArtistName name)
     {
