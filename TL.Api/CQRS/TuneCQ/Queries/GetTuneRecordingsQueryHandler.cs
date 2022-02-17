@@ -21,12 +21,10 @@ public class GetTuneRecordingsQuery : IRequest<Option<IEnumerable<Track>>>
 public class GetTuneRecordingsQueryHandler :
     IRequestHandler<GetTuneRecordingsQuery, Option<IEnumerable<Track>>>
 {
-    private readonly ITuneTrackService _tuneTrackService;
     private readonly ITuneRepository _tuneRepository;
 
-    public GetTuneRecordingsQueryHandler(ITuneTrackService tuneTrackService, ITuneRepository tuneRepository)
+    public GetTuneRecordingsQueryHandler(ITuneRepository tuneRepository)
     {
-        _tuneTrackService = tuneTrackService;
         _tuneRepository = tuneRepository;
     }
 
