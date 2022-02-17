@@ -8,8 +8,8 @@ namespace TL.Repository;
 
 public interface ITuneTrackService
 {
-    Task<TrackTune> AddExistingTuneToTrack(Track track, Tune tune, TrackTune trackTune);
-    Task<Track> RemoveTuneFromTrack(Track track, TrackTune trackTune);
+    Task<TrackTune> AddExistingTuneToTrack(Track track, Tune tune, TrackTuneOrder trackTune);
+    // Task<Unit> RemoveTuneFromTrack(Track track, TrackTune trackTune);
     Task<IEnumerable<Track>> FindTracksByTune(Tune tune);
 }
 
@@ -43,13 +43,13 @@ public class TuneTrackService : ITuneTrackService
         return trackTune;
     }
 
-    public async Task<Track> RemoveTuneFromTrack(Track track, TrackTune trackTune)
-    {
-        track.RemoveTune(trackTune);
-        await SaveChangesAsync();
-        return track;
-    }
-    
+    // public async Task<Unit> RemoveTuneFromTrack(Track track, TrackTune trackTune)
+    // {
+    //     await _trackTuneRepository.DeleteAsync(trackTune);
+    //     await SaveChangesAsync();
+    //     return Unit.Default;
+    // }
+    //
 
     public async Task<IEnumerable<Track>> FindTracksByTune(Tune tune)
     {
