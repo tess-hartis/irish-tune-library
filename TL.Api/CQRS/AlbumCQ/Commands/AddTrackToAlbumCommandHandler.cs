@@ -1,5 +1,6 @@
 using LanguageExt;
 using LanguageExt.Common;
+using static LanguageExt.Prelude;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
@@ -8,7 +9,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class AddTrackToAlbumCommand : IRequest<Validation<Error, Track>>
+public class AddTrackToAlbumCommand : IRequest<Option<Validation<Error, Track>>>
 {
     public int AlbumId { get; set; }
     public string Title { get; }
@@ -22,32 +23,35 @@ public class AddTrackToAlbumCommand : IRequest<Validation<Error, Track>>
     }
 }
 public class AddTrackToAlbumCommandHandler : 
-    IRequestHandler<AddTrackToAlbumCommand, Validation<Error, Track>>
+    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Track>>>
 {
-    private readonly IAlbumTrackService _albumTrackService;
+    private readonly ITrackRepository _trackRepository;
+    private readonly IAlbumRepository _albumRepository;
 
-    public AddTrackToAlbumCommandHandler(IAlbumTrackService albumTrackService)
+    public AddTrackToAlbumCommandHandler(ITrackRepository trackRepository, IAlbumRepository albumRepository)
     {
-        _albumTrackService = albumTrackService;
+        _trackRepository = trackRepository;
+        _albumRepository = albumRepository;
     }
 
-    public async Task<Validation<Error, Track>> Handle
+    public async Task<Option<Validation<Error, Track>>> Handle
         (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
     {
-        var title = TrackTitle.Create(command.Title);
-        var number = TrackNumber.Create(command.TrackNumber);
+        var album = await _albumRepository.FindAsync(command.AlbumId);
+        var title = Some(TrackTitle.Create(command.Title));
+        var trackNumber = Some(TrackNumber.Create(command.TrackNumber));
+
+        var result =
+            from a in album
+            from t in title
+            from tn in trackNumber
+            select (t, tn).Apply(((x, y) => Track.Create(x, y, a)));
+
+        ignore(result
+            .Map(t =>
+                t.Map(async x => await _trackRepository.AddAsync(x))));
+
+        return result;
         
-        var track = (title, number)
-            .Apply((t, n) =>
-                Track.Create(t, n));
-
-        await track
-            .Succ(async t =>
-            {
-                await _albumTrackService.AddNewTrackToAlbum(command.AlbumId, t);
-            })
-            .Fail(e => e.AsTask());
-
-        return track;
     }
 }
