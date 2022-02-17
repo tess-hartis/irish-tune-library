@@ -71,12 +71,14 @@ public class TrackController : Controller
     
 
     [HttpDelete("{trackId}/tune/{tuneId}")]
-    public async Task<IActionResult> RemoveTuneFromTrack(int trackId, int tuneId)
+    public async Task<IActionResult> RemoveTuneFromTrack(int trackTuneId)
     {
-        var command = new RemoveTrackTuneCommand(trackId, tuneId);
+        var command = new RemoveTrackTuneCommand(trackTuneId);
         var result = await _mediator.Send(command);
-        return Ok(GetTrackDTO.FromTrack(result));
-        
+        return result
+            .Some<IActionResult>(_ => NoContent())
+            .None(NotFound);
+
         //udpate GetTrackDTO to also include tunes on track
     }
 
