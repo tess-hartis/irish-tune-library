@@ -61,13 +61,7 @@ public class Tune
     public Boolean RemoveAlternateTitle(TuneTitle title)
     {
         return _alternateTitles.Remove(title);
-
         
-        //may need to change parameter back to string??
-
-        // var deleteMe = _alternateTitles.Find(x => x.Value == title);
-        // _alternateTitles.Remove(deleteMe);
-        // return this;
     }
 
     public Tune Update(TuneTitle title, TuneComposer composer, string type, string key)
