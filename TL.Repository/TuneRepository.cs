@@ -11,7 +11,7 @@ namespace TL.Repository;
 public interface ITuneRepository : IGenericRepository<Tune>
 {
     Task AddAlternateTitle(Tune tune, TuneTitle title);
-    Task<Option<Tune>> RemoveAlternateTitle(Tune tune, string title);
+    // Task<Option<Tune>> RemoveAlternateTitle(Tune tune, string title);
     new Task<Option<Tune>> FindAsync(int id);
 }
 
@@ -29,19 +29,19 @@ public class TuneRepository : GenericRepository<Tune>, ITuneRepository
         await SaveAsync();
     }
 
-    public async Task<Option<Tune>> RemoveAlternateTitle(Tune tune, string title)
-    { 
-        var toDelete = Some(tune.AlternateTitles
-            .First(x => x.Value == title));
-
-        var result = toDelete
-            .Map(t => tune.RemoveAlternateTitle(t));
-
-        ignore(result.Map(async _ => await SaveAsync()));
-
-        return result;
-        
-    }
+    // public async Task<Option<Tune>> RemoveAlternateTitle(Tune tune, string title)
+    // { 
+    //     var toDelete = Some(tune.AlternateTitles
+    //         .First(x => x.Value == title));
+    //
+    //     var result = toDelete
+    //         .Map(t => tune.RemoveAlternateTitle(t));
+    //
+    //     ignore(result.Map(async _ => await SaveAsync()));
+    //
+    //     return result;
+    //     
+    // }
 
     public override async Task<Option<Tune>> FindAsync(int id)
     {
