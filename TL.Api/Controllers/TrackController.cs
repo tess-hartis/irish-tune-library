@@ -70,7 +70,7 @@ public class TrackController : Controller
     }
     
 
-    [HttpDelete("{trackId}/tune/{tuneId}")]
+    [HttpDelete("trackTune/{trackTuneId}")]
     public async Task<IActionResult> RemoveTuneFromTrack(int trackTuneId)
     {
         var command = new RemoveTrackTuneCommand(trackTuneId);
@@ -78,8 +78,7 @@ public class TrackController : Controller
         return result
             .Some<IActionResult>(_ => NoContent())
             .None(NotFound);
-
-        //udpate GetTrackDTO to also include tunes on track
+        
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
