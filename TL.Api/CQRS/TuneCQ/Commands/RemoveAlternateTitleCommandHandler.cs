@@ -9,7 +9,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class RemoveAlternateTitleCommand : IRequest<Option<Tune>>
+public class RemoveAlternateTitleCommand : IRequest<Option<Boolean>>
 {
     public int Id { get; set; }
     public string AltTitleString { get; }
@@ -21,7 +21,7 @@ public class RemoveAlternateTitleCommand : IRequest<Option<Tune>>
     }
 }
 public class RemoveAlternateTitleCommandHandler : 
-    IRequestHandler<RemoveAlternateTitleCommand, Option<Tune>>
+    IRequestHandler<RemoveAlternateTitleCommand, Option<Boolean>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -30,24 +30,48 @@ public class RemoveAlternateTitleCommandHandler :
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Option<Tune>> Handle
+    public async Task<Option<Boolean>> Handle
         (RemoveAlternateTitleCommand command, CancellationToken cancellationToken)
     {
         
         var tune = await _tuneRepository.FindAsync(command.Id);
-
-        var possibleTitle = tune
-            .Map(t => t.AlternateTitles
-                .First(x => x.Value == command.AltTitleString));
-
-        var result =
+        var possible = Some(command.AltTitleString);
+        
+        var hmm =
             from t in tune
-            from p in possibleTitle
-            select t.RemoveAlternateTitle(p);
+            from p in possible
+            select t.RemoveAlternateTitle(t.AlternateTitles.FirstOrDefault(x => x.Value == p));
+        
+        ignore( hmm.Map(async x => await _tuneRepository.SaveAsync()));
+        
+        return hmm;
 
-        ignore(result.Map(async x => await _tuneRepository.UpdateAsync(x)));
+        // var tune = await _tuneRepository.FindAsync(command.Id);
+        // var possible = tune.Map(t => t.AlternateTitles.FirstOrDefault(x => x.Value == command.AltTitleString));
+        //
+        //var result = tune.Map(t => possible.Map(x => t.RemoveAlternateTitle(x)));
+        //
+        // var result = tune.Map(t =>
+        // {
+        //     if (possible == null)
+        //         return Option<Tune>.None;
+        //
+        //     return possible.Map(x => t.RemoveAlternateTitle(x));
+        // });
+        //
+        // ignore(result.Map(x => x.Map(async y => await _tuneRepository.SaveAsync())));
+        //
+        // return result;
 
-        return result;
+
+        // var result =
+        //     from t in tune
+        //     from p in possibleTitle
+        //     select t.RemoveAlternateTitle(p);
+
+        // ignore(result.Map(async x => await _tuneRepository.SaveAsync()));
+        //
+        // return result;
 
         // var tune = await _tuneRepository.FindAsync(command.Id);
         //
@@ -56,7 +80,6 @@ public class RemoveAlternateTitleCommandHandler :
         // var hmm = tune.Map(t =>
         // {
         //     if (t.AlternateTitles.Exists(x => x.Value == unvalidated))
-        //         
         //         return t.RemoveAlternateTitle(unvalidated);
         //     return t;
         // });
@@ -74,7 +97,25 @@ public class RemoveAlternateTitleCommandHandler :
 
         // ignore(tune.Map(async x => await _tuneRepository.RemoveAlternateTitle(x, possibleTitleToDelete)));
 
+        // var hmm = tune.Map(t =>
+        // {
+        //     if (t.AlternateTitles.Exists(x => x.Value == possible))
+        //         return t.RemoveAlternateTitle(t.AlternateTitles.First(x => x.Value == possible));
+        //
+        //     return t;
+        // });
 
+        // var hmm = tune.Map(async t =>
+        // {
+        //     var myBool = t.RemoveAlternateTitle(t.AlternateTitles.FirstOrDefault(x => x.Value == possible));
+        //     if (myBool)
+        //     {
+        //         await _tuneRepository.SaveAsync();
+        //         return Some(t);
+        //     }
+        //
+        //     return None;
+        // });
 
 
     }

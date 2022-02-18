@@ -1,4 +1,6 @@
 using TL.Domain.ValueObjects.TuneValueObjects;
+using LanguageExt;
+using static LanguageExt.Prelude;
 
 namespace TL.Domain;
 
@@ -56,11 +58,10 @@ public class Tune
         return this;
     }
 
-    public Tune RemoveAlternateTitle(TuneTitle title)
+    public Boolean RemoveAlternateTitle(TuneTitle title)
     {
-        _alternateTitles.Remove(title);
-        return this;
-        
+        return _alternateTitles.Remove(title);
+
         
         //may need to change parameter back to string??
 
