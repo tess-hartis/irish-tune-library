@@ -31,10 +31,10 @@ public class Album
 
     private Album(){ }
     
-    public Album AddArtist(Artist artist)
+    public Unit AddArtist(Artist artist)
     {
         _artists.Add(artist);
-        return this;
+        return Unit.Default;
     }
 
     public Boolean RemoveArtist(Artist artist)

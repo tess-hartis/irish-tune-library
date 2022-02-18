@@ -86,7 +86,7 @@ public class AlbumController : Controller
     var command = new AddExistingArtistToAlbumCommand(albumId, artistId);
     var album = await _mediator.Send(command);
     return album
-      .Some<IActionResult>(a => Ok(GetAlbumDTO.FromAlbum(a)))
+      .Some<IActionResult>(u => Ok())
       .None(NotFound);
 
     //need to edit DTO to include album artists

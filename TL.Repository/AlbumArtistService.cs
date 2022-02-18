@@ -12,7 +12,7 @@ public interface IAlbumArtistService
 {
     Task<IEnumerable<Album>> FindArtistAlbums(Artist artist);
     Task<IEnumerable<Artist>> FindAlbumArtists(Album album);
-    Task<Option<Album>> AddExistingArtistToAlbum(int albumId, int artistId);
+    Task<Option<Unit>> AddExistingArtistToAlbum(int albumId, int artistId);
     // Task<Album> AddNewArtistToAlbum(Album album, Artist artist);
     // Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId);
     
@@ -50,7 +50,7 @@ public class AlbumArtistService : IAlbumArtistService
         return artists;
     }
 
-    public async Task<Option<Album>> AddExistingArtistToAlbum(int albumId, int artistId)
+    public async Task<Option<Unit>> AddExistingArtistToAlbum(int albumId, int artistId)
     {
         var album = await _albumRepository.FindAsync(albumId);
         var artist = await _artistRepository.FindAsync(artistId);
