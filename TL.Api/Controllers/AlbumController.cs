@@ -98,7 +98,14 @@ public class AlbumController : Controller
     var command = new RemoveArtistFromAlbumCommand(albumId, artistId);
     var album = await _mediator.Send(command);
     return album
-      .Some<IActionResult>(a => Ok(GetAlbumDTO.FromAlbum(a)))
+      .Some<IActionResult>(b =>
+      {
+        if (b)
+          return Ok();
+
+        return BadRequest();
+        
+      })
       .None(NotFound);
   }
 
@@ -119,13 +126,6 @@ public class AlbumController : Controller
       .None(NotFound);
 
   }
-
-  // [HttpDelete("{albumId}/track/{trackId}")]
-  // public async Task<ActionResult> RemoveTrackFromAlbum(int albumId, int trackId)
-  // {
-  //   await _albumTrackService.RemoveTrackFromAlbum(albumId, trackId);
-  //   return Ok($"Track with ID '{trackId}' was removed from album with ID '{albumId}'");
-  // }
 
   [HttpGet("{albumId}/tracks")]
   public async Task<IActionResult> GetAlbumTracks(int albumId)

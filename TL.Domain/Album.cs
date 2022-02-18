@@ -37,10 +37,9 @@ public class Album
         return this;
     }
 
-    public Album RemoveArtist(Artist artist)
+    public Boolean RemoveArtist(Artist artist)
     {
-        _artists.Remove(artist);
-        return this;
+       return _artists.Remove(artist);
     }
 
     public Album Update(AlbumTitle title, AlbumYear year)

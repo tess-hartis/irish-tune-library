@@ -14,7 +14,7 @@ public interface IAlbumArtistService
     Task<IEnumerable<Artist>> FindAlbumArtists(Album album);
     Task<Option<Album>> AddExistingArtistToAlbum(int albumId, int artistId);
     // Task<Album> AddNewArtistToAlbum(Album album, Artist artist);
-    Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId);
+    // Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId);
     
 }
 
@@ -67,15 +67,15 @@ public class AlbumArtistService : IAlbumArtistService
         return result;
     }
 
-    public async Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId)
-    {
-        var album = await _albumRepository.FindAsync(albumId);
-        var artist = await _artistRepository.FindAsync(artistId);
-
-        var result = artist.Bind(a => album.Map(x => x.RemoveArtist(a)));
-
-        ignore(result.Map(async _ => await _context.SaveChangesAsync()));
-
-        return result;
-    }
+    // public async Task<Option<Album>> RemoveArtistFromAlbum(int albumId, int artistId)
+    // {
+    //     var album = await _albumRepository.FindAsync(albumId);
+    //     var artist = await _artistRepository.FindAsync(artistId);
+    //
+    //     var result = artist.Bind(a => album.Map(x => x.RemoveArtist(a)));
+    //
+    //     ignore(result.Map(async _ => await _context.SaveChangesAsync()));
+    //
+    //     return result;
+    // }
 }
