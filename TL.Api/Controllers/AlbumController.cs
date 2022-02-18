@@ -44,7 +44,7 @@ public class AlbumController : Controller
   {
     var album = await _mediator.Send(request);
     return album.Match<IActionResult>(
-      a => Ok(GetAlbumDTO.FromAlbum(a)),
+      a => Ok(),
       e =>
       {
         var errors = e.Select(e => e.Message).ToList();
@@ -59,7 +59,7 @@ public class AlbumController : Controller
     var album = await _mediator.Send(request);
     return album
       .Some(x =>
-        x.Succ<IActionResult>(a => Ok(GetAlbumDTO.FromAlbum(a)))
+        x.Succ<IActionResult>(a => Ok())
           .Fail(e =>
           {
             var errors = e.Select(x => x.Message).ToList();
