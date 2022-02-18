@@ -30,14 +30,8 @@ public class ExceptionHandlingMiddleware
         var statusCode = (int) HttpStatusCode.InternalServerError;
         switch (ex)
         {
-            case InvalidEntityException:
-                statusCode = (int) HttpStatusCode.UnprocessableEntity;
-                break;
-            case InvalidOperationException:
-                statusCode = (int) HttpStatusCode.BadRequest;
-                break;
-            case EntityNotFoundException:
-                statusCode = (int) HttpStatusCode.NotFound;
+            case NullReferenceException:
+                statusCode = (int) HttpStatusCode.InternalServerError;
                 break;
             
                 
