@@ -72,7 +72,7 @@ public class TuneController : Controller
     {
         var tune = await _mediator.Send(request);
         return tune.Match<IActionResult>(
-            t => Ok(GetTuneDTO.FromTune(t)),
+            t => Ok(),
             e =>
             {
                 var errors = e.Select(e => e.Message).ToList();
