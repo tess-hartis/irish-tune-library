@@ -12,12 +12,12 @@ namespace TL.Api.CQRS.TuneCQ.Commands;
 public class RemoveAlternateTitleCommand : IRequest<Option<Boolean>>
 {
     public int Id { get; set; }
-    public string AltTitleString { get; }
+    public string AlternateTitle { get; }
 
-    public RemoveAlternateTitleCommand(int id, string altTitleString)
+    public RemoveAlternateTitleCommand(int id, string alternateTitle)
     {
         Id = id;
-        AltTitleString = altTitleString;
+        AlternateTitle = alternateTitle;
     }
 }
 public class RemoveAlternateTitleCommandHandler : 
@@ -35,7 +35,7 @@ public class RemoveAlternateTitleCommandHandler :
     {
         
         var tune = await _tuneRepository.FindAsync(command.Id);
-        var possible = Some(command.AltTitleString);
+        var possible = Some(command.AlternateTitle);
         
         var hmm =
             from t in tune
