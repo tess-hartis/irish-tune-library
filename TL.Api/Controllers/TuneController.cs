@@ -87,7 +87,7 @@ public class TuneController : Controller
         var tune = await _mediator.Send(request);
         return tune
             .Some(x =>
-                x.Succ<IActionResult>(t => Ok(GetTuneDTO.FromTune(t)))
+                x.Succ<IActionResult>(t => Ok())
                     .Fail(e =>
                     {
                         var errors = e.Select(x => x.Message).ToList();
