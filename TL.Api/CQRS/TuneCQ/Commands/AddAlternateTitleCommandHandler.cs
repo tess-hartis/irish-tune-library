@@ -41,7 +41,7 @@ public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitle
 
         ignore(updatedTune
             .Map(t =>
-                t.Map(async x => await _tuneRepository.UpdateAsync(x))));
+                t.Map(async x => await _tuneRepository.SaveAsync())));
 
         return updatedTune;
 
