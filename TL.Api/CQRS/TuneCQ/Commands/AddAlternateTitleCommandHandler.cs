@@ -6,10 +6,11 @@ using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
+using Unit = LanguageExt.Unit;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class AddAlternateTitleCommand : IRequest<Option<Validation<Error, Tune>>>
+public class AddAlternateTitleCommand : IRequest<Option<Validation<Error, Unit>>>
 {
     public int Id { get; set; }
     public string AlternateTitle { get; }
@@ -20,7 +21,7 @@ public class AddAlternateTitleCommand : IRequest<Option<Validation<Error, Tune>>
         AlternateTitle = alternateTitle;
     }
 }
-public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitleCommand, Option<Validation<Error, Tune>>>
+public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitleCommand, Option<Validation<Error, Unit>>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -29,7 +30,7 @@ public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitle
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Option<Validation<Error, Tune>>> Handle
+    public async Task<Option<Validation<Error, Unit>>> Handle
         (AddAlternateTitleCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);

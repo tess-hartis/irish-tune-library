@@ -111,10 +111,10 @@ public class TuneController : Controller
     public async Task<IActionResult> AddAlternateTitle(int id, [FromBody] AddAlternateTitleCommand request)
     {
         request.Id = id;
-        var tune = await _mediator.Send(request);
-        return tune
+        var result = await _mediator.Send(request);
+        return result
             .Some(x =>
-                x.Succ<IActionResult>(t => Ok(GetTuneDTO.FromTune(t)))
+                x.Succ<IActionResult>(u => Ok())
                     .Fail(e =>
                     {
                         var errors = e.Select(x => x.Message).ToList();

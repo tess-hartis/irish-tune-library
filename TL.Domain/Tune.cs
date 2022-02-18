@@ -52,10 +52,10 @@ public class Tune
 
     }
 
-    public Tune AddAlternateTitle(TuneTitle title)
+    public Unit AddAlternateTitle(TuneTitle title)
     {
         _alternateTitles.Add(title);
-        return this;
+        return Unit.Default;
     }
 
     public Boolean RemoveAlternateTitle(TuneTitle title)
