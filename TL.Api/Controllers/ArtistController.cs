@@ -47,7 +47,7 @@ public class ArtistController : Controller
    {
       var artist = await _mediator.Send(request);
       return artist.Match<IActionResult>(
-         a => Ok(GetArtistDTO.FromArtist(a)),
+         a => Ok(),
          e =>
          {
             var errors = e.Select(e => e.Message).ToList();
