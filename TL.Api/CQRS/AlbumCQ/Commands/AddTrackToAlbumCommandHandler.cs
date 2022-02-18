@@ -47,9 +47,7 @@ public class AddTrackToAlbumCommandHandler :
             from tn in trackNumber
             select (t, tn).Apply(((x, y) => Track.Create(x, y, a)));
 
-        ignore(result
-            .Map(t =>
-                t.Map(async x => await _trackRepository.AddAsync(x))));
+        ignore(result.MapT(async x => await _trackRepository.AddAsync(x)));
 
         return result;
         
