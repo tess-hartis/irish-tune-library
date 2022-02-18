@@ -49,9 +49,7 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
             from o in order
             select o.Map(x => TrackTune.Create(tr, tu, x));
 
-        ignore(result
-            .Map(x =>
-                x.Map(async y => await _trackTuneRepository.AddAsync(y))));
+        ignore(result.MapT(async y => await _trackTuneRepository.AddAsync(y)));
 
         return result;
 
