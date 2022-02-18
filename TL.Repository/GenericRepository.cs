@@ -15,7 +15,7 @@ public interface IGenericRepository<T> where T : class
     Task<Unit> AddAsync(T entity);
     Task<Unit> DeleteAsync(T entity);
     Task<Option<T>> FindAsync(int id);
-    Task<T> UpdateAsync(T entity);
+    Task<Unit> UpdateAsync(T entity);
     Task<int> SaveAsync();
 }
 
@@ -66,11 +66,11 @@ public abstract class GenericRepository<T>
         return result.ToSome();
     }
     
-    public virtual async Task<T> UpdateAsync(T entity)
+    public virtual async Task<Unit> UpdateAsync(T entity)
     {
         Context.Set<T>().Update(entity);
         await Context.SaveChangesAsync();
-        return entity;
+        return Unit.Default;
     }
 
     public virtual async Task<int> SaveAsync()
