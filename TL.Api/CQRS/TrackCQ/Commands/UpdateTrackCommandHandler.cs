@@ -14,13 +14,13 @@ public class UpdateTrackCommand : IRequest<Option<Validation<Error, Unit>>>
 {
     public int Id { get; set; }
     public string Title { get; }
-    public int Number { get; }
+    public int TrackNumber { get; }
 
-    public UpdateTrackCommand(int id, string title, int number)
+    public UpdateTrackCommand(int id, string title, int trackNumber)
     {
         Id = id;
         Title = title;
-        Number = number;
+        TrackNumber = trackNumber;
     }
 }
 public class UpdateTrackCommandHandler : 
@@ -39,7 +39,7 @@ public class UpdateTrackCommandHandler :
         var track = await _trackRepository.FindAsync(command.Id);
 
         var title = TrackTitle.Create(command.Title);
-        var number = TrkNumber.Create(command.Number);
+        var number = TrkNumber.Create(command.TrackNumber);
 
         var updatedTrack = track
             .Map(t => (title, number)
