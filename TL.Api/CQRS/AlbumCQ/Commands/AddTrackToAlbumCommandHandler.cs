@@ -39,7 +39,7 @@ public class AddTrackToAlbumCommandHandler :
     {
         var album = await _albumRepository.FindAsync(command.AlbumId);
         var title = Some(TrackTitle.Create(command.Title));
-        var trackNumber = Some(TrackNumber.Create(command.TrackNumber));
+        var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
 
         var result =
             from a in album

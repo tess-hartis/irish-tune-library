@@ -28,7 +28,7 @@ public class AlbumTrackServiceTest
          
          //Act
          var trackTitle = TrackTitle.Create("new Track");
-         var trackNumber = TrackNumber.Create(3);
+         var trackNumber = TrkNumber.Create(3);
          await albumTrackRepo.AddNewTrackToAlbum(album.Id, trackTitle, trackNumber);
          
          //Assert

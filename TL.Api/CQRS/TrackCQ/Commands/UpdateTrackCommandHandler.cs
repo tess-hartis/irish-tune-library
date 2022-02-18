@@ -39,7 +39,7 @@ public class UpdateTrackCommandHandler :
         var track = await _trackRepository.FindAsync(command.Id);
 
         var title = TrackTitle.Create(command.Title);
-        var number = TrackNumber.Create(command.Number);
+        var number = TrkNumber.Create(command.Number);
 
         var updatedTrack = track
             .Map(t => (title, number)

@@ -19,7 +19,7 @@ public class GetTrackDTO
             TrackId = track.Id,
             AlbumId = track.AlbumId,
             Title = track.Title.Value,
-            TrackNumber = track.TrackNumber.Value,
+            TrackNumber = track.TrkNumber.Value,
             Tunes = tunes
 
         };
