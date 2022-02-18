@@ -62,7 +62,7 @@ public class ArtistController : Controller
       var artist = await _mediator.Send(request);
       return artist
          .Some(x =>
-            x.Succ<IActionResult>(a => Ok(GetArtistDTO.FromArtist(a)))
+            x.Succ<IActionResult>(u => Ok())
                .Fail(e =>
                {
                   var errors = e.Select(x => x.Message).ToList();

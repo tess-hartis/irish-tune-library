@@ -5,10 +5,11 @@ using MediatR;
 using TL.Domain;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;
+using Unit = LanguageExt.Unit;
 
 namespace TL.Api.CQRS.ArtistCQ.Commands;
 
-public class UpdateArtistCommand : IRequest<Option<Validation<Error, Artist>>>
+public class UpdateArtistCommand : IRequest<Option<Validation<Error, Unit>>>
 {
     public int Id { get; set; }
     public string Name { get; }
@@ -20,7 +21,7 @@ public class UpdateArtistCommand : IRequest<Option<Validation<Error, Artist>>>
     }
 }
 public class UpdateArtistCommandHandler : 
-    IRequestHandler<UpdateArtistCommand, Option<Validation<Error, Artist>>>
+    IRequestHandler<UpdateArtistCommand, Option<Validation<Error, Unit>>>
 {
     private readonly IArtistRepository _artistRepository;
 
@@ -29,7 +30,7 @@ public class UpdateArtistCommandHandler :
         _artistRepository = artistRepository;
     }
 
-    public async Task<Option<Validation<Error, Artist>>> Handle
+    public async Task<Option<Validation<Error, Unit>>> Handle
         (UpdateArtistCommand command, CancellationToken cancellationToken)
     {
         var artist = await _artistRepository.FindAsync(command.Id);
@@ -40,7 +41,7 @@ public class UpdateArtistCommandHandler :
 
         ignore(updatedArtist
             .Map(a =>
-                a.Map(async x => await _artistRepository.UpdateAsync(x))));
+                a.Map(async x => await _artistRepository.SaveAsync())));
 
         return updatedArtist;
 

@@ -1,3 +1,4 @@
+using LanguageExt;
 using TL.Domain.Exceptions;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 
@@ -24,10 +25,10 @@ public class Artist
         return artist;
     }
     
-    public Artist Update(ArtistName name)
+    public Unit Update(ArtistName name)
     {
         Name = name;
-        return this;
+        return Unit.Default;
     }
     
 }
