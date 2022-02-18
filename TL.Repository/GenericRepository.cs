@@ -46,8 +46,7 @@ public abstract class GenericRepository<T>
         var result = await Context.Set<T>().AddAsync(entity);
         await Context.SaveChangesAsync();
         return unit;
-
-        //may need to remove result variable and change back to original
+        
     }
 
     public virtual async Task<Unit> DeleteAsync(T entity)
