@@ -149,10 +149,6 @@ public class TuneController : Controller
                 Ok(t.Select(GetTrackDTO.FromTrack)))
             .None(NotFound);
         
-        
-        // var query = new GetTuneRecordingsQuery(tuneId);
-        // var result = await _mediator.Send(query);
-        // return Ok(result.Select(GetTrackDTO.FromTrack));
     }
     
     
