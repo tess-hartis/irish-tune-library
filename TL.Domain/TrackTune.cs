@@ -19,41 +19,15 @@ public class TrackTune
     {
         var trackTune = new TrackTune
         {
-            Track = track,
             TrackId = track.Id,
-            Tune = tune,
             TuneId = tune.Id,
-            Order = order
-            
+            Order = order,
+            Title = tune.Title.Value
         };
 
         return trackTune;
     }
-
-    public void SetTuneId(int id)
-    {
-        TuneId = id;
-    }
-
-    public void SetTrackId(int id)
-    {
-        TrackId = id;
-    }
-
-    public void SetTune(Tune tune)
-    {
-        Tune = tune;
-    }
-
-    public void SetTrack(Track track)
-    {
-        Track = track;
-    }
-
-    public void SetTitle(string title)
-    {
-        Title = title;
-    }
+    
 }
 
 
