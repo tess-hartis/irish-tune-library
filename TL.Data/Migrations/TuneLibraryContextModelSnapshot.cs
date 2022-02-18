@@ -125,14 +125,6 @@ namespace TL.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("TuneKey")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TuneType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("Tunes");
@@ -233,23 +225,6 @@ namespace TL.Data.Migrations
                         .WithMany("FeaturedOnTrack")
                         .HasForeignKey("TuneId");
 
-                    b.OwnsOne("TL.Domain.ValueObjects.TrackValueObjects.TrackNumber", "TrackNumber", b1 =>
-                        {
-                            b1.Property<int>("TrackId")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("Value")
-                                .HasColumnType("integer")
-                                .HasColumnName("TrackNumber");
-
-                            b1.HasKey("TrackId");
-
-                            b1.ToTable("Tracks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TrackId");
-                        });
-
                     b.OwnsOne("TL.Domain.ValueObjects.TrackValueObjects.TrackTitle", "Title", b1 =>
                         {
                             b1.Property<int>("TrackId")
@@ -268,12 +243,29 @@ namespace TL.Data.Migrations
                                 .HasForeignKey("TrackId");
                         });
 
+                    b.OwnsOne("TL.Domain.ValueObjects.TrackValueObjects.TrkNumber", "TrkNumber", b1 =>
+                        {
+                            b1.Property<int>("TrackId")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("TrackNumber");
+
+                            b1.HasKey("TrackId");
+
+                            b1.ToTable("Tracks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TrackId");
+                        });
+
                     b.Navigation("Album");
 
                     b.Navigation("Title")
                         .IsRequired();
 
-                    b.Navigation("TrackNumber")
+                    b.Navigation("TrkNumber")
                         .IsRequired();
                 });
 
@@ -378,12 +370,54 @@ namespace TL.Data.Migrations
                                 .HasForeignKey("TuneId");
                         });
 
+                    b.OwnsOne("TL.Domain.ValueObjects.TuneValueObjects.TuneKeyValueObj", "TuneKey", b1 =>
+                        {
+                            b1.Property<int>("TuneId")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("Key");
+
+                            b1.HasKey("TuneId");
+
+                            b1.ToTable("Tunes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TuneId");
+                        });
+
+                    b.OwnsOne("TL.Domain.ValueObjects.TuneValueObjects.TuneTypeValueObj", "TuneType", b1 =>
+                        {
+                            b1.Property<int>("TuneId")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("Type");
+
+                            b1.HasKey("TuneId");
+
+                            b1.ToTable("Tunes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TuneId");
+                        });
+
                     b.Navigation("AlternateTitles");
 
                     b.Navigation("Composer")
                         .IsRequired();
 
                     b.Navigation("Title")
+                        .IsRequired();
+
+                    b.Navigation("TuneKey")
+                        .IsRequired();
+
+                    b.Navigation("TuneType")
                         .IsRequired();
                 });
 

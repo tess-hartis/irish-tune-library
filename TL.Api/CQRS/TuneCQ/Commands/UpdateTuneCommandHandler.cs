@@ -45,11 +45,13 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Optio
 
         var title = TuneTitle.Create(command.Title);
         var composer = TuneComposer.Create(command.Composer);
+        var type = TuneTypeValueObj.Create(command.Type);
+        var key = TuneKeyValueObj.Create(command.Key);
 
         var updatedTune = tune
-            .Map(t => (title, composer)
-                .Apply((x, y) =>
-                    t.Update(x, y, command.Type, command.Key)));
+            .Map(t => (title, composer, type, key)
+                .Apply((x, y, ty, k) =>
+                    t.Update(x, y, ty, k)));
 
         ignore(updatedTune
             .Map(t =>

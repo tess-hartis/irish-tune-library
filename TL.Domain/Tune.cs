@@ -18,8 +18,8 @@ public class Tune
     public IReadOnlyList<TuneTitle> AlternateTitles =>
         _alternateTitles;
 
-    public TuneTypeEnum TuneType { get; private set; }
-    public TuneKeyEnum TuneKey { get; private set; }
+    public TuneTypeValueObj TuneType { get; private set; }
+    public TuneKeyValueObj TuneKey { get; private set; }
     public TuneComposer Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
     
@@ -27,26 +27,28 @@ public class Tune
     public IEnumerable<Track> FeaturedOnTrack => 
         _featuredOnTrack.Select(x => x.Track).ToList();
 
-    public static Tune Create(TuneTitle title, TuneComposer composer, string type, string key)
+    public static Tune Create(TuneTitle title, TuneComposer composer, TuneTypeValueObj type, TuneKeyValueObj key)
     {
 
         var tune = new Tune
         {
             Title = title,
             Composer = composer,
+            TuneType = type,
+            TuneKey = key,
             DateAdded = DateOnly.FromDateTime(DateTime.Today)
         };
         
        
-        if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
-            throw new Exception();
+        // if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
+        //     throw new Exception();
+        //
+        // tune.TuneType = tuneType;
 
-        tune.TuneType = tuneType;
-
-        if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
-            throw new Exception();
-
-        tune.TuneKey = tuneKey;
+        // if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
+        //     throw new Exception();
+        //
+        // tune.TuneKey = tuneKey;
 
         return tune;
 
@@ -64,20 +66,22 @@ public class Tune
         
     }
 
-    public Tune Update(TuneTitle title, TuneComposer composer, string type, string key)
+    public Tune Update(TuneTitle title, TuneComposer composer, TuneTypeValueObj type, TuneKeyValueObj key)
     {
         Title = title;
         Composer = composer;
+        TuneType = type;
+        TuneKey = key;
         
-        if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
-            throw new Exception();
+        // if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
+        //     throw new Exception();
+        //
+        // this.TuneType = tuneType;
 
-        this.TuneType = tuneType;
-
-        if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
-            throw new Exception();
-
-        this.TuneKey = tuneKey;
+        // if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
+        //     throw new Exception();
+        //
+        // this.TuneKey = tuneKey;
 
         return this;
     }

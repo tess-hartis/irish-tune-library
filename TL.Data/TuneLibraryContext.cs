@@ -32,15 +32,15 @@ public class TuneLibraryContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Tune>()
-            .Property(t => t.TuneType)
-            .HasConversion(t => t.ToString(),
-                t => (TuneTypeEnum) Enum.Parse(typeof(TuneTypeEnum), t));
-
-        modelBuilder.Entity<Tune>()
-            .Property(t => t.TuneKey)
-            .HasConversion(t => t.ToString(),
-                t => (TuneKeyEnum) Enum.Parse(typeof(TuneKeyEnum), t));
+        // modelBuilder.Entity<Tune>()
+        //     .Property(t => t.TuneType)
+        //     .HasConversion(t => t.ToString(),
+        //         t => (TuneTypeEnum) Enum.Parse(typeof(TuneTypeEnum), t));
+        //
+        // modelBuilder.Entity<Tune>()
+        //     .Property(t => t.TuneKey)
+        //     .HasConversion(t => t.ToString(),
+        //         t => (TuneKeyEnum) Enum.Parse(typeof(TuneKeyEnum), t));
 
         modelBuilder.Entity<Tune>()
             .Property(t => t.DateAdded)
@@ -118,6 +118,16 @@ public class TuneLibraryContext : DbContext
             .OwnsOne(t => t.Composer)
             .Property(x => x.Value)
             .HasColumnName("Composer");
+
+        modelBuilder.Entity<Tune>()
+            .OwnsOne(t => t.TuneType)
+            .Property(x => x.Value)
+            .HasColumnName("Type");
+        
+        modelBuilder.Entity<Tune>()
+            .OwnsOne(t => t.TuneKey)
+            .Property(x => x.Value)
+            .HasColumnName("Key");
 
         modelBuilder.Entity<TrackTune>()
             .OwnsOne(t => t.Order)

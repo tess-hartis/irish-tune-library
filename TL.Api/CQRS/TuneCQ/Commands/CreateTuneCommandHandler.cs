@@ -38,10 +38,12 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Valid
     {
         var title = TuneTitle.Create(command.Title);
         var composer = TuneComposer.Create(command.Composer);
+        var type = TuneTypeValueObj.Create(command.Type);
+        var key = TuneKeyValueObj.Create(command.Key);
 
-        var newTune = (title, composer)
-            .Apply((t, c) =>
-                Tune.Create(t, c, command.Type, command.Key));
+        var newTune = (title, composer, type, key)
+            .Apply((t, c, ty, k) =>
+                Tune.Create(t, c, ty, k));
 
         await newTune
             .Succ(async toon =>
