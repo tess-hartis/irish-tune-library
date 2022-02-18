@@ -6,10 +6,11 @@ using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
+using Unit = LanguageExt.Unit;
 
 namespace TL.Api.CQRS.TrackCQ.Commands;
 
-public class UpdateTrackCommand : IRequest<Option<Validation<Error, Track>>>
+public class UpdateTrackCommand : IRequest<Option<Validation<Error, Unit>>>
 {
     public int Id { get; set; }
     public string Title { get; }
@@ -23,7 +24,7 @@ public class UpdateTrackCommand : IRequest<Option<Validation<Error, Track>>>
     }
 }
 public class UpdateTrackCommandHandler : 
-    IRequestHandler<UpdateTrackCommand, Option<Validation<Error, Track>>>
+    IRequestHandler<UpdateTrackCommand, Option<Validation<Error, Unit>>>
 {
     private readonly ITrackRepository _trackRepository;
 
@@ -32,7 +33,7 @@ public class UpdateTrackCommandHandler :
         _trackRepository = trackRepository;
     }
 
-    public async Task<Option<Validation<Error, Track>>> Handle
+    public async Task<Option<Validation<Error, Unit>>> Handle
         (UpdateTrackCommand command, CancellationToken cancellationToken)
     {
         var track = await _trackRepository.FindAsync(command.Id);
@@ -46,9 +47,9 @@ public class UpdateTrackCommandHandler :
 
         ignore(updatedTrack
             .Map(t =>
-                t.Map(async x => await _trackRepository.UpdateAsync(x))));
+                t.Map(async x => await _trackRepository.SaveAsync())));
 
         return updatedTrack;
-        
+
     }
 }

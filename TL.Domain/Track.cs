@@ -44,11 +44,11 @@ public class Track
         return Unit.Default;
     }
 
-    public Track Update(TrackTitle title, TrackNumber trackNumber)
+    public Unit Update(TrackTitle title, TrackNumber trackNumber)
     {
         Title = title;
         TrackNumber = trackNumber;
-        return this;
+        return Unit.Default;
     }
     
     

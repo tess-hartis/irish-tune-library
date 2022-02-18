@@ -49,7 +49,7 @@ public class TrackController : Controller
         var track = await _mediator.Send(request);
         return track
             .Some(x =>
-                x.Succ<IActionResult>(t => Ok(GetTrackDTO.FromTrack(t)))
+                x.Succ<IActionResult>(u => Ok())
                     .Fail(e =>
                     {
                         var errors = e.Select(x => x.Message).ToList();
