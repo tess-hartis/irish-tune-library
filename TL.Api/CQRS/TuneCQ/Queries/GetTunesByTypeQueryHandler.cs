@@ -8,9 +8,9 @@ namespace TL.Api.CQRS.TuneCQ.Queries;
 
 public class GetTunesByTypeQuery : IRequest<IEnumerable<Tune>>
 {
-    public TuneTypeEnum Type { get; }
+    public string Type { get; }
 
-    public GetTunesByTypeQuery(TuneTypeEnum type)
+    public GetTunesByTypeQuery(string type)
     {
         Type = type;
     }
@@ -29,7 +29,7 @@ public class GetTunesByTypeQueryHandler : IRequestHandler<GetTunesByTypeQuery, I
         (GetTunesByTypeQuery request, CancellationToken cancellationToken)
     {
         var tunes = await _tuneRepository
-            .GetByWhere(x => x.TuneType == request.Type).ToListAsync();
+            .GetByWhere(x => x.TuneType.Value == request.Type).ToListAsync();
         return tunes;
     }
 }

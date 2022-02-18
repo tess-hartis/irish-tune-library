@@ -8,10 +8,10 @@ namespace TL.Api.CQRS.TuneCQ.Queries;
 
 public class GetTunesByTypeKeyQuery : IRequest<IEnumerable<Tune>>
 {
-    public TuneTypeEnum Type { get; }
-    public TuneKeyEnum Key { get; }
+    public string Type { get; }
+    public string Key { get; }
 
-    public GetTunesByTypeKeyQuery(TuneTypeEnum type, TuneKeyEnum key)
+    public GetTunesByTypeKeyQuery(string type, string key)
     {
         Type = type;
         Key = key;
@@ -31,7 +31,8 @@ public class GetTunesByTypeKeyQueryHandler : IRequestHandler<GetTunesByTypeKeyQu
         (GetTunesByTypeKeyQuery request, CancellationToken cancellationToken)
     {
         var tunes = await _tuneRepository
-            .GetByWhere(x => x.TuneType == request.Type & x.TuneKey == request.Key)
+            .GetByWhere(x => x.TuneType.Value == request.Type & 
+                             x.TuneKey.Value == request.Key)
             .ToListAsync();
         return tunes;
     }

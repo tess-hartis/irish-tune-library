@@ -36,23 +36,23 @@ public class TuneController : Controller
     }
 
     [HttpGet("type/{type}")]
-    public async Task<IActionResult> FindByType(TuneTypeEnum type)
+    public async Task<IActionResult> FindByType(string type)
     {
         var query = new GetTunesByTypeQuery(type);
         var result = await _mediator.Send(query);
         return Ok(result.Select(GetTuneDTO.FromTune));
     }
-
+    
     [HttpGet("key/{key}")]
-    public async Task<IActionResult> FindByKey(TuneKeyEnum key)
+    public async Task<IActionResult> FindByKey(string key)
     {
         var query = new GetTunesByKeyQuery(key);
         var result = await _mediator.Send(query);
         return Ok(result.Select(GetTuneDTO.FromTune));
     }
-
+    
     [HttpGet("type/{type}/key/{key}")]
-    public async Task<IActionResult> FindByTypeAndKey(TuneTypeEnum type, TuneKeyEnum key)
+    public async Task<IActionResult> FindByTypeAndKey(string type, string key)
     {
         var query = new GetTunesByTypeKeyQuery(type, key);
         var result = await _mediator.Send(query);
