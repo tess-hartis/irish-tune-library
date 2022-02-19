@@ -115,21 +115,18 @@ public class AlbumController : Controller
     request.AlbumId = albumId;
     var track = await _mediator.Send(request);
     return track
-      .Some(x =>
-        x.Succ(y =>
-            y.Some<IActionResult>(b =>
-              {
-                if (b)
-                  return Ok();
+      .Some(x => 
+        x.Succ<IActionResult>(b =>
+        {
+          if (b)
+            return Ok();
 
-                return BadRequest();
-              })
-              .None(NotFound))
+          return UnprocessableEntity();
+        })
           .Fail(e =>
           {
             var errors = e.Select(x => x.Message).ToList();
             return UnprocessableEntity(new {errors});
-            
           }))
       .None(NotFound);
 

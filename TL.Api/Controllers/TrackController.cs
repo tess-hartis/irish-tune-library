@@ -1,4 +1,5 @@
 using LanguageExt.Common;
+using static LanguageExt.Prelude;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -88,15 +89,22 @@ public class TrackController : Controller
         request.TuneId = tuneId;
         var trackTune = await _mediator.Send(request);
         return trackTune
-            .Some(x =>
-                x.Succ<IActionResult>(t => Ok())
-                    .Fail(e =>
+                .Some(x =>
+                    x.Succ<IActionResult>(b =>
+                    {
+                        if (b)
+                            return Ok();
+
+                        return UnprocessableEntity();
+                    })
+                        .Fail(e =>
                     {
                         var errors = e.Select(x => x.Message).ToList();
                         return UnprocessableEntity(new {errors});
                     }))
+               
             .None(NotFound);
-
     }
-    
+
 }
+    
