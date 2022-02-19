@@ -36,8 +36,7 @@ public class UpdateArtistCommandHandler :
         var artist = await _artistRepository.FindAsync(command.Id);
         var name = ArtistName.Create(command.Name);
         var updatedArtist = artist
-            .Map(a => (name)
-                .Map(n => a.Update(n)));
+            .Map(a => name.Map(a.Update));
 
         ignore(updatedArtist
             .Map(a =>
