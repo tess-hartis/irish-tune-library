@@ -11,7 +11,7 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.TrackCQ.Commands;
 
-public class AddTrackTuneCommand : IRequest<Option<Validation<Error, TrackTune>>>
+public class AddTrackTuneCommand : IRequest<Option<Validation<Error, bool>>>
 {
     public int TrackId { get; set; }
     public int TuneId { get; set; }
@@ -24,7 +24,7 @@ public class AddTrackTuneCommand : IRequest<Option<Validation<Error, TrackTune>>
         Order = order;
     }
 }
-public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, Option<Validation<Error, TrackTune>>>
+public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, Option<Validation<Error, bool>>>
 {
     private readonly TuneLibraryContext _context;
     private ITrackRepository _trackRepository;
@@ -60,7 +60,7 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
         }
     }
 
-    public async Task<Option<Validation<Error, TrackTune>>> Handle(AddTrackTuneCommand command,
+    public async Task<Option<Validation<Error, bool>>> Handle(AddTrackTuneCommand command,
         CancellationToken cancellationToken)
     {
         var track = await TrackRepo.FindAsync(command.TrackId);
@@ -71,9 +71,10 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
             from tr in track
             from tu in tune
             from o in order
-            select o.Map(x => TrackTune.Create(tr, tu, x));
+            select o.Map(x => TrackTune.Create(x))
+                .Map(y => tr.AddTrackTune(y, tu));
 
-        ignore(result.MapT(async y => await TrackTuneRepo.AddAsync(y)));
+        ignore(result.MapT(async y => await TrackTuneRepo.SaveAsync()));
 
         return result;
 

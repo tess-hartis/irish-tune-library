@@ -65,6 +65,20 @@ public class Track
             this.AlbumId = album.Id;
         }
     }
+
+    public bool AddTrackTune(TrackTune trackTune, Tune tune)
+    {
+        var duplicateOrder = _trackTunes.Exists(x =>
+            x.Order.Value == trackTune.Order.Value);
+
+        if (duplicateOrder)
+            return false;
+        
+        _trackTunes.Add(trackTune);
+        trackTune.SetTrack(this);
+        trackTune.SetTune(tune);
+        return true;
+    }
     
     
 }

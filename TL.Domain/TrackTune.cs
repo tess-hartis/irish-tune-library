@@ -15,19 +15,37 @@ public class TrackTune
     public Tune Tune { get; set; }
     
     
-    public static TrackTune Create(Track track, Tune tune, TrackTuneOrder order)
+    public static TrackTune Create(TrackTuneOrder order)
     {
         var trackTune = new TrackTune
         {
-            TrackId = track.Id,
-            TuneId = tune.Id,
             Order = order,
-            Title = tune.Title.Value
         };
 
         return trackTune;
     }
-    
+
+    public void SetTrack(Track track)
+    {
+        if (track.TrackTunes.Contains(this))
+        {
+            this.Track = track;
+            this.TrackId = track.Id;
+        }
+    }
+
+    public void SetTune(Tune tune)
+    {
+        var trackTunes = tune.FeaturedOnTrack
+            .SelectMany(t => t.TrackTunes);
+        
+        if (trackTunes.Contains(this))
+        {
+            this.Tune = tune;
+            this.TuneId = tune.Id;
+            this.Title = tune.Title.Value;
+        }
+    }
 }
 
 

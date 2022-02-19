@@ -36,7 +36,7 @@ public class Album
         return Unit.Default;
     }
 
-    public Boolean RemoveArtist(Artist artist)
+    public bool RemoveArtist(Artist artist)
     {
        return _artists.Remove(artist);
     }
@@ -48,7 +48,7 @@ public class Album
         return this;
     }
 
-    public Boolean AddTrack(Track track)
+    public bool AddTrack(Track track)
     {
         var duplicateTrackNumber = _tracks.Exists(x =>
             x.TrkNumber.Value == track.TrkNumber.Value);
