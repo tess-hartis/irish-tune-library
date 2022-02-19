@@ -1,4 +1,6 @@
 using LanguageExt;
+using LanguageExt.Common;
+using static LanguageExt.Prelude;
 using TL.Domain.ValueObjects.TrackValueObjects;
 
 namespace TL.Domain;
@@ -25,24 +27,29 @@ public class Track
             TrkNumber = trkNumber,
             AlbumId = album.Id
         };
-
-        //add validation to prevent tracks with the same track number from being added
-        //add validation for tracknumber
         
         return track;
     }
-    
-    public Track AddTune(TrackTune trackTune)
+
+    public static Validation<Error, Track> CreateAndValidateTrackNumber(TrackTitle title, TrkNumber trkNumber, Album album)
     {
-        _trackTunes.Add(trackTune);
-        return this;
+        var track = new Track()
+        {
+            Title = title,
+            TrkNumber = trkNumber,
+            AlbumId = album.Id
+        };
+
+        var duplicateTrackNumber = album.TrackListing
+            .Exists(x => x.TrkNumber.Value == trkNumber.Value);
+
+        if (duplicateTrackNumber)
+            return Fail<Error, Track>("Track number already exists");
+
+        return Success<Error, Track>(track);
     }
-    
-    public Unit RemoveTune(TrackTune trackTune)
-    {
-        _trackTunes.Remove(trackTune);
-        return Unit.Default;
-    }
+
+
 
     public Unit Update(TrackTitle title, TrkNumber trkNumber)
     {

@@ -1,5 +1,6 @@
 using LanguageExt;
 using LanguageExt.Common;
+using LanguageExt.SomeHelp;
 using static LanguageExt.Prelude;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
@@ -9,7 +10,8 @@ using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class AddTrackToAlbumCommand : IRequest<Option<Validation<Error, Track>>>
+public class AddTrackToAlbumCommand : IRequest
+    <Option<Validation<Error, Validation<Error, Track>>>>
 {
     public int AlbumId { get; set; }
     public string Title { get; }
@@ -23,7 +25,7 @@ public class AddTrackToAlbumCommand : IRequest<Option<Validation<Error, Track>>>
     }
 }
 public class AddTrackToAlbumCommandHandler : 
-    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Track>>>
+    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Validation<Error, Track>>>>
 {
     private readonly ITrackRepository _trackRepository;
     private readonly IAlbumRepository _albumRepository;
@@ -34,20 +36,40 @@ public class AddTrackToAlbumCommandHandler :
         _albumRepository = albumRepository;
     }
 
-    public async Task<Option<Validation<Error, Track>>> Handle
+    // public async Task<Option<Validation<Error, Track>>> Handle
+    //     (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
+    // {
+    //     var album = await _albumRepository.FindAsync(command.AlbumId);
+    //     var title = Some(TrackTitle.Create(command.Title));
+    //     var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
+    //     
+    //     var result =
+    //         from a in album
+    //         from t in title
+    //         from tn in trackNumber
+    //         select (t, tn).Apply(((x, y) => Track.Create(x, y, a)));
+    //     
+    //         ignore(result.MapT(async x => await _trackRepository.AddAsync(x)));
+    //
+    //     return result;
+    //     
+    // }
+    
+    public async Task<Option<Validation<Error, Validation<Error, Track>>>> Handle
         (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
     {
         var album = await _albumRepository.FindAsync(command.AlbumId);
         var title = Some(TrackTitle.Create(command.Title));
         var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
-
+        
         var result =
             from a in album
             from t in title
             from tn in trackNumber
-            select (t, tn).Apply(((x, y) => Track.Create(x, y, a)));
-
-        ignore(result.MapT(async x => await _trackRepository.AddAsync(x)));
+            select (t, tn).Apply(((x, y) => Track.CreateAndValidateTrackNumber(x, y, a)));
+        
+        ignore(result.MapT(x => 
+            x.Map(async y => await _trackRepository.AddAsync(y))));
 
         return result;
         
