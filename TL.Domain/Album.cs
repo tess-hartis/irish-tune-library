@@ -49,6 +49,19 @@ public class Album
         return this;
     }
 
+    public Boolean AddTrack(Track track)
+    {
+        var duplicateTrackNumber = _tracks.Exists(x =>
+            x.TrkNumber.Value == track.TrkNumber.Value);
+
+        if (duplicateTrackNumber)
+            return false;
+
+        _tracks.Add(track);
+        track.SetAlbum(this);
+        return true;
+    }
+
 
 
 

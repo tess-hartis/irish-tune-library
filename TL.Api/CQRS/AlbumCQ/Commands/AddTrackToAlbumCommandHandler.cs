@@ -11,7 +11,7 @@ using TL.Repository;
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
 public class AddTrackToAlbumCommand : IRequest
-    <Option<Validation<Error, Validation<Error, Track>>>>
+    <Option<Validation<Error, Option<Boolean>>>>
 {
     public int AlbumId { get; set; }
     public string Title { get; }
@@ -25,7 +25,7 @@ public class AddTrackToAlbumCommand : IRequest
     }
 }
 public class AddTrackToAlbumCommandHandler : 
-    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Validation<Error, Track>>>>
+    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Option<Boolean>>>>
 {
     private readonly ITrackRepository _trackRepository;
     private readonly IAlbumRepository _albumRepository;
@@ -36,6 +36,30 @@ public class AddTrackToAlbumCommandHandler :
         _albumRepository = albumRepository;
     }
 
+    public async Task<Option<Validation<Error, Option<Boolean>>>> Handle
+        (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
+    {
+        var album = await _albumRepository.FindAsync(command.AlbumId);
+        var title = Some(TrackTitle.Create(command.Title));
+        var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
+
+        var track =
+            from tt in title
+            from tn in trackNumber
+            select (tt, tn).Apply(((x, y) => Track.Create(x, y)))
+                .Map(t => album
+                    .Map(a => 
+                        a.AddTrack(t)));
+        
+        
+        ignore(track.MapT(x => 
+            x.Map(async y => await _trackRepository.SaveAsync())));
+
+        return track;
+
+    }
+    
+    //ATTEMPT #1 (does not validate track number)
     // public async Task<Option<Validation<Error, Track>>> Handle
     //     (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
     // {
@@ -55,23 +79,46 @@ public class AddTrackToAlbumCommandHandler :
     //     
     // }
     
-    public async Task<Option<Validation<Error, Validation<Error, Track>>>> Handle
-        (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
-    {
-        var album = await _albumRepository.FindAsync(command.AlbumId);
-        var title = Some(TrackTitle.Create(command.Title));
-        var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
-        
-        var result =
-            from a in album
-            from t in title
-            from tn in trackNumber
-            select (t, tn).Apply(((x, y) => Track.CreateAndValidateTrackNumber(x, y, a)));
-        
-        ignore(result.MapT(x => 
-            x.Map(async y => await _trackRepository.AddAsync(y))));
-
-        return result;
-        
-    }
+    //ATTEMPT #2 (works)
+    // public async Task<Option<Validation<Error, Validation<Error, Track>>>> Handle
+    //     (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
+    // {
+    //     var album = await _albumRepository.FindAsync(command.AlbumId);
+    //     var title = Some(TrackTitle.Create(command.Title));
+    //     var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
+    //     
+    //     var result =
+    //         from a in album
+    //         from t in title
+    //         from tn in trackNumber
+    //         select (t, tn).Apply(((x, y) => Track.CreateAndValidateTrackNumber(x, y, a)));
+    //     
+    //     ignore(result.MapT(x => 
+    //         x.Map(async y => await _trackRepository.AddAsync(y))));
+    //
+    //     return result;
+    //     
+    // }
 }
+
+// This is what we want to do:
+// var track = track.create()
+// album.addTrack(track);
+
+// ============
+// Album
+// AddTrack(Track track) {
+// check the list
+// _tracks.add(track);
+// track.SetAlbum(this);
+// }
+// ============
+
+// ============
+// Track
+// SetAlbum(Album album) {
+// if (album.TrackListings.Contains(blah blah blah)
+// track.Album = this;
+// track.AlbumId = this.Id;
+// }
+// ============

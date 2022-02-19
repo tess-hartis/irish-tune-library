@@ -19,13 +19,12 @@ public class Track
     public int AlbumId { get; set; }
     public Album Album { get; set; }
 
-    public static Track Create(TrackTitle title, TrkNumber trkNumber, Album album)
+    public static Track Create(TrackTitle title, TrkNumber trkNumber)
     {
         var track = new Track()
         {
             Title = title,
             TrkNumber = trkNumber,
-            AlbumId = album.Id
         };
         
         return track;
@@ -56,6 +55,15 @@ public class Track
         Title = title;
         TrkNumber = trkNumber;
         return Unit.Default;
+    }
+
+    public void SetAlbum(Album album)
+    {
+        if (album.TrackListing.Contains(this))
+        {
+            this.Album = album;
+            this.AlbumId = album.Id;
+        }
     }
     
     
