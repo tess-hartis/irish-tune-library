@@ -66,7 +66,7 @@ public class Tune
         
     }
 
-    public Tune Update(TuneTitle title, TuneComposer composer, TuneTypeValueObj type, TuneKeyValueObj key)
+    public Unit Update(TuneTitle title, TuneComposer composer, TuneTypeValueObj type, TuneKeyValueObj key)
     {
         Title = title;
         Composer = composer;
@@ -83,6 +83,6 @@ public class Tune
         //
         // this.TuneKey = tuneKey;
 
-        return this;
+        return Unit.Default;
     }
 }
