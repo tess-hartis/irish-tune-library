@@ -82,7 +82,10 @@ public class AlbumArtistService : IAlbumArtistService
         var album = await AlbumRepo.FindAsync(albumId);
         var artist = await ArtistRepo.FindAsync(artistId);
     
-        var result = artist.Bind(a => album.Map(x => x.RemoveArtist(a)));
+        var result =
+            from al in album
+            from ar in artist
+            select al.RemoveArtist(al.Artists.FirstOrDefault(x => x.Id == ar.Id));
     
         ignore(result.Map(async _ => await _context.SaveChangesAsync()));
     

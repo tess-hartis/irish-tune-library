@@ -18,27 +18,27 @@ public class RemoveArtistFromAlbumCommand : IRequest<Option<Boolean>>
 }
 public class RemoveArtistFromAlbumCommandHandler : IRequestHandler<RemoveArtistFromAlbumCommand, Option<Boolean>>
 {
-    private readonly IAlbumRepository _albumRepository;
-    private readonly IArtistRepository _artistRepository;
+    private readonly IAlbumArtistService _albumArtistService;
 
-    public RemoveArtistFromAlbumCommandHandler(IAlbumRepository albumRepository, IArtistRepository artistRepository)
+    public RemoveArtistFromAlbumCommandHandler(IAlbumArtistService albumArtistService)
     {
-        _albumRepository = albumRepository;
-        _artistRepository = artistRepository;
+        _albumArtistService = albumArtistService;
     }
 
     public async Task<Option<Boolean>> Handle(RemoveArtistFromAlbumCommand command, CancellationToken cancellationToken)
     {
-        var album = await _albumRepository.FindAsync(command.AlbumId);
-        var artist = await _artistRepository.FindAsync(command.ArtistId);
+        return await _albumArtistService.RemoveArtistFromAlbum(command.AlbumId, command.ArtistId);
 
-        var result =
-            from al in album
-            from ar in artist
-            select al.RemoveArtist(al.Artists.FirstOrDefault(x => x.Id == ar.Id));
-
-        ignore(result.Map(async x => await _albumRepository.SaveAsync()));
-
-        return result;
+        // var album = await _albumRepository.FindAsync(command.AlbumId);
+        // var artist = await _artistRepository.FindAsync(command.ArtistId);
+        //
+        // var result =
+        //     from al in album
+        //     from ar in artist
+        //     select al.RemoveArtist(al.Artists.FirstOrDefault(x => x.Id == ar.Id));
+        //
+        // ignore(result.Map(async x => await _albumRepository.SaveAsync()));
+        //
+        // return result;
     }
 }
