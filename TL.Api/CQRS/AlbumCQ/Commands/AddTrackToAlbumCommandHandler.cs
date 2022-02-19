@@ -12,7 +12,7 @@ using TL.Repository;
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
 public class AddTrackToAlbumCommand : IRequest
-    <Option<Validation<Error, Option<Boolean>>>>
+    <Option<Validation<Error, bool>>>
 {
     public int AlbumId { get; set; }
     public string Title { get; }
@@ -26,7 +26,7 @@ public class AddTrackToAlbumCommand : IRequest
     }
 }
 public class AddTrackToAlbumCommandHandler : 
-    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Option<Boolean>>>>
+    IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, bool>>>
 {
     private readonly TuneLibraryContext _context;
     private ITrackRepository _trackRepository;
@@ -53,7 +53,7 @@ public class AddTrackToAlbumCommandHandler :
         }
     }
 
-    public async Task<Option<Validation<Error, Option<Boolean>>>> Handle
+    public async Task<Option<Validation<Error, bool>>> Handle
         (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
     {
         var album = await AlbumRepo.FindAsync(command.AlbumId);
@@ -63,14 +63,11 @@ public class AddTrackToAlbumCommandHandler :
         var track =
             from tt in title
             from tn in trackNumber
-            select (tt, tn).Apply(((x, y) => Track.Create(x, y)))
-                .Map(t => album
-                    .Map(a => 
-                        a.AddTrack(t)));
-        
-        
-        ignore(track.MapT(x => 
-            x.Map(async y => await TrackRepo.SaveAsync())));
+            from a in album
+            select (tt, tn).Apply(Track.Create).Map(a.AddTrack);
+
+
+        ignore(track.MapT(async _ => await TrackRepo.SaveAsync()));
 
         return track;
 
