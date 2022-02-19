@@ -1,5 +1,4 @@
 using LanguageExt;
-using TL.Domain.Exceptions;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 
 namespace TL.Domain;

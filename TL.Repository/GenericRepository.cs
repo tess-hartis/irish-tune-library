@@ -4,7 +4,6 @@ using LanguageExt.SomeHelp;
 using static LanguageExt.Prelude;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
-using TL.Domain.Exceptions;
 
 namespace TL.Repository;
 

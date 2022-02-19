@@ -1,7 +1,6 @@
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
-using TL.Domain.Exceptions;
 
 namespace TL.Api.Middleware;
 
