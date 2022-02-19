@@ -64,7 +64,8 @@ public class AddTrackToAlbumCommandHandler :
             from tt in title
             from tn in trackNumber
             from a in album
-            select (tt, tn).Apply(Track.Create).Map(a.AddTrack);
+            select (tt, tn).Apply(Track.Create)
+                .Map(a.AddTrack);
 
 
         ignore(track.MapT(async _ => await TrackRepo.SaveAsync()));

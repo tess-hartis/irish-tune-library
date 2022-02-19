@@ -71,7 +71,7 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
             from tr in track
             from tu in tune
             from o in order
-            select o.Map(x => TrackTune.Create(x))
+            select o.Map(TrackTune.Create)
                 .Map(y => tr.AddTrackTune(y, tu));
 
         ignore(result.MapT(async y => await TrackTuneRepo.SaveAsync()));
