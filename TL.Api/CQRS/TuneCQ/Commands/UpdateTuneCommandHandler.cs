@@ -9,10 +9,11 @@ using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
+using Unit = LanguageExt.Unit;
 
 namespace TL.Api.CQRS.TuneCQ.Commands;
 
-public class UpdateTuneCommand : IRequest<Option<Validation<Error, Tune>>>
+public class UpdateTuneCommand : IRequest<Option<Validation<Error, Unit>>>
 {
     public int Id { get; set; }
     public string Title { get; }
@@ -30,7 +31,7 @@ public class UpdateTuneCommand : IRequest<Option<Validation<Error, Tune>>>
     }
 }
 
-public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Option<Validation<Error, Tune>>>
+public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Option<Validation<Error, Unit>>>
 {
     private readonly ITuneRepository _tuneRepository;
 
@@ -39,7 +40,7 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Optio
         _tuneRepository = tuneRepository;
     }
 
-    public async Task<Option<Validation<Error, Tune>>> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
+    public async Task<Option<Validation<Error, Unit>>> Handle(UpdateTuneCommand command, CancellationToken cancellationToken)
     {
         var tune = await _tuneRepository.FindAsync(command.Id);
 
@@ -50,12 +51,11 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Optio
 
         var updatedTune = tune
             .Map(t => (title, composer, type, key)
-                .Apply((x, y, ty, k) =>
-                    t.Update(x, y, ty, k)));
+                .Apply(t.Update));
 
         ignore(updatedTune
             .Map(t =>
-                t.Map(async x => await _tuneRepository.UpdateAsync(x))));
+                t.Map(async x => await _tuneRepository.SaveAsync())));
 
         return updatedTune;
         
