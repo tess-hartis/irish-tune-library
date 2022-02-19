@@ -68,7 +68,7 @@ public class AddTrackToAlbumCommandHandler :
                 .Map(a.AddTrack);
 
 
-        ignore(track.MapT(async _ => await TrackRepo.SaveAsync()));
+        ignore(track.MapT(async _ => await _context.SaveChangesAsync()));
 
         return track;
 

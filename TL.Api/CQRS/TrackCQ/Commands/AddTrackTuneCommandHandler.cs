@@ -74,7 +74,7 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
             select o.Map(TrackTune.Create)
                 .Map(y => tr.AddTrackTune(y, tu));
 
-        ignore(result.MapT(async y => await TrackTuneRepo.SaveAsync()));
+        ignore(result.MapT(async y => await _context.SaveChangesAsync()));
 
         return result;
 
