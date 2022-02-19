@@ -4,6 +4,7 @@ using LanguageExt.SomeHelp;
 using static LanguageExt.Prelude;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Data;
 using TL.Domain;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Repository;
@@ -25,22 +26,45 @@ public class AddTrackTuneCommand : IRequest<Option<Validation<Error, TrackTune>>
 }
 public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, Option<Validation<Error, TrackTune>>>
 {
-    private readonly ITrackRepository _trackRepository;
-    private readonly ITuneRepository _tuneRepository;
-    private readonly ITrackTuneRepository _trackTuneRepository;
+    private readonly TuneLibraryContext _context;
+    private ITrackRepository _trackRepository;
+    private ITuneRepository _tuneRepository;
+    private ITrackTuneRepository _trackTuneRepository;
 
-    public AddTrackTuneCommandHandler(ITrackRepository trackRepository, ITuneRepository tuneRepository, ITrackTuneRepository trackTuneRepository)
+    public AddTrackTuneCommandHandler(TuneLibraryContext context)
     {
-        _trackRepository = trackRepository;
-        _tuneRepository = tuneRepository;
-        _trackTuneRepository = trackTuneRepository;
+        _context = context;
+    }
+
+    private ITrackRepository TrackRepo
+    {
+        get
+        {
+            return _trackRepository = new TrackRepository(_context);
+        }
+    }
+
+    private ITuneRepository TuneRepo
+    {
+        get
+        {
+            return _tuneRepository = new TuneRepository(_context);
+        }
+    }
+
+    private ITrackTuneRepository TrackTuneRepo
+    {
+        get
+        {
+            return _trackTuneRepository = new TrackTuneRepository(_context);
+        }
     }
 
     public async Task<Option<Validation<Error, TrackTune>>> Handle(AddTrackTuneCommand command,
         CancellationToken cancellationToken)
     {
-        var track = await _trackRepository.FindAsync(command.TrackId);
-        var tune = await _tuneRepository.FindAsync(command.TuneId);
+        var track = await TrackRepo.FindAsync(command.TrackId);
+        var tune = await TuneRepo.FindAsync(command.TuneId);
         var order = Some(TrackTuneOrder.Create(command.Order));
 
         var result =
@@ -49,7 +73,7 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
             from o in order
             select o.Map(x => TrackTune.Create(tr, tu, x));
 
-        ignore(result.MapT(async y => await _trackTuneRepository.AddAsync(y)));
+        ignore(result.MapT(async y => await TrackTuneRepo.AddAsync(y)));
 
         return result;
 

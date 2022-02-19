@@ -4,6 +4,7 @@ using LanguageExt.SomeHelp;
 using static LanguageExt.Prelude;
 using MediatR;
 using TL.Api.DTOs.TrackDTOs;
+using TL.Data;
 using TL.Domain;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
@@ -27,19 +28,35 @@ public class AddTrackToAlbumCommand : IRequest
 public class AddTrackToAlbumCommandHandler : 
     IRequestHandler<AddTrackToAlbumCommand, Option<Validation<Error, Option<Boolean>>>>
 {
-    private readonly ITrackRepository _trackRepository;
-    private readonly IAlbumRepository _albumRepository;
+    private readonly TuneLibraryContext _context;
+    private ITrackRepository _trackRepository;
+    private  IAlbumRepository _albumRepository;
 
-    public AddTrackToAlbumCommandHandler(ITrackRepository trackRepository, IAlbumRepository albumRepository)
+    public AddTrackToAlbumCommandHandler(TuneLibraryContext context)
     {
-        _trackRepository = trackRepository;
-        _albumRepository = albumRepository;
+        _context = context;
+    }
+
+    private ITrackRepository TrackRepo
+    {
+        get
+        {
+            return _trackRepository = new TrackRepository(_context);
+        }
+    }
+
+    private IAlbumRepository AlbumRepo
+    {
+        get
+        {
+            return _albumRepository = new AlbumRepository(_context);
+        }
     }
 
     public async Task<Option<Validation<Error, Option<Boolean>>>> Handle
         (AddTrackToAlbumCommand command, CancellationToken cancellationToken)
     {
-        var album = await _albumRepository.FindAsync(command.AlbumId);
+        var album = await AlbumRepo.FindAsync(command.AlbumId);
         var title = Some(TrackTitle.Create(command.Title));
         var trackNumber = Some(TrkNumber.Create(command.TrackNumber));
 
@@ -53,7 +70,7 @@ public class AddTrackToAlbumCommandHandler :
         
         
         ignore(track.MapT(x => 
-            x.Map(async y => await _trackRepository.SaveAsync())));
+            x.Map(async y => await TrackRepo.SaveAsync())));
 
         return track;
 
