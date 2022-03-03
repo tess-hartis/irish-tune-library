@@ -14,8 +14,8 @@ public class Track
     private readonly List<TrackTune> _trackTunes = new List<TrackTune>();
     public IReadOnlyList<TrackTune> TrackTunes => _trackTunes;
 
-    public int AlbumId { get; set; }
-    public Album Album { get; set; }
+    public int AlbumId { get; private set; }
+    public Album Album { get; private set; }
 
     public static Track Create(TrackTitle title, TrkNumber trkNumber)
     {
@@ -39,8 +39,8 @@ public class Track
     {
         if (album.TrackListing.Contains(this))
         {
-            this.Album = album;
-            this.AlbumId = album.Id;
+            Album = album;
+            AlbumId = album.Id;
         }
     }
 
