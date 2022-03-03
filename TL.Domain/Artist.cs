@@ -7,7 +7,7 @@ public class Artist
 {
     private Artist(){ }
     
-    public int Id { get; private set; }
+    public int Id { get; }
     
     public ArtistName Name { get; private set; }
     
