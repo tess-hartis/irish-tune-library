@@ -88,7 +88,6 @@ public class TuneController : Controller
                         return UnprocessableEntity(new {errors});
                     }))
             .None(NotFound);
-
     }
     
     [HttpDelete("{id}")]
@@ -142,9 +141,5 @@ public class TuneController : Controller
             .Some<IActionResult>(t => 
                 Ok(t.Select(GetTrackDTO.FromTrack)))
             .None(NotFound);
-        
     }
-    
-    
-    
 }
