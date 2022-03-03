@@ -39,6 +39,5 @@ public class AlbumRepository : GenericRepository<Album>, IAlbumRepository
             .Include(a => a.TrackListing)
             .ToListAsync();
     }
-
-
+    
 }
