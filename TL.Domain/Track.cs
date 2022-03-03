@@ -11,7 +11,7 @@ public class Track
     public TrackTitle Title { get; private set; }
     public TrkNumber TrkNumber { get; private set; }
     
-    private List<TrackTune> _trackTunes = new List<TrackTune>();
+    private readonly List<TrackTune> _trackTunes = new List<TrackTune>();
     public IReadOnlyList<TrackTune> TrackTunes => _trackTunes;
 
     public int AlbumId { get; set; }
