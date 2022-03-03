@@ -29,8 +29,8 @@ public class TrackTune
     {
         if (track.TrackTunes.Contains(this))
         {
-            this.Track = track;
-            this.TrackId = track.Id;
+            Track = track;
+            TrackId = track.Id;
         }
     }
 
@@ -41,9 +41,9 @@ public class TrackTune
         
         if (trackTunes.Contains(this))
         {
-            this.Tune = tune;
-            this.TuneId = tune.Id;
-            this.Title = tune.Title.Value;
+            Tune = tune;
+            TuneId = tune.Id;
+            Title = tune.Title.Value;
         }
     }
 }
