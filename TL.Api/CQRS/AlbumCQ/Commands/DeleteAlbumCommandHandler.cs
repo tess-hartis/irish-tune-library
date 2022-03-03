@@ -30,6 +30,5 @@ public class DeleteAlbumCommandHandler : IRequestHandler<DeleteAlbumCommand, Opt
         var album = await _albumRepository.FindAsync(command.AlbumId);
         ignore(album.Map(async a => await _albumRepository.DeleteAsync(a)));
         return album.Map(a => unit);
-
     }
 }
