@@ -5,7 +5,7 @@ namespace TL.Domain;
 
 public class Album
 {
-    public int Id { get; private set; }
+    public int Id { get; }
     public AlbumTitle Title { get; private set; }
     public AlbumYear Year { get; private set; }
    
