@@ -8,7 +8,6 @@ public class Artist
     private Artist(){ }
     
     public int Id { get; }
-    
     public ArtistName Name { get; private set; }
     
     private readonly List<Album> _albums = new List<Album>();
@@ -29,5 +28,4 @@ public class Artist
         Name = name;
         return Unit.Default;
     }
-    
 }

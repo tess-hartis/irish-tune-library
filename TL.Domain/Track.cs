@@ -57,6 +57,4 @@ public class Track
         trackTune.SetTune(tune);
         return true;
     }
-    
-    
 }

@@ -11,7 +11,6 @@ public class Tune
     public TuneTitle Title { get; private set; }
 
     private readonly List<TuneTitle> _alternateTitles = new List<TuneTitle>();
-
     public IReadOnlyList<TuneTitle> AlternateTitles =>
         _alternateTitles;
 
