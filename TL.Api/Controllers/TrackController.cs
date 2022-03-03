@@ -7,6 +7,7 @@ using TL.Api.DTOs.TrackDTOs;
 namespace TL.Api.Controllers;
 
 [Route("api/[controller]")]
+[ApiController]
 
 public class TrackController : Controller
 {

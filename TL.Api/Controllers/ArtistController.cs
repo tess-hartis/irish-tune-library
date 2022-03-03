@@ -8,6 +8,8 @@ using TL.Api.DTOs.ArtistDTOs;
 namespace TL.Api.Controllers;
 
 [Route("api/[controller]")]
+[ApiController]
+
 public class ArtistController : Controller
 {
    private readonly IMediator _mediator;

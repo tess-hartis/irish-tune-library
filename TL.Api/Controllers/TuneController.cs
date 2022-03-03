@@ -8,6 +8,7 @@ using TL.Api.DTOs.TuneDTOS;
 namespace TL.Api.Controllers;
 
 [Route("api/[controller]")]
+[ApiController]
 
 public class TuneController : Controller
 {
