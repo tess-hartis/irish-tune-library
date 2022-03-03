@@ -11,7 +11,7 @@ public class Artist
     
     public ArtistName Name { get; private set; }
     
-    private List<Album> _albums = new List<Album>();
+    private readonly List<Album> _albums = new List<Album>();
     public IEnumerable<Album> Albums => _albums;
 
     public static Artist CreateArtist(ArtistName name)
