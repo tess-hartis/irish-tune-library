@@ -30,6 +30,5 @@ public class GetAlbumTracksQueryHandler : IRequestHandler<GetAlbumTracksQuery, O
         var album = await _albumRepository.FindAsync(request.AlbumId);
         var tracks = album.Select(a => a.TrackListing);
         return tracks;
-
     }
 }

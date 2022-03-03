@@ -1,6 +1,5 @@
 using LanguageExt;
 using MediatR;
-using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
 using TL.Repository;
 
@@ -28,6 +27,5 @@ public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, Optio
     public async Task<Option<Track>> Handle(GetTrackByIdQuery request, CancellationToken cancellationToken)
     {
         return await _trackRepository.FindAsync(request.Id);
-        
     }
 }

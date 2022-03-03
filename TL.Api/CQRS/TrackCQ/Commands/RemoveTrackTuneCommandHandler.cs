@@ -1,7 +1,6 @@
  using LanguageExt;
  using static LanguageExt.Prelude;
  using MediatR;
- using TL.Domain;
  using TL.Repository;
  using Unit = LanguageExt.Unit;
 

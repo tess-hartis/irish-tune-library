@@ -47,6 +47,5 @@ public class UpdateAlbumCommandHandler : IRequestHandler<UpdateAlbumCommand, Opt
                 a.Map(async x => await _albumRepository.UpdateAsync(x))));
 
         return updatedAlbum;
-        
     }
 }

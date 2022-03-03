@@ -2,8 +2,6 @@ using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using MediatR;
-using TL.Api.DTOs.TuneDTOS;
-using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
 using Unit = LanguageExt.Unit;
@@ -45,7 +43,5 @@ public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitle
                 t.Map(async x => await _tuneRepository.SaveAsync())));
 
         return updatedTune;
-
-
     }
 }

@@ -1,12 +1,7 @@
-using CSharpFunctionalExtensions;
 using LanguageExt;
 using static LanguageExt.Prelude;
-using LanguageExt.ClassInstances.Pred;
 using LanguageExt.Common;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using TL.Api.DTOs.TuneDTOS;
-using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
 using Unit = LanguageExt.Unit;
@@ -58,6 +53,5 @@ public class UpdateTuneCommandHandler : IRequestHandler<UpdateTuneCommand, Optio
                 t.Map(async x => await _tuneRepository.SaveAsync())));
 
         return updatedTune;
-        
     }
 }

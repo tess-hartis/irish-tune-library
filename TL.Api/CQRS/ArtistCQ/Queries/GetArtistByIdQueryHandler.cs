@@ -1,6 +1,5 @@
 using LanguageExt;
 using MediatR;
-using TL.Api.DTOs.ArtistDTOs;
 using TL.Domain;
 using TL.Repository;
 

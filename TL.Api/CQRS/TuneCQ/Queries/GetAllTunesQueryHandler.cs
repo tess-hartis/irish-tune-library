@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Repository;
 

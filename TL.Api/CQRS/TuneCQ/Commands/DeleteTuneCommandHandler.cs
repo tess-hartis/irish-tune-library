@@ -1,7 +1,6 @@
 using LanguageExt;
 using static LanguageExt.Prelude;
 using MediatR;
-using TL.Domain;
 using TL.Repository;
 using Unit = LanguageExt.Unit;
 
@@ -30,6 +29,5 @@ public class DeleteTuneCommandHandler : IRequestHandler<DeleteTuneCommand, Optio
         var tune = await _tuneRepository.FindAsync(command.Id);
         ignore(tune.Map(async t => await _tuneRepository.DeleteAsync(t)));
         return tune.Map(t => unit);
-        
     }
 }

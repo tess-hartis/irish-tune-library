@@ -1,7 +1,6 @@
 using LanguageExt;
 using LanguageExt.Common;
 using MediatR;
-using TL.Api.DTOs.TuneDTOS;
 using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
@@ -53,7 +52,6 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Valid
             .Fail(e => e.AsTask());
 
         return newTune;
-
     }
     
 }

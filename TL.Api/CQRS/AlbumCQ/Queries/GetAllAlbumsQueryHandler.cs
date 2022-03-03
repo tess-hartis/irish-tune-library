@@ -1,6 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using TL.Api.DTOs.AlbumDTOs;
 using TL.Domain;
 using TL.Repository;
 
@@ -22,6 +20,5 @@ public class GetAllAlbumsQueryHandler : IRequestHandler<GetAllAlbumsQuery, IEnum
     {
         var albums = await _albumRepository.GetAll();
         return albums;
-
     }
 }

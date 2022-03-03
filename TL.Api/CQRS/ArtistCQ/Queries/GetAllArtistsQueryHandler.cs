@@ -1,6 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using TL.Api.DTOs.ArtistDTOs;
 using TL.Domain;
 using TL.Repository;
 

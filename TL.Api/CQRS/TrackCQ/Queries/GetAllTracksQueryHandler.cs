@@ -1,6 +1,4 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
 using TL.Repository;
 
@@ -22,6 +20,5 @@ public class GetAllTracksQueryHandler : IRequestHandler<GetAllTracksQuery, IEnum
     {
         var tracks = await _trackRepository.GetAll();
         return tracks;
-
     }
 }

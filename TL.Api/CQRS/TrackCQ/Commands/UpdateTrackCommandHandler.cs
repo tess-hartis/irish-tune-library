@@ -2,8 +2,6 @@ using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using MediatR;
-using TL.Api.DTOs.TrackDTOs;
-using TL.Domain;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
 using Unit = LanguageExt.Unit;
@@ -50,6 +48,5 @@ public class UpdateTrackCommandHandler :
                 t.Map(async x => await _trackRepository.SaveAsync())));
 
         return updatedTrack;
-
     }
 }

@@ -29,6 +29,5 @@ public class DeleteTrackCommandHandler : IRequestHandler<DeleteTrackCommand, Opt
         var track = await _trackRepository.FindAsync(command.Id);
         ignore(track.Map(async t => await _trackRepository.DeleteAsync(t)));
         return track.Map(t => unit);
-
     }
 }

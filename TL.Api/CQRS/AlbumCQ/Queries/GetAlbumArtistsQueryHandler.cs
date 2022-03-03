@@ -1,6 +1,5 @@
 using LanguageExt;
 using MediatR;
-using TL.Api.DTOs.ArtistDTOs;
 using TL.Domain;
 using TL.Repository;
 
@@ -31,6 +30,5 @@ public class GetAlbumArtistsQueryHandler : IRequestHandler<GetAlbumArtistsQuery,
         var album = await _albumRepository.FindAsync(request.AlbumId);
         var artists = album.Select(a => a.Artists);
         return artists;
-
     }
 }
