@@ -1,9 +1,9 @@
 using LanguageExt;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Repository;
+using static LanguageExt.Prelude;
 
-namespace TL.Api.CQRS.TuneCQ.Commands;
+namespace TL.CQRS.TuneCQ.Commands;
 
 public class RemoveAlternateTitleCommand : IRequest<Option<bool>>
 {

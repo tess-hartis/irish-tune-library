@@ -1,10 +1,10 @@
 using LanguageExt;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Repository;
+using static LanguageExt.Prelude;
 using Unit = LanguageExt.Unit;
 
-namespace TL.Api.CQRS.TuneCQ.Commands;
+namespace TL.CQRS.TuneCQ.Commands;
 
 public class DeleteTuneCommand : IRequest<Option<Unit>>
 {

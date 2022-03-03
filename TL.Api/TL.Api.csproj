@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="CQRS" />
       <Folder Include="DTOs" />
     </ItemGroup>
 

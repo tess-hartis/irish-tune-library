@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TL.Api.CQRS.TuneCQ.Commands;
-using TL.Api.CQRS.TuneCQ.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Api.DTOs.TuneDTOS;
+using TL.CQRS.TuneCQ.Commands;
+using TL.CQRS.TuneCQ.Queries;
 
 namespace TL.Api.Controllers;
 

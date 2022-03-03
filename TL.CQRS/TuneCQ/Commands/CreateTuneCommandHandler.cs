@@ -5,7 +5,7 @@ using TL.Domain;
 using TL.Domain.ValueObjects.TuneValueObjects;
 using TL.Repository;
 
-namespace TL.Api.CQRS.TuneCQ.Commands;
+namespace TL.CQRS.TuneCQ.Commands;
 
 public class CreateTuneCommand : IRequest<Validation<Error, Tune>>
 {

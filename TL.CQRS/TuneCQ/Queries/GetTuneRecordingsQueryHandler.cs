@@ -3,7 +3,7 @@ using MediatR;
 using TL.Domain;
 using TL.Repository;
 
-namespace TL.Api.CQRS.TuneCQ.Queries;
+namespace TL.CQRS.TuneCQ.Queries;
 
 public class GetTuneRecordingsQuery : IRequest<Option<IEnumerable<Track>>>
 {
