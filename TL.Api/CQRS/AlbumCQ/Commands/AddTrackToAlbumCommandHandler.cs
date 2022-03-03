@@ -49,7 +49,6 @@ public class AddTrackToAlbumCommandHandler :
         ignore(track.MapT(async _ => await _unitOfWork.Save()));
 
         return track;
-
     }
 }
 
