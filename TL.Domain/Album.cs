@@ -8,12 +8,11 @@ public class Album
     public int Id { get; }
     public AlbumTitle Title { get; private set; }
     public AlbumYear Year { get; private set; }
-   
     
-    private List<Artist> _artists = new List<Artist>();
+    private readonly List<Artist> _artists = new List<Artist>();
     public IEnumerable<Artist> Artists => _artists;
     
-    private List<Track> _tracks = new List<Track>();
+    private readonly List<Track> _tracks = new List<Track>();
     public IEnumerable<Track> TrackListing => _tracks;
     
     
