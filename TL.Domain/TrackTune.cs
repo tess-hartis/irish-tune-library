@@ -4,15 +4,15 @@ namespace TL.Domain;
 
 public class TrackTune
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
+    public int Id { get; }
+    public string Title { get; private set; }
     public TrackTuneOrder Order { get; private set; }
     
-    public int TrackId { get; set; }
-    public Track Track { get; set; }
+    public int TrackId { get; private set; }
+    public Track Track { get; private set; }
     
-    public int TuneId { get; set; }
-    public Tune Tune { get; set; }
+    public int TuneId { get; private set; }
+    public Tune Tune { get; private set; }
     
     
     public static TrackTune Create(TrackTuneOrder order)
