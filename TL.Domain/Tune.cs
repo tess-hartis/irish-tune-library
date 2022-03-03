@@ -18,7 +18,7 @@ public class Tune
     public TuneTypeValueObj TuneType { get; private set; }
     public TuneKeyValueObj TuneKey { get; private set; }
     public TuneComposer Composer { get; private set; }
-    public DateOnly DateAdded { get; private set; }
+    public DateOnly DateAdded { get; private init; }
     
     private readonly List<TrackTune> _featuredOnTrack = new List<TrackTune>();
     public IEnumerable<Track> FeaturedOnTrack => 
