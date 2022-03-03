@@ -44,10 +44,9 @@ public class Tune
         return Unit.Default;
     }
 
-    public Boolean RemoveAlternateTitle(TuneTitle title)
+    public bool RemoveAlternateTitle(TuneTitle title)
     {
         return _alternateTitles.Remove(title);
-        
     }
 
     public Unit Update(TuneTitle title, TuneComposer composer, TuneTypeValueObj type, TuneKeyValueObj key)
