@@ -23,7 +23,7 @@ public abstract class GenericRepository<T>
 {
     protected TuneLibraryContext Context;
 
-    public GenericRepository(TuneLibraryContext context)
+    protected GenericRepository(TuneLibraryContext context)
     {
         Context = context;
     }
@@ -42,7 +42,7 @@ public abstract class GenericRepository<T>
 
     public virtual async Task<Unit> AddAsync(T entity)
     {
-        var result = await Context.Set<T>().AddAsync(entity);
+        await Context.Set<T>().AddAsync(entity);
         await Context.SaveChangesAsync();
         return unit;
         
