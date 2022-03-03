@@ -10,7 +10,7 @@ public class Tune
     public int Id { get; private set; }
     public TuneTitle Title { get; private set; }
 
-    private List<TuneTitle> _alternateTitles = new List<TuneTitle>();
+    private readonly List<TuneTitle> _alternateTitles = new List<TuneTitle>();
 
     public IReadOnlyList<TuneTitle> AlternateTitles =>
         _alternateTitles;
@@ -20,7 +20,7 @@ public class Tune
     public TuneComposer Composer { get; private set; }
     public DateOnly DateAdded { get; private set; }
     
-    private List<TrackTune> _featuredOnTrack = new List<TrackTune>();
+    private readonly List<TrackTune> _featuredOnTrack = new List<TrackTune>();
     public IEnumerable<Track> FeaturedOnTrack => 
         _featuredOnTrack.Select(x => x.Track).ToList();
 
