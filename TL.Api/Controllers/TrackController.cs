@@ -18,7 +18,6 @@ public class TrackController : Controller
         _mediator = mediator;
     }
     
-
     [HttpGet("{id}")]
     public async Task<IActionResult> FindTrack(int id)
     {
@@ -52,7 +51,6 @@ public class TrackController : Controller
                         return UnprocessableEntity(new {errors});
                     }))
             .None(NotFound);
-
     }
 
     [HttpDelete("{id}")]
@@ -74,7 +72,6 @@ public class TrackController : Controller
         return result
             .Some<IActionResult>(_ => NoContent())
             .None(NotFound);
-        
     }
 
     [HttpPost("{trackId}/tune/{tuneId}")]
@@ -100,6 +97,5 @@ public class TrackController : Controller
                
             .None(NotFound);
     }
-
 }
     

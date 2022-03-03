@@ -36,7 +36,6 @@ public class ArtistController : Controller
          .Map(GetArtistDTO.FromArtist)
          .Some<IActionResult>(Ok)
          .None(NotFound);
-
    }
 
    [HttpPost]
@@ -76,8 +75,6 @@ public class ArtistController : Controller
       return result
          .Some<IActionResult>(_ => NoContent())
          .None(NotFound);
-      
-
    }
 
    [HttpGet("{artistId}/albums")]
@@ -90,5 +87,4 @@ public class ArtistController : Controller
             Ok(a.Select(GetAlbumDTO.FromAlbum)))
          .None(NotFound);
    }
-   
 }

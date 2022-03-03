@@ -130,51 +130,8 @@ public class AlbumController : Controller
           }))
       
       .None(NotFound);
-
   }
-  //ATTEMPT #1 (does not validate track number)
-  // [HttpPost("{albumId}/track")]
-  // public async Task<IActionResult> AddTrackToAlbum(int albumId, [FromBody] AddTrackToAlbumCommand request)
-  // {
-  //   request.AlbumId = albumId;
-  //   var track = await _mediator.Send(request);
-  //   return track
-  //     .Some<IActionResult>(x =>
-  //       x.Succ<IActionResult>(t => Ok())
-  //         .Fail(e =>
-  //         {
-  //           var errors = e.Select(x => x.Message).ToList();
-  //           return UnprocessableEntity(new {errors});
-  //
-  //         }))
-  //     .None(NotFound);
-  //
-  // }
   
-  //ATTEMPT #2 (works)
-  // [HttpPost("{albumId}/track")]
-  // public async Task<IActionResult> AddTrackToAlbum(int albumId, [FromBody] AddTrackToAlbumCommand request)
-  // {
-  //   request.AlbumId = albumId;
-  //   var track = await _mediator.Send(request);
-  //   
-  //   return track
-  //     .Some<IActionResult>(x => // if the album exists, goes to next line
-  //       x.Succ(y => // if validation of value objs was successful, goes to next line
-  //           y.Match<IActionResult>(t => Ok(), //matches Ok if track number is not a duplicate, otherwise fails
-  //             e =>
-  //             {
-  //               var errors = e.Select(x => x.Message).ToList();
-  //               return UnprocessableEntity(new {errors});
-  //             }))
-  //         .Fail(e => //the value objects failed (title was invalid or track number was an invalid number)
-  //         {
-  //           var errors = e.Select(x => x.Message).ToList();
-  //           return UnprocessableEntity(new {errors});
-  //         }))
-  //     .None(NotFound);    // did not find the album
-  // }
-
   [HttpGet("{albumId}/tracks")]
   public async Task<IActionResult> GetAlbumTracks(int albumId)
   {
