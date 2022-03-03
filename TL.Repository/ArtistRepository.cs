@@ -3,7 +3,6 @@ using LanguageExt.SomeHelp;
 using Microsoft.EntityFrameworkCore;
 using TL.Data;
 using TL.Domain;
-using TL.Domain.ValueObjects.ArtistValueObjects;
 
 namespace TL.Repository;
 
