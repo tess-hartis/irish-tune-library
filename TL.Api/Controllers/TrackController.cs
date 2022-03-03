@@ -1,14 +1,8 @@
-using LanguageExt.Common;
-using static LanguageExt.Prelude;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TL.Api.CQRS.TrackCQ.Commands;
 using TL.Api.CQRS.TrackCQ.Queries;
 using TL.Api.DTOs.TrackDTOs;
-using TL.Domain.ValueObjects.TrackTuneValueObjects;
-using TL.Domain.ValueObjects.TrackValueObjects;
-using TL.Repository;
 
 namespace TL.Api.Controllers;
 
