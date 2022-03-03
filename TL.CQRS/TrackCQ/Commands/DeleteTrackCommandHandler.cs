@@ -1,10 +1,10 @@
 using LanguageExt;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Repository;
+using static LanguageExt.Prelude;
 using Unit = LanguageExt.Unit;
 
-namespace TL.Api.CQRS.TrackCQ.Commands;
+namespace TL.CQRS.TrackCQ.Commands;
 
 public class DeleteTrackCommand : IRequest<Option<Unit>>
 {

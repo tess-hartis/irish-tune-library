@@ -3,7 +3,7 @@ using MediatR;
 using TL.Domain;
 using TL.Repository;
 
-namespace TL.Api.CQRS.TrackCQ.Queries;
+namespace TL.CQRS.TrackCQ.Queries;
 
 public class GetTrackByIdQuery : IRequest<Option<Track>>
 {

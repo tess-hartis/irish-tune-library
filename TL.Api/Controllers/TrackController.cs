@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TL.Api.CQRS.TrackCQ.Commands;
-using TL.Api.CQRS.TrackCQ.Queries;
 using TL.Api.DTOs.TrackDTOs;
+using TL.CQRS.TrackCQ.Commands;
+using TL.CQRS.TrackCQ.Queries;
 
 namespace TL.Api.Controllers;
 

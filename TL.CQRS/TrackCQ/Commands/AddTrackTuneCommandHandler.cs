@@ -1,12 +1,12 @@
 using LanguageExt;
 using LanguageExt.Common;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Domain;
 using TL.Domain.ValueObjects.TrackTuneValueObjects;
 using TL.Repository;
+using static LanguageExt.Prelude;
 
-namespace TL.Api.CQRS.TrackCQ.Commands;
+namespace TL.CQRS.TrackCQ.Commands;
 
 public class AddTrackTuneCommand : IRequest<Option<Validation<Error, bool>>>
 {
