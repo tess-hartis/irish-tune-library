@@ -21,7 +21,6 @@ public record TrkNumber
         if (value > 50)
             return Fail<Error, TrkNumber>("Invalid track number");
         
-
         return Success<Error, TrkNumber>(new TrkNumber(value));
     }
 }

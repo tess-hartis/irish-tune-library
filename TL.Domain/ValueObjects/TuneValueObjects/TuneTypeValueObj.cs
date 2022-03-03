@@ -21,6 +21,5 @@ public record TuneTypeValueObj
             return Fail<Error, TuneTypeValueObj>("Invalid tune type");
 
         return Success<Error, TuneTypeValueObj>(new TuneTypeValueObj(trimmed));
-
     }
 }

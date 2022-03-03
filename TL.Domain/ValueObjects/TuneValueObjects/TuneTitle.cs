@@ -32,7 +32,6 @@ public record TuneTitle
         if (!Regex.IsMatch(trimmed, pattern))
             return Fail<Error, TuneTitle>("Title contains invalid characters");
         
-
         return Success<Error, TuneTitle>(new TuneTitle(trimmed));
     }
 }

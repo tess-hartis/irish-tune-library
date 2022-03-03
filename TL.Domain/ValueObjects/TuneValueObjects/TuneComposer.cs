@@ -31,8 +31,7 @@ public record TuneComposer
         
         if (!Regex.IsMatch(trimmed, pattern))
             return Fail<Error, TuneComposer>("Composer name contains invalid characters");
-
-
+        
         return Success<Error, TuneComposer>(new TuneComposer(trimmed));
     }
 }
