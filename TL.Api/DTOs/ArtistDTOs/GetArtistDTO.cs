@@ -11,9 +11,6 @@ public class GetArtistDTO
 
     public static GetArtistDTO FromArtist(Artist artist)
     {
-        // var albums = from a in artist.Albums
-        //     select GetAlbumDTO.FromAlbum(a);
-
         var albums = artist.Albums.Select(GetAlbumDTO.FromAlbum);
         
         return new GetArtistDTO

@@ -32,7 +32,6 @@ public class ExceptionHandlingMiddleware
                 statusCode = (int) HttpStatusCode.InternalServerError;
                 break;
             
-                
         }
         
         var errorMessage = JsonConvert.SerializeObject(new {ex.Message});

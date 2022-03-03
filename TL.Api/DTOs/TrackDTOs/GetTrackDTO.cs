@@ -21,7 +21,6 @@ public class GetTrackDTO
             Title = track.Title.Value,
             TrackNumber = track.TrkNumber.Value,
             Tunes = tunes
-
         };
     }
 }
