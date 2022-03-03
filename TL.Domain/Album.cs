@@ -5,6 +5,8 @@ namespace TL.Domain;
 
 public class Album
 {
+    private Album(){ }
+    
     public int Id { get; }
     public AlbumTitle Title { get; private set; }
     public AlbumYear Year { get; private set; }
@@ -26,8 +28,6 @@ public class Album
         
         return album;
     }
-
-    private Album(){ }
     
     public Unit AddArtist(Artist artist)
     {
@@ -59,8 +59,4 @@ public class Album
         track.SetAlbum(this);
         return true;
     }
-
-
-
-
 }
