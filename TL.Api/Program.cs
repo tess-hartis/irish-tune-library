@@ -1,9 +1,8 @@
-using System.Reflection;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json.Converters;
 using TinyHelpers.Json.Serialization;
 using TL.Api.Middleware;
+using TL.CQRS;
 using TL.Data;
 using TL.Repository;
 
@@ -23,10 +22,11 @@ builder.Services.AddTransient<ITrackRepository, TrackRepository>();
 builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
 builder.Services.AddTransient<IArtistRepository, ArtistRepository>();
 builder.Services.AddTransient<ITrackTuneRepository, TrackTuneRepository>();
+builder.Services.AddTransient<ITrackAlbumUnitOfWork, TrackAlbumUnitOfWork>();
+builder.Services.AddTransient<ITrackTuneUnitOfWork, TrackTuneUnitOfWork>();
+builder.Services.AddTransient<IAlbumArtistUnitOfWork, AlbumArtistUnitOfWork>();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
-
-//not sure about this
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(typeof(MediatorEntry).Assembly);
 
 var app = builder.Build();
 
