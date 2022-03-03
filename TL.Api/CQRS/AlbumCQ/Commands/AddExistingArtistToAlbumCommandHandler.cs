@@ -1,9 +1,6 @@
 using LanguageExt;
 using static LanguageExt.Prelude;
 using MediatR;
-using TL.Api.DTOs.AlbumDTOs;
-using TL.Data;
-using TL.Domain;
 using TL.Repository;
 using Unit = LanguageExt.Unit;
 
