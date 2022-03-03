@@ -1,12 +1,11 @@
 using LanguageExt;
 using static LanguageExt.Prelude;
 using MediatR;
-using TL.Data;
 using TL.Repository;
 
 namespace TL.Api.CQRS.AlbumCQ.Commands;
 
-public class RemoveArtistFromAlbumCommand : IRequest<Option<Boolean>>
+public class RemoveArtistFromAlbumCommand : IRequest<Option<bool>>
 {
     public int AlbumId { get; }
     public int ArtistId { get; }
@@ -17,45 +16,26 @@ public class RemoveArtistFromAlbumCommand : IRequest<Option<Boolean>>
         ArtistId = artistId;
     }
 }
-public class RemoveArtistFromAlbumCommandHandler : IRequestHandler<RemoveArtistFromAlbumCommand, Option<Boolean>>
+public class RemoveArtistFromAlbumCommandHandler : IRequestHandler<RemoveArtistFromAlbumCommand, Option<bool>>
 {
-    private readonly TuneLibraryContext _context;
-    private IAlbumRepository _albumRepository;
-    private IArtistRepository _artistRepository;
+    private readonly IAlbumArtistUnitOfWork _unitOfWork;
     
-
-    public RemoveArtistFromAlbumCommandHandler(TuneLibraryContext context)
+    public RemoveArtistFromAlbumCommandHandler(IAlbumArtistUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
     
-    private IAlbumRepository AlbumRepo
+    public async Task<Option<bool>> Handle(RemoveArtistFromAlbumCommand command, CancellationToken cancellationToken)
     {
-        get
-        {
-            return _albumRepository = new AlbumRepository(_context);
-        }
-    }
-
-    private IArtistRepository ArtistRepo
-    {
-        get
-        {
-            return _artistRepository = new ArtistRepository(_context);
-        }
-    }
-
-    public async Task<Option<Boolean>> Handle(RemoveArtistFromAlbumCommand command, CancellationToken cancellationToken)
-    {
-        var album = await AlbumRepo.FindAsync(command.AlbumId);
-        var artist = await ArtistRepo.FindAsync(command.ArtistId);
+        var album = await _unitOfWork.AlbumRepo.FindAsync(command.AlbumId);
+        var artist = await _unitOfWork.ArtistRepo.FindAsync(command.ArtistId);
         
         var result =
             from al in album
             from ar in artist
             select al.RemoveArtist(al.Artists.FirstOrDefault(x => x.Id == ar.Id));
         
-        ignore(result.Map(async x => await _context.SaveChangesAsync()));
+        ignore(result.Map(async x => await _unitOfWork.Save()));
         
         return result;
     }
