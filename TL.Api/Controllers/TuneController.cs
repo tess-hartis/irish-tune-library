@@ -1,15 +1,9 @@
-using CSharpFunctionalExtensions;
-using LanguageExt;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TL.Api.CQRS.TuneCQ.Commands;
 using TL.Api.CQRS.TuneCQ.Queries;
 using TL.Api.DTOs.TrackDTOs;
 using TL.Api.DTOs.TuneDTOS;
-using TL.Domain;
-using TL.Domain.ValueObjects.TuneValueObjects;
-using TL.Repository;
 
 namespace TL.Api.Controllers;
 
