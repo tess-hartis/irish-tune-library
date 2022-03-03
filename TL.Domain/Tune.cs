@@ -7,7 +7,7 @@ public class Tune
 {
     private Tune() { }
 
-    public int Id { get; private set; }
+    public int Id { get; }
     public TuneTitle Title { get; private set; }
 
     private readonly List<TuneTitle> _alternateTitles = new List<TuneTitle>();
