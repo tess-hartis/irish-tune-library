@@ -7,7 +7,7 @@ public class Track
 {
     private Track() { }
     
-    public int Id { get; private set; }
+    public int Id { get; }
     public TrackTitle Title { get; private set; }
     public TrkNumber TrkNumber { get; private set; }
     
