@@ -5,7 +5,7 @@ using TL.Domain;
 using TL.Domain.ValueObjects.AlbumValueObjects;
 using TL.Repository;
 
-namespace TL.Api.CQRS.AlbumCQ.Commands;
+namespace TL.CQRS.AlbumCQ.Commands;
 
 public class CreateAlbumCommand : IRequest<Validation<Error, Album>>
 {

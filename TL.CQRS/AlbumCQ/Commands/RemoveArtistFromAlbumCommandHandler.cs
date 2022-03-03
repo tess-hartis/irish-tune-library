@@ -1,9 +1,9 @@
 using LanguageExt;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Repository;
+using static LanguageExt.Prelude;
 
-namespace TL.Api.CQRS.AlbumCQ.Commands;
+namespace TL.CQRS.AlbumCQ.Commands;
 
 public class RemoveArtistFromAlbumCommand : IRequest<Option<bool>>
 {

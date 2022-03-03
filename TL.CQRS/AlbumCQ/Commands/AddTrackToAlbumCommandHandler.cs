@@ -1,15 +1,14 @@
 using LanguageExt;
 using LanguageExt.Common;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Domain;
 using TL.Domain.ValueObjects.TrackValueObjects;
 using TL.Repository;
+using static LanguageExt.Prelude;
 
-namespace TL.Api.CQRS.AlbumCQ.Commands;
+namespace TL.CQRS.AlbumCQ.Commands;
 
-public class AddTrackToAlbumCommand : IRequest
-    <Option<Validation<Error, bool>>>
+public class AddTrackToAlbumCommand : IRequest <Option<Validation<Error, bool>>>
 {
     public int AlbumId { get; set; }
     public string Title { get; }

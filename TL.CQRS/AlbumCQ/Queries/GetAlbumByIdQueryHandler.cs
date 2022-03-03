@@ -3,7 +3,7 @@ using MediatR;
 using TL.Domain;
 using TL.Repository;
 
-namespace TL.Api.CQRS.AlbumCQ.Queries;
+namespace TL.CQRS.AlbumCQ.Queries;
 
 public class GetAlbumByIdQuery : IRequest<Option<Album>>
 {

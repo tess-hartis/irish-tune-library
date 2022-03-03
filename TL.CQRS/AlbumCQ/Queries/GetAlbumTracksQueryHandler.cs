@@ -1,10 +1,9 @@
 using LanguageExt;
 using MediatR;
-using TL.Api.DTOs.TrackDTOs;
 using TL.Domain;
 using TL.Repository;
 
-namespace TL.Api.CQRS.AlbumCQ.Queries;
+namespace TL.CQRS.AlbumCQ.Queries;
 
 public class GetAlbumTracksQuery : IRequest<Option<IEnumerable<Track>>>
 {

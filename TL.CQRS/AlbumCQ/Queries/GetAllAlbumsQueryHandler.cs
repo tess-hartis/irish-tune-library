@@ -2,7 +2,7 @@ using MediatR;
 using TL.Domain;
 using TL.Repository;
 
-namespace TL.Api.CQRS.AlbumCQ.Queries;
+namespace TL.CQRS.AlbumCQ.Queries;
 
 public record GetAllAlbumsQuery : IRequest<IEnumerable<Album>>;
 

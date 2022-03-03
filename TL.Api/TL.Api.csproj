@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TL.CQRS\TL.CQRS.csproj" />
       <ProjectReference Include="..\TL.Repository\TL.Repository.csproj" />
     </ItemGroup>
 
