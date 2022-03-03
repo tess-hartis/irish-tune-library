@@ -1,14 +1,11 @@
 using TL.Domain.ValueObjects.TuneValueObjects;
 using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace TL.Domain;
 
 public class Tune
 {
-    private Tune()
-    {
-    }
+    private Tune() { }
 
     public int Id { get; private set; }
     public TuneTitle Title { get; private set; }
@@ -29,7 +26,6 @@ public class Tune
 
     public static Tune Create(TuneTitle title, TuneComposer composer, TuneTypeValueObj type, TuneKeyValueObj key)
     {
-
         var tune = new Tune
         {
             Title = title,
@@ -39,19 +35,7 @@ public class Tune
             DateAdded = DateOnly.FromDateTime(DateTime.Today)
         };
         
-       
-        // if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
-        //     throw new Exception();
-        //
-        // tune.TuneType = tuneType;
-
-        // if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
-        //     throw new Exception();
-        //
-        // tune.TuneKey = tuneKey;
-
         return tune;
-
     }
 
     public Unit AddAlternateTitle(TuneTitle title)
@@ -73,16 +57,6 @@ public class Tune
         TuneType = type;
         TuneKey = key;
         
-        // if (!Enum.TryParse<TuneTypeEnum>(type, true, out var tuneType))
-        //     throw new Exception();
-        //
-        // this.TuneType = tuneType;
-
-        // if (!Enum.TryParse<TuneKeyEnum>(key, true, out var tuneKey))
-        //     throw new Exception();
-        //
-        // this.TuneKey = tuneKey;
-
         return Unit.Default;
     }
 }
