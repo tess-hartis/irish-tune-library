@@ -17,48 +17,30 @@ public class AddExistingArtistToAlbumCommand : IRequest<Option<Unit>>
         ArtistId = artistId;
     }
 }
+
 public class AddExistingArtistToAlbumCommandHandler : IRequestHandler<AddExistingArtistToAlbumCommand, Option<Unit>>
 {
-    private readonly TuneLibraryContext _context;
-    private IAlbumRepository _albumRepository;
-    private IArtistRepository _artistRepository;
+    private readonly IAlbumArtistUnitOfWork _unitOfWork;
     
 
-    public AddExistingArtistToAlbumCommandHandler(TuneLibraryContext context)
+    public AddExistingArtistToAlbumCommandHandler(IAlbumArtistUnitOfWork unitOfWork)
     {
-        _context = context;
-    }
-
-    private IAlbumRepository AlbumRepo
-    {
-        get
-        {
-            return _albumRepository = new AlbumRepository(_context);
-        }
-    }
-
-    private IArtistRepository ArtistRepo
-    {
-        get
-        {
-            return _artistRepository = new ArtistRepository(_context);
-        }
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<Option<Unit>> Handle(AddExistingArtistToAlbumCommand command, CancellationToken cancellationToken)
     {
         
-        var album = await AlbumRepo.FindAsync(command.AlbumId);
-        var artist = await ArtistRepo.FindAsync(command.ArtistId);
+        var album = await _unitOfWork.AlbumRepo.FindAsync(command.AlbumId);
+        var artist = await _unitOfWork.ArtistRepo.FindAsync(command.ArtistId);
         
         var result = 
             from al in album 
             from ar in artist 
             select al.AddArtist(ar);
         
-        ignore(result.Map(async _ => await _context.SaveChangesAsync()));
+        ignore(result.Map(async _ => await _unitOfWork.Save()));
         
         return result;
-
     }
 }
