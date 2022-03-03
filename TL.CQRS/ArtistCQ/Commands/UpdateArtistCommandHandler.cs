@@ -1,12 +1,12 @@
 using LanguageExt;
 using LanguageExt.Common;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;
+using static LanguageExt.Prelude;
 using Unit = LanguageExt.Unit;
 
-namespace TL.Api.CQRS.ArtistCQ.Commands;
+namespace TL.CQRS.ArtistCQ.Commands;
 
 public class UpdateArtistCommand : IRequest<Option<Validation<Error, Unit>>>
 {

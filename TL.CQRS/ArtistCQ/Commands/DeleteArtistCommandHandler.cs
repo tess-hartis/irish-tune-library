@@ -1,11 +1,11 @@
 using LanguageExt;
-using static LanguageExt.Prelude;
 using MediatR;
 using TL.Repository;
+using static LanguageExt.Prelude;
 using Unit = LanguageExt.Unit;
 
 
-namespace TL.Api.CQRS.ArtistCQ.Commands;
+namespace TL.CQRS.ArtistCQ.Commands;
 
 public class DeleteArtistCommand : IRequest<Option<Unit>>
 {

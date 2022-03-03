@@ -5,7 +5,7 @@ using TL.Domain;
 using TL.Domain.ValueObjects.ArtistValueObjects;
 using TL.Repository;
 
-namespace TL.Api.CQRS.ArtistCQ.Commands;
+namespace TL.CQRS.ArtistCQ.Commands;
 
 public class CreateArtistCommand : IRequest<Validation<Error, Artist>>
 {
