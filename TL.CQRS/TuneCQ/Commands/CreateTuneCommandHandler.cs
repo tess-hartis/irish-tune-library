@@ -53,5 +53,4 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Valid
 
         return newTune;
     }
-    
 }

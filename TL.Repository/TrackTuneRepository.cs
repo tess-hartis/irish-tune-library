@@ -15,5 +15,4 @@ public class TrackTuneRepository : GenericRepository<TrackTune>, ITrackTuneRepos
     {
         
     }
-    
 }

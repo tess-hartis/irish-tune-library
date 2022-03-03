@@ -8,6 +8,7 @@ public interface ITrackAlbumUnitOfWork
     ITrackRepository TrackRepo { get; }
     IAlbumRepository AlbumRepo { get; }
 }
+
 public class TrackAlbumUnitOfWork : ITrackAlbumUnitOfWork
 {
     private readonly TuneLibraryContext _context;

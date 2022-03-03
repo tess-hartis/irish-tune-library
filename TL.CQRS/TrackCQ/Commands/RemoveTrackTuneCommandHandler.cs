@@ -15,6 +15,7 @@ using Unit = LanguageExt.Unit;
          TrackTuneId = trackTuneId;
      }
  }
+ 
  public class RemoveTrackTuneCommandHandler : IRequestHandler<RemoveTrackTuneCommand, Option<Unit>>
  {
      private readonly ITrackTuneRepository _trackTuneRepository;

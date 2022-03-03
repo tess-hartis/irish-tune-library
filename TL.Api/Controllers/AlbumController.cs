@@ -77,7 +77,6 @@ public class AlbumController : Controller
     return result
       .Some<IActionResult>(_ => NoContent())
       .None(NotFound);
-    
   }
 
   [HttpPost("{albumId}/artist/{artistId}")]
@@ -88,8 +87,6 @@ public class AlbumController : Controller
     return album
       .Some<IActionResult>(u => Ok())
       .None(NotFound);
-
-    //need to edit DTO to include album artists
   }
 
   [HttpDelete("{albumId}/artist/{artistId}")]

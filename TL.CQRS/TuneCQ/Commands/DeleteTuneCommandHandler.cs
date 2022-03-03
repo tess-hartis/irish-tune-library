@@ -15,6 +15,7 @@ public class DeleteTuneCommand : IRequest<Option<Unit>>
         Id = id;
     }
 }
+
 public class DeleteTuneCommandHandler : IRequestHandler<DeleteTuneCommand, Option<Unit>>
 {
     private readonly ITuneRepository _tuneRepository;

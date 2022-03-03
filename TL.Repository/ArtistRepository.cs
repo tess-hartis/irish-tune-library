@@ -32,5 +32,4 @@ public class ArtistRepository : GenericRepository<Artist>, IArtistRepository
 
         return result.ToSome();
     }
-
 }

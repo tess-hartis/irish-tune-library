@@ -13,8 +13,8 @@ public class GetTrackByIdQuery : IRequest<Option<Track>>
     {
         Id = id;
     }
-    
 }
+
 public class GetTrackByIdQueryHandler : IRequestHandler<GetTrackByIdQuery, Option<Track>>
 {
     private readonly ITrackRepository _trackRepository;

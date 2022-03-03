@@ -20,7 +20,5 @@ public class GetAllArtistsQueryHandler : IRequestHandler<GetAllArtistsQuery, IEn
     {
         var artists = await _artistRepository.GetAllArtists();
         return artists;
-
     }
-
 }

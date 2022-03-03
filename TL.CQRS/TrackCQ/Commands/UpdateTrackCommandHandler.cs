@@ -21,6 +21,7 @@ public class UpdateTrackCommand : IRequest<Option<Validation<Error, Unit>>>
         TrackNumber = trackNumber;
     }
 }
+
 public class UpdateTrackCommandHandler : 
     IRequestHandler<UpdateTrackCommand, Option<Validation<Error, Unit>>>
 {

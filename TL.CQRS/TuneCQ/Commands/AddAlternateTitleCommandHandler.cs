@@ -19,6 +19,7 @@ public class AddAlternateTitleCommand : IRequest<Option<Validation<Error, Unit>>
         AlternateTitle = alternateTitle;
     }
 }
+
 public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitleCommand, Option<Validation<Error, Unit>>>
 {
     private readonly ITuneRepository _tuneRepository;

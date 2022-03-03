@@ -16,6 +16,7 @@ public class RemoveAlternateTitleCommand : IRequest<Option<bool>>
         AlternateTitle = alternateTitle;
     }
 }
+
 public class RemoveAlternateTitleCommandHandler : 
     IRequestHandler<RemoveAlternateTitleCommand, Option<bool>>
 {
