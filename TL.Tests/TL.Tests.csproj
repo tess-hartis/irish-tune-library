@@ -19,4 +19,8 @@
       <ProjectReference Include="..\TL.Repository\TL.Repository.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DomainTests" />
+    </ItemGroup>
+
 </Project>
