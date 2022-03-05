@@ -2,5 +2,12 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a91c30d2_002D353d_002D4225_002D93c3_002Da4cc167a3d7f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Valid_TuneTitle_Test" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.ValueObjectTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Valid_Tune_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Invalid_TuneTitle_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Invalid_TuneTitle_And_Composer_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Valid_Alternate_Title_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Invalid_AlternateTitle_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Valid_Update_Tune_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Invalid_Update_Tune_Test&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
