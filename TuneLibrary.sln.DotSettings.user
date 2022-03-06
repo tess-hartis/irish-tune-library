@@ -9,5 +9,17 @@
     &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Invalid_AlternateTitle_Test&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Valid_Update_Tune_Test&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TuneTests.Invalid_Update_Tune_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TrackTests.Valid_Track_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TrackTests.Invalid_Track_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TrackTests.Valid_Update_Track_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.TrackTests.Invalid_Update_Track_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.ArtistTests.Valid_Artist_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.ArtistTests.Invalid_Artist_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.ArtistTests.Valid_Update_Artist_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.ArtistTests.Invalid_Update_Artist_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.AlbumTests.Valid_Album_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.AlbumTests.Invalid_Album_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.AlbumTests.Valid_Update_Album_Test&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::7B71B776-50B5-4A5B-BE70-17795FB7691F::net6.0::TL.Testing.AlbumTests.Invalid_Update_Album_Test&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
