@@ -97,10 +97,10 @@ public class TuneTests
             Succ: t =>
             {
                 result.Match(
-                    u => Assert.True(t.AlternateTitles.Count == 1),
-                    err => Assert.True(false, "alt title is valid"));
+                    Succ: _ => Assert.True(t.AlternateTitles.Count == 1),
+                    Fail: _ => Assert.True(false, "alt title is valid"));
             },
-            Fail: err => Assert.True(false, "tune is valid"));
+            Fail: _ => Assert.True(false, "tune is valid"));
     }
 
     [Fact]
