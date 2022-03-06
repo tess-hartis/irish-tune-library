@@ -28,7 +28,7 @@ public class CreateArtistCommandHandler : IRequestHandler<CreateArtistCommand, V
     public async Task<Validation<Error, Artist>> Handle(CreateArtistCommand command, CancellationToken cancellationToken)
     {
         var name = ArtistName.Create(command.Name);
-        var artist = name.Map(n => Artist.CreateArtist(n));
+        var artist = name.Map(n => Artist.Create(n));
         await artist
             .Succ(async a =>
             {

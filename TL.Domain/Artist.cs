@@ -13,7 +13,7 @@ public class Artist
     private readonly List<Album> _albums = new List<Album>();
     public IEnumerable<Album> Albums => _albums;
 
-    public static Artist CreateArtist(ArtistName name)
+    public static Artist Create(ArtistName name)
     {
         var artist = new Artist()
         {
