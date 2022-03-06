@@ -45,7 +45,11 @@ public class TuneTests
 
         tune.Match(
             Succ: _ => Assert.True(false, "should not get here"),
-            Fail: errors => Assert.True(errors.Count == 1));
+            Fail: errors =>
+            {
+                Assert.True(errors.Count == 1);
+                Assert.True(errors.Head == "Title cannot be empty");
+            });
     }
     
     [Fact]
