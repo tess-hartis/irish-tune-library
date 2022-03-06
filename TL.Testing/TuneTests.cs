@@ -67,8 +67,14 @@ public class TuneTests
 
         tune.Match(
             Succ: _ => Assert.True(false, "should not get here"),
-            Fail: errors => Assert.True(errors.Count == 2));
+            Fail: errors =>
+            {
+                Assert.True(errors.Count == 2);
+                Assert.True(errors.Head.Message == "Title cannot be empty");
+                Assert.True(errors.Tail.Head.Message == "Composer name cannot be empty");
+            });
     }
+    
 
     [Fact]
     public void Valid_Alternate_Title_Test()
