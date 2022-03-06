@@ -124,10 +124,10 @@ public class TuneTests
             Succ: t =>
             {
                 result.Match(
-                    u => Assert.True(false, "alt title is invalid"),
-                    errors => Assert.True(t.AlternateTitles.Count == 0));
+                    Succ: _ => Assert.True(false, "alt title is invalid"),
+                    Fail: _ => Assert.True(t.AlternateTitles.Count == 0));
             },
-            Fail: err => Assert.True(false, "tune is valid"));
+            Fail: _ => Assert.True(false, "tune is valid"));
     }
 
     [Fact]
@@ -157,16 +157,16 @@ public class TuneTests
         originalTune.Match(
             Succ: ot =>
             {
-                updatedTune.Match(u =>
+                updatedTune.Match(Succ: _ =>
                     {
                         Assert.True(ot.Title.Value == "Green Grove");
                         Assert.True(ot.Composer.Value == "John Doyle");
                         Assert.True(ot.TuneType.Value == "Jig");
                         Assert.True(ot.TuneKey.Value == "Amin");
                     },
-                    Fail: err => Assert.True(false, "update valid"));
+                    Fail: _ => Assert.True(false, "update valid"));
             },
-            Fail: err => Assert.True(false, "original tune valid"));
+            Fail: _ => Assert.True(false, "original tune valid"));
     }
 
     [Fact]
@@ -199,9 +199,9 @@ public class TuneTests
             Succ: ot =>
             {
                 updatedTune.Match(
-                    u => Assert.True(false, "invalid update"),
+                    Succ: _ => Assert.True(false, "invalid update"),
                     Fail: errors => Assert.True(errors.Count > 0));
             },
-            Fail: err => Assert.True(false, "original tune valid"));
+            Fail: _ => Assert.True(false, "original tune valid"));
     }
 }
