@@ -27,7 +27,7 @@ public class TuneTests
                 Assert.True(t.TuneType.Value == "Reel");
                 Assert.True(t.TuneKey.Value == "Emin");
             },
-            Fail: err => Assert.True(false, "should not get here"));
+            Fail: _ => Assert.True(false, "should not get here"));
     }
     
     [Fact]
