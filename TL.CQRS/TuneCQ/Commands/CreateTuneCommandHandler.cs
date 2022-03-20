@@ -43,15 +43,8 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Valid
 
         var tune = (title, composer, type, key)
             .Apply(Tune.Create);
-
-        await newTune
-            .Succ(async toon =>
-            {
-                await _tuneRepository.AddAsync(toon);
-                
-            })
-            .Fail(e => e.AsTask());
-
-        return newTune;
+        
+        ignore(tune.Map(async x => await _tuneRepository.AddAsync(x)));
+        return tune;
     }
 }
