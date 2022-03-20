@@ -45,7 +45,6 @@ public class AddTrackTuneCommandHandler : IRequestHandler<AddTrackTuneCommand, O
                 .Map(y => tr.AddTrackTune(y, tu));
 
         ignore(result.MapT(async y => await _unitOfWork.Save()));
-
         return result;
     }
 }
