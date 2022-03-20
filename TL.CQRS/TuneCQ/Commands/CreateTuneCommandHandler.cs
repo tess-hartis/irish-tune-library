@@ -41,7 +41,7 @@ public class CreateTuneCommandHandler : IRequestHandler<CreateTuneCommand, Valid
         var type = TuneTypeValueObj.Create(command.Type);
         var key = TuneKeyValueObj.Create(command.Key);
 
-        var newTune = (title, composer, type, key)
+        var tune = (title, composer, type, key)
             .Apply(Tune.Create);
 
         await newTune
