@@ -37,7 +37,7 @@ public class AddAlternateTitleCommandHandler : IRequestHandler<AddAlternateTitle
 
         var updatedTune = tune
             .Map(t => alternateTitle
-                .Map(a => t.AddAlternateTitle(a)));
+                .Map(t.AddAlternateTitle));
 
         ignore(updatedTune
             .Map(t =>
