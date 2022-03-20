@@ -32,17 +32,9 @@ public class CreateAlbumCommandHandler : IRequestHandler<CreateAlbumCommand, Val
     {
         var title = AlbumTitle.Create(command.Title);
         var year = AlbumYear.Create(command.Year);
-
-        var album = (title, year)
-            .Apply((t, y) => Album.Create(t, y));
-
-        await album
-            .Succ(async a =>
-            {
-                await _albumRepository.AddAsync(a);
-            })
-            .Fail(e => e.AsTask());
-
+        var album = (title, year).Apply(Album.Create);
+        
+        ignore(album.Map(async x => await _albumRepository.AddAsync(x)));
         return album;
     }
 }
