@@ -40,7 +40,6 @@ public class RemoveAlternateTitleCommandHandler :
             select t.RemoveAlternateTitle(t.AlternateTitles.FirstOrDefault(x => x.Value == p));
         
         ignore( result.Map(async x => await _tuneRepository.SaveAsync()));
-        
         return result;
     }
 }
