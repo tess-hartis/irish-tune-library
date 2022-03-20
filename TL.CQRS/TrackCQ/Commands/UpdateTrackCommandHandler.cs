@@ -42,7 +42,7 @@ public class UpdateTrackCommandHandler :
 
         var updatedTrack = track
             .Map(t => (title, number)
-                .Apply((x, y) => t.Update(x, y)));
+                .Apply(t.Update));
 
         ignore(updatedTrack
             .Map(t =>
